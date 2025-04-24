@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/stainless-sdks/dinari-go/internal/apijson"
-	"github.com/stainless-sdks/dinari-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
 )
 
 // Error represents an error that originates from the API, i.e. when a request is

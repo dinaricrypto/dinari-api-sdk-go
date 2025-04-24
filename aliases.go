@@ -3,8 +3,8 @@
 package dinari
 
 import (
-	"github.com/stainless-sdks/dinari-go/internal/apierror"
-	"github.com/stainless-sdks/dinari-go/packages/param"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apierror"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
 )
 
 // aliased to make [param.APIUnion] private when embedding

@@ -1,7 +1,7 @@
 package apijson
 
 import (
-	"github.com/stainless-sdks/dinari-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
 	"reflect"
 )
 

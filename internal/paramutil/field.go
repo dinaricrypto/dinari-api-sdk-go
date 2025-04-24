@@ -1,8 +1,8 @@
 package paramutil
 
 import (
-	"github.com/stainless-sdks/dinari-go/packages/param"
-	"github.com/stainless-sdks/dinari-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
 )
 
 func AddrIfPresent[T comparable](v param.Opt[T]) *T {

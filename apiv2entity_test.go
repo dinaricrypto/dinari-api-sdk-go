@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stainless-sdks/dinari-go"
-	"github.com/stainless-sdks/dinari-go/internal/testutil"
-	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/dinaricrypto/dinari-api-sdk-go"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/testutil"
+	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 )
 
 func TestAPIV2EntityNew(t *testing.T) {
