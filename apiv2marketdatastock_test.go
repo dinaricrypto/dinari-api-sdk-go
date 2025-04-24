@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari_test
+package dinariapisdk_test
 
 import (
 	"context"
@@ -22,17 +22,17 @@ func TestAPIV2MarketDataStockListWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
-	_, err := client.API.V2.MarketData.Stocks.List(context.TODO(), dinari.APIV2MarketDataStockListParams{
-		Page:     dinari.Int(1),
-		PageSize: dinari.Int(1),
+	_, err := client.API.V2.MarketData.Stocks.List(context.TODO(), dinariapisdk.APIV2MarketDataStockListParams{
+		Page:     dinariapisdk.Int(1),
+		PageSize: dinariapisdk.Int(1),
 		Symbols:  []string{"string"},
 	})
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -49,13 +49,13 @@ func TestAPIV2MarketDataStockGetDividends(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.MarketData.Stocks.GetDividends(context.TODO(), "stock_id")
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -72,19 +72,19 @@ func TestAPIV2MarketDataStockGetHistoricalPrices(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.MarketData.Stocks.GetHistoricalPrices(
 		context.TODO(),
 		"stock_id",
-		dinari.APIV2MarketDataStockGetHistoricalPricesParams{
-			Timespan: dinari.APIV2MarketDataStockGetHistoricalPricesParamsTimespanDay,
+		dinariapisdk.APIV2MarketDataStockGetHistoricalPricesParams{
+			Timespan: dinariapisdk.APIV2MarketDataStockGetHistoricalPricesParamsTimespanDay,
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -101,19 +101,19 @@ func TestAPIV2MarketDataStockGetNewsWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.MarketData.Stocks.GetNews(
 		context.TODO(),
 		"stock_id",
-		dinari.APIV2MarketDataStockGetNewsParams{
-			Limit: dinari.Int(1),
+		dinariapisdk.APIV2MarketDataStockGetNewsParams{
+			Limit: dinariapisdk.Int(1),
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -130,13 +130,13 @@ func TestAPIV2MarketDataStockGetQuote(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.MarketData.Stocks.GetQuote(context.TODO(), "stock_id")
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

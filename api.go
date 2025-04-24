@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari
+package dinariapisdk
 
 import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
