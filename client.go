@@ -1,14 +1,14 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari
+package dinariapisdk
 
 import (
 	"context"
 	"net/http"
 	"os"
 
-	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
-	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
+	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 )
 
 // Client creates a struct with services and top level methods that help with

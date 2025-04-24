@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari_test
+package dinariapisdk_test
 
 import (
 	"context"
@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stainless-sdks/dinari-go"
-	"github.com/stainless-sdks/dinari-go/internal/testutil"
-	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/dinaricrypto/dinari-api-sdk-go"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/testutil"
+	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 )
 
 func TestAPIV2AccountOrderGet(t *testing.T) {
@@ -22,7 +22,7 @@ func TestAPIV2AccountOrderGet(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
@@ -32,7 +32,7 @@ func TestAPIV2AccountOrderGet(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -49,13 +49,13 @@ func TestAPIV2AccountOrderList(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.Accounts.Orders.List(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -72,7 +72,7 @@ func TestAPIV2AccountOrderCancel(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
@@ -82,7 +82,7 @@ func TestAPIV2AccountOrderCancel(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -99,14 +99,14 @@ func TestAPIV2AccountOrderGetEstimatedFee(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.Accounts.Orders.GetEstimatedFee(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.APIV2AccountOrderGetEstimatedFeeParams{
+		dinariapisdk.APIV2AccountOrderGetEstimatedFeeParams{
 			ChainID:         0,
 			ContractAddress: "contract_address",
 			OrderData: map[string]string{
@@ -115,7 +115,7 @@ func TestAPIV2AccountOrderGetEstimatedFee(t *testing.T) {
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -132,7 +132,7 @@ func TestAPIV2AccountOrderGetFulfillments(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
@@ -142,7 +142,7 @@ func TestAPIV2AccountOrderGetFulfillments(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

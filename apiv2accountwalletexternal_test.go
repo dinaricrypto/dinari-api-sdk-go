@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari_test
+package dinariapisdk_test
 
 import (
 	"context"
@@ -8,9 +8,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/stainless-sdks/dinari-go"
-	"github.com/stainless-sdks/dinari-go/internal/testutil"
-	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/dinaricrypto/dinari-api-sdk-go"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/testutil"
+	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 )
 
 func TestAPIV2AccountWalletExternalConnect(t *testing.T) {
@@ -22,14 +22,14 @@ func TestAPIV2AccountWalletExternalConnect(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.Accounts.Wallet.External.Connect(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.APIV2AccountWalletExternalConnectParams{
+		dinariapisdk.APIV2AccountWalletExternalConnectParams{
 			ChainID:       0,
 			Nonce:         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			Signature:     "0xeaF12bD1DfFd",
@@ -37,7 +37,7 @@ func TestAPIV2AccountWalletExternalConnect(t *testing.T) {
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -54,19 +54,19 @@ func TestAPIV2AccountWalletExternalGetNonce(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.Accounts.Wallet.External.GetNonce(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.APIV2AccountWalletExternalGetNonceParams{
+		dinariapisdk.APIV2AccountWalletExternalGetNonceParams{
 			WalletAddress: "wallet_address",
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

@@ -1,6 +1,6 @@
 # Dinari Go API Library
 
-<a href="https://pkg.go.dev/github.com/stainless-sdks/dinari-go"><img src="https://pkg.go.dev/badge/github.com/stainless-sdks/dinari-go.svg" alt="Go Reference"></a>
+<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go"><img src="https://pkg.go.dev/badge/github.com/dinaricrypto/dinari-api-sdk-go.svg" alt="Go Reference"></a>
 
 The Dinari Go library provides convenient access to the Dinari REST API
 from applications written in Go.
@@ -9,17 +9,25 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ## Installation
 
+<!-- x-release-please-start-version -->
+
 ```go
 import (
-	"github.com/stainless-sdks/dinari-go" // imported as dinari
+	"github.com/dinaricrypto/dinari-api-sdk-go" // imported as dinariapisdk
 )
 ```
 
+<!-- x-release-please-end -->
+
 Or to pin the version:
 
+<!-- x-release-please-start-version -->
+
 ```sh
-go get -u 'github.com/stainless-sdks/dinari-go@v0.0.1-alpha.0'
+go get -u 'github.com/dinaricrypto/dinari-api-sdk-go@v0.1.0-alpha.1'
 ```
+
+<!-- x-release-please-end -->
 
 ## Requirements
 
@@ -36,12 +44,12 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/stainless-sdks/dinari-go"
-	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/dinaricrypto/dinari-api-sdk-go"
+	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 )
 
 func main() {
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("DINARI_API_KEY")
 	)
 	response, err := client.API.V2.GetHealth(context.TODO())
@@ -55,29 +63,29 @@ func main() {
 
 ### Request fields
 
-The dinari library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson)
+The dinariapisdk library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson)
 semantics from the Go 1.24+ `encoding/json` release for request fields.
 
 Required primitive fields (`int64`, `string`, etc.) feature the tag <code>\`json:"...,required"\`</code>. These
 fields are always serialized, even their zero values.
 
-Optional primitive types are wrapped in a `param.Opt[T]`. These fields can be set with the provided constructors, `dinari.String(string)`, `dinari.Int(int64)`, etc.
+Optional primitive types are wrapped in a `param.Opt[T]`. These fields can be set with the provided constructors, `dinariapisdk.String(string)`, `dinariapisdk.Int(int64)`, etc.
 
 Any `param.Opt[T]`, map, slice, struct or string enum uses the
 tag <code>\`json:"...,omitzero"\`</code>. Its zero value is considered omitted.
 
 ```go
-params := dinari.ExampleParams{
-	ID:   "id_xxx",             // required property
-	Name: dinari.String("..."), // optional property
+params := dinariapisdk.ExampleParams{
+	ID:   "id_xxx",                   // required property
+	Name: dinariapisdk.String("..."), // optional property
 
-	Point: dinari.Point{
-		X: 0,             // required field will serialize as 0
-		Y: dinari.Int(1), // optional field will serialize as 1
+	Point: dinariapisdk.Point{
+		X: 0,                   // required field will serialize as 0
+		Y: dinariapisdk.Int(1), // optional field will serialize as 1
 		// ... omitted non-required fields will not be serialized
 	},
 
-	Origin: dinari.Origin{}, // the zero value of [Origin] is considered omitted
+	Origin: dinariapisdk.Origin{}, // the zero value of [Origin] is considered omitted
 }
 ```
 
@@ -103,7 +111,7 @@ params.WithExtraFields(map[string]any{
 })
 
 // Send a number instead of an object
-custom := param.OverrideObj[dinari.FooParams](12)
+custom := param.OverrideObj[dinariapisdk.FooParams](12)
 ```
 
 When available, use the `.IsPresent()` method to check if an optional parameter is not omitted or `null`.
@@ -240,7 +248,7 @@ This library uses the functional options pattern. Functions defined in the
 requests. For example:
 
 ```go
-client := dinari.NewClient(
+client := dinariapisdk.NewClient(
 	// Adds a header to every request made by the client
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
@@ -253,7 +261,7 @@ client.API.V2.GetHealth(context.TODO(), ...,
 )
 ```
 
-See the [full list of request options](https://pkg.go.dev/github.com/stainless-sdks/dinari-go/option).
+See the [full list of request options](https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go/option).
 
 ### Pagination
 
@@ -267,7 +275,7 @@ with additional helper methods like `.GetNextPage()`, e.g.:
 ### Errors
 
 When the API returns a non-success status code, we return an error with type
-`*dinari.Error`. This contains the `StatusCode`, `*http.Request`, and
+`*dinariapisdk.Error`. This contains the `StatusCode`, `*http.Request`, and
 `*http.Response` values of the request, as well as the JSON of the error body
 (much like other response objects in the SDK).
 
@@ -276,7 +284,7 @@ To handle errors, we recommend that you use the `errors.As` pattern:
 ```go
 _, err := client.API.V2.GetHealth(context.TODO())
 if err != nil {
-	var apierr *dinari.Error
+	var apierr *dinariapisdk.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
@@ -316,7 +324,7 @@ The file name and content-type can be customized by implementing `Name() string`
 string` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a
 file returned by `os.Open` will be sent with the file name on disk.
 
-We also provide a helper `dinari.File(reader io.Reader, filename string, contentType string)`
+We also provide a helper `dinariapisdk.File(reader io.Reader, filename string, contentType string)`
 which can be used to wrap any `io.Reader` with the appropriate file name and content type.
 
 ### Retries
@@ -329,7 +337,7 @@ You can use the `WithMaxRetries` option to configure or disable this:
 
 ```go
 // Configure the default for all requests:
-client := dinari.NewClient(
+client := dinariapisdk.NewClient(
 	option.WithMaxRetries(0), // default is 2
 )
 
@@ -390,7 +398,7 @@ or the `option.WithJSONSet()` methods.
 params := FooNewParams{
     ID:   "id_xxxx",
     Data: FooNewParamsData{
-        FirstName: dinari.String("John"),
+        FirstName: dinariapisdk.String("John"),
     },
 }
 client.Foo.New(context.Background(), params, option.WithJSONSet("data.last_name", "Doe"))
@@ -425,7 +433,7 @@ func Logger(req *http.Request, next option.MiddlewareNext) (res *http.Response, 
     return res, err
 }
 
-client := dinari.NewClient(
+client := dinariapisdk.NewClient(
 	option.WithMiddleware(Logger),
 )
 ```
@@ -450,7 +458,7 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/dinari-go/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/dinaricrypto/dinari-api-sdk-go/issues) with questions, bugs, or suggestions.
 
 ## Contributing
 

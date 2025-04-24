@@ -1,7 +1,7 @@
-package dinari
+package dinariapisdk
 
 import (
-	"github.com/stainless-sdks/dinari-go/packages/param"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
 	"io"
 	"time"
 )

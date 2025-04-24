@@ -3,8 +3,8 @@ package resp_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/stainless-sdks/dinari-go/internal/apijson"
-	"github.com/stainless-sdks/dinari-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
 	"reflect"
 	"testing"
 )

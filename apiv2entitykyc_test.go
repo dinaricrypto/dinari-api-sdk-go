@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari_test
+package dinariapisdk_test
 
 import (
 	"context"
@@ -9,9 +9,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stainless-sdks/dinari-go"
-	"github.com/stainless-sdks/dinari-go/internal/testutil"
-	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/dinaricrypto/dinari-api-sdk-go"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/testutil"
+	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 )
 
 func TestAPIV2EntityKYCGet(t *testing.T) {
@@ -23,13 +23,13 @@ func TestAPIV2EntityKYCGet(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.Entities.KYC.Get(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -46,13 +46,13 @@ func TestAPIV2EntityKYCGetURL(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.Entities.KYC.GetURL(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -69,33 +69,33 @@ func TestAPIV2EntityKYCSubmitWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.Entities.KYC.Submit(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.APIV2EntityKYCSubmitParams{
-			Data: dinari.KYCDataParam{
+		dinariapisdk.APIV2EntityKYCSubmitParams{
+			Data: dinariapisdk.KYCDataParam{
 				CountryCode:        "SG",
 				LastName:           "Doe",
-				AddressCity:        dinari.String("San Francisco"),
-				AddressPostalCode:  dinari.String("94111"),
-				AddressStreet1:     dinari.String("123 Main St."),
-				AddressStreet2:     dinari.String("Apt. 123"),
-				AddressSubdivision: dinari.String("California"),
-				BirthDate:          dinari.Time(time.Now()),
-				Email:              dinari.String("johndoe@website.com"),
-				FirstName:          dinari.String("John"),
-				MiddleName:         dinari.String("middle_name"),
-				TaxIDNumber:        dinari.String("123456789"),
+				AddressCity:        dinariapisdk.String("San Francisco"),
+				AddressPostalCode:  dinariapisdk.String("94111"),
+				AddressStreet1:     dinariapisdk.String("123 Main St."),
+				AddressStreet2:     dinariapisdk.String("Apt. 123"),
+				AddressSubdivision: dinariapisdk.String("California"),
+				BirthDate:          dinariapisdk.Time(time.Now()),
+				Email:              dinariapisdk.String("johndoe@website.com"),
+				FirstName:          dinariapisdk.String("John"),
+				MiddleName:         dinariapisdk.String("middle_name"),
+				TaxIDNumber:        dinariapisdk.String("123456789"),
 			},
 			ProviderName: "provider_name",
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -112,7 +112,7 @@ func TestAPIV2EntityKYCUploadDocument(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
@@ -120,12 +120,12 @@ func TestAPIV2EntityKYCUploadDocument(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		"kyc_id",
-		dinari.APIV2EntityKYCUploadDocumentParams{
-			DocumentType: dinari.KYCDocumentTypeGovernmentID,
+		dinariapisdk.APIV2EntityKYCUploadDocumentParams{
+			DocumentType: dinariapisdk.KYCDocumentTypeGovernmentID,
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
