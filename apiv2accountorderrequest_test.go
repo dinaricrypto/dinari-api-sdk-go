@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari_test
+package dinariapisdk_test
 
 import (
 	"context"
@@ -22,7 +22,7 @@ func TestAPIV2AccountOrderRequestGet(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
@@ -32,7 +32,7 @@ func TestAPIV2AccountOrderRequestGet(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -49,13 +49,13 @@ func TestAPIV2AccountOrderRequestList(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.Accounts.OrderRequests.List(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -72,15 +72,15 @@ func TestAPIV2AccountOrderRequestNewLimitBuy(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.Accounts.OrderRequests.NewLimitBuy(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.APIV2AccountOrderRequestNewLimitBuyParams{
-			LimitOrderRequestInput: dinari.LimitOrderRequestInputParam{
+		dinariapisdk.APIV2AccountOrderRequestNewLimitBuyParams{
+			LimitOrderRequestInput: dinariapisdk.LimitOrderRequestInputParam{
 				AssetQuantity: 0,
 				LimitPrice:    0,
 				StockID:       "stock_id",
@@ -88,7 +88,7 @@ func TestAPIV2AccountOrderRequestNewLimitBuy(t *testing.T) {
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -105,15 +105,15 @@ func TestAPIV2AccountOrderRequestNewLimitSell(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.Accounts.OrderRequests.NewLimitSell(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.APIV2AccountOrderRequestNewLimitSellParams{
-			LimitOrderRequestInput: dinari.LimitOrderRequestInputParam{
+		dinariapisdk.APIV2AccountOrderRequestNewLimitSellParams{
+			LimitOrderRequestInput: dinariapisdk.LimitOrderRequestInputParam{
 				AssetQuantity: 0,
 				LimitPrice:    0,
 				StockID:       "stock_id",
@@ -121,7 +121,7 @@ func TestAPIV2AccountOrderRequestNewLimitSell(t *testing.T) {
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -138,21 +138,21 @@ func TestAPIV2AccountOrderRequestNewMarketBuyWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.Accounts.OrderRequests.NewMarketBuy(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.APIV2AccountOrderRequestNewMarketBuyParams{
+		dinariapisdk.APIV2AccountOrderRequestNewMarketBuyParams{
 			PaymentAmount: 0,
 			StockID:       "stock_id",
-			IncludeFees:   dinari.Bool(true),
+			IncludeFees:   dinariapisdk.Bool(true),
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -169,20 +169,20 @@ func TestAPIV2AccountOrderRequestNewMarketSell(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
 	)
 	_, err := client.API.V2.Accounts.OrderRequests.NewMarketSell(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.APIV2AccountOrderRequestNewMarketSellParams{
+		dinariapisdk.APIV2AccountOrderRequestNewMarketSellParams{
 			AssetQuantity: 0,
 			StockID:       "stock_id",
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
