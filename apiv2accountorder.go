@@ -35,9 +35,9 @@ func NewAPIV2AccountOrderService(opts ...option.RequestOption) (r APIV2AccountOr
 }
 
 // Retrieves details of a specific order by its ID.
-func (r *APIV2AccountOrderService) Get(ctx context.Context, accountID string, orderID string, opts ...option.RequestOption) (res *Order, err error) {
+func (r *APIV2AccountOrderService) Get(ctx context.Context, orderID string, query APIV2AccountOrderGetParams, opts ...option.RequestOption) (res *Order, err error) {
 	opts = append(r.Options[:], opts...)
-	if accountID == "" {
+	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -45,7 +45,7 @@ func (r *APIV2AccountOrderService) Get(ctx context.Context, accountID string, or
 		err = errors.New("missing required order_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s", accountID, orderID)
+	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s", query.AccountID, orderID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -64,9 +64,9 @@ func (r *APIV2AccountOrderService) List(ctx context.Context, accountID string, o
 
 // Cancels an order by its ID. Note that this requires the order ID, not the order
 // request ID.
-func (r *APIV2AccountOrderService) Cancel(ctx context.Context, accountID string, orderID string, opts ...option.RequestOption) (res *Order, err error) {
+func (r *APIV2AccountOrderService) Cancel(ctx context.Context, orderID string, body APIV2AccountOrderCancelParams, opts ...option.RequestOption) (res *Order, err error) {
 	opts = append(r.Options[:], opts...)
-	if accountID == "" {
+	if body.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -74,7 +74,7 @@ func (r *APIV2AccountOrderService) Cancel(ctx context.Context, accountID string,
 		err = errors.New("missing required order_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s/cancel", accountID, orderID)
+	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s/cancel", body.AccountID, orderID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
 	return
 }
@@ -93,9 +93,9 @@ func (r *APIV2AccountOrderService) GetEstimatedFee(ctx context.Context, accountI
 }
 
 // Retrieves order fulfillments for a specific order.
-func (r *APIV2AccountOrderService) GetFulfillments(ctx context.Context, accountID string, orderID string, opts ...option.RequestOption) (res *[]OrderFulfillment, err error) {
+func (r *APIV2AccountOrderService) GetFulfillments(ctx context.Context, orderID string, query APIV2AccountOrderGetFulfillmentsParams, opts ...option.RequestOption) (res *[]OrderFulfillment, err error) {
 	opts = append(r.Options[:], opts...)
-	if accountID == "" {
+	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -103,7 +103,7 @@ func (r *APIV2AccountOrderService) GetFulfillments(ctx context.Context, accountI
 		err = errors.New("missing required order_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s/fulfillments", accountID, orderID)
+	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s/fulfillments", query.AccountID, orderID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -305,6 +305,24 @@ func (r *Apiv2AccountOrderGetEstimatedFeeResponseFee) UnmarshalJSON(data []byte)
 	return apijson.UnmarshalRoot(data, r)
 }
 
+type APIV2AccountOrderGetParams struct {
+	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	paramObj
+}
+
+// IsPresent returns true if the field's value is not omitted and not the JSON
+// "null". To check if this field is omitted, use [param.IsOmitted].
+func (f APIV2AccountOrderGetParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
+
+type APIV2AccountOrderCancelParams struct {
+	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	paramObj
+}
+
+// IsPresent returns true if the field's value is not omitted and not the JSON
+// "null". To check if this field is omitted, use [param.IsOmitted].
+func (f APIV2AccountOrderCancelParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
+
 type APIV2AccountOrderGetEstimatedFeeParams struct {
 	// Chain where the order is placed
 	ChainID int64 `json:"chain_id,required"`
@@ -324,4 +342,15 @@ func (f APIV2AccountOrderGetEstimatedFeeParams) IsPresent() bool {
 func (r APIV2AccountOrderGetEstimatedFeeParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2AccountOrderGetEstimatedFeeParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+
+type APIV2AccountOrderGetFulfillmentsParams struct {
+	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	paramObj
+}
+
+// IsPresent returns true if the field's value is not omitted and not the JSON
+// "null". To check if this field is omitted, use [param.IsOmitted].
+func (f APIV2AccountOrderGetFulfillmentsParams) IsPresent() bool {
+	return !param.IsOmitted(f) && !f.IsNull()
 }

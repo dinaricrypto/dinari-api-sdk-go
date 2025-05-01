@@ -12,6 +12,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
 )
 
@@ -35,9 +36,9 @@ func NewAPIV2AccountOrderFulfillmentService(opts ...option.RequestOption) (r API
 }
 
 // Retrieves details of a specific order fulfillment by its ID.
-func (r *APIV2AccountOrderFulfillmentService) Get(ctx context.Context, accountID string, fulfillmentID string, opts ...option.RequestOption) (res *OrderFulfillment, err error) {
+func (r *APIV2AccountOrderFulfillmentService) Get(ctx context.Context, fulfillmentID string, query APIV2AccountOrderFulfillmentGetParams, opts ...option.RequestOption) (res *OrderFulfillment, err error) {
 	opts = append(r.Options[:], opts...)
-	if accountID == "" {
+	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -45,7 +46,7 @@ func (r *APIV2AccountOrderFulfillmentService) Get(ctx context.Context, accountID
 		err = errors.New("missing required fulfillment_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/accounts/%s/order_fulfillments/%s", accountID, fulfillmentID)
+	path := fmt.Sprintf("api/v2/accounts/%s/order_fulfillments/%s", query.AccountID, fulfillmentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -104,4 +105,15 @@ type OrderFulfillment struct {
 func (r OrderFulfillment) RawJSON() string { return r.JSON.raw }
 func (r *OrderFulfillment) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type APIV2AccountOrderFulfillmentGetParams struct {
+	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	paramObj
+}
+
+// IsPresent returns true if the field's value is not omitted and not the JSON
+// "null". To check if this field is omitted, use [param.IsOmitted].
+func (f APIV2AccountOrderFulfillmentGetParams) IsPresent() bool {
+	return !param.IsOmitted(f) && !f.IsNull()
 }

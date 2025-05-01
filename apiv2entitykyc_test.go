@@ -118,9 +118,9 @@ func TestAPIV2EntityKYCUploadDocument(t *testing.T) {
 	)
 	_, err := client.API.V2.Entities.KYC.UploadDocument(
 		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		"kyc_id",
 		dinariapisdk.APIV2EntityKYCUploadDocumentParams{
+			EntityID:     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			DocumentType: dinariapisdk.KYCDocumentTypeGovernmentID,
 		},
 	)

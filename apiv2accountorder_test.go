@@ -29,7 +29,9 @@ func TestAPIV2AccountOrderGet(t *testing.T) {
 	_, err := client.API.V2.Accounts.Orders.Get(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		dinariapisdk.APIV2AccountOrderGetParams{
+			AccountID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		},
 	)
 	if err != nil {
 		var apierr *dinariapisdk.Error
@@ -79,7 +81,9 @@ func TestAPIV2AccountOrderCancel(t *testing.T) {
 	_, err := client.API.V2.Accounts.Orders.Cancel(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		dinariapisdk.APIV2AccountOrderCancelParams{
+			AccountID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		},
 	)
 	if err != nil {
 		var apierr *dinariapisdk.Error
@@ -139,7 +143,9 @@ func TestAPIV2AccountOrderGetFulfillments(t *testing.T) {
 	_, err := client.API.V2.Accounts.Orders.GetFulfillments(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		dinariapisdk.APIV2AccountOrderGetFulfillmentsParams{
+			AccountID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		},
 	)
 	if err != nil {
 		var apierr *dinariapisdk.Error

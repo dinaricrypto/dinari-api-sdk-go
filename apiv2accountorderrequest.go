@@ -37,9 +37,9 @@ func NewAPIV2AccountOrderRequestService(opts ...option.RequestOption) (r APIV2Ac
 }
 
 // Retrieves details of a specific managed order request by its ID.
-func (r *APIV2AccountOrderRequestService) Get(ctx context.Context, accountID string, requestID string, opts ...option.RequestOption) (res *OrderRequest, err error) {
+func (r *APIV2AccountOrderRequestService) Get(ctx context.Context, requestID string, query APIV2AccountOrderRequestGetParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
-	if accountID == "" {
+	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -47,7 +47,7 @@ func (r *APIV2AccountOrderRequestService) Get(ctx context.Context, accountID str
 		err = errors.New("missing required request_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/%s", accountID, requestID)
+	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/%s", query.AccountID, requestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -178,6 +178,17 @@ const (
 	OrderRequestStatusError     OrderRequestStatus = "ERROR"
 	OrderRequestStatusCancelled OrderRequestStatus = "CANCELLED"
 )
+
+type APIV2AccountOrderRequestGetParams struct {
+	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	paramObj
+}
+
+// IsPresent returns true if the field's value is not omitted and not the JSON
+// "null". To check if this field is omitted, use [param.IsOmitted].
+func (f APIV2AccountOrderRequestGetParams) IsPresent() bool {
+	return !param.IsOmitted(f) && !f.IsNull()
+}
 
 type APIV2AccountOrderRequestNewLimitBuyParams struct {
 	// Input parameters for placing a limit order.
