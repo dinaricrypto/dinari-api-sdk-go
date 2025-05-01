@@ -72,9 +72,9 @@ func (r *APIV2EntityKYCService) Submit(ctx context.Context, entityID string, bod
 }
 
 // Uploads KYC-related documentation (for Partner KYC-enabled entities).
-func (r *APIV2EntityKYCService) UploadDocument(ctx context.Context, entityID string, kycID string, body APIV2EntityKYCUploadDocumentParams, opts ...option.RequestOption) (res *Apiv2EntityKYCUploadDocumentResponse, err error) {
+func (r *APIV2EntityKYCService) UploadDocument(ctx context.Context, kycID string, params APIV2EntityKYCUploadDocumentParams, opts ...option.RequestOption) (res *Apiv2EntityKYCUploadDocumentResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if entityID == "" {
+	if params.EntityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return
 	}
@@ -82,8 +82,8 @@ func (r *APIV2EntityKYCService) UploadDocument(ctx context.Context, entityID str
 		err = errors.New("missing required kyc_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/entities/%s/kyc/%s/document", entityID, kycID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	path := fmt.Sprintf("api/v2/entities/%s/kyc/%s/document", params.EntityID, kycID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
 
@@ -316,6 +316,7 @@ func (r APIV2EntityKYCSubmitParams) MarshalJSON() (data []byte, err error) {
 }
 
 type APIV2EntityKYCUploadDocumentParams struct {
+	EntityID string `path:"entity_id,required" format:"uuid" json:"-"`
 	// Type of the document to be uploaded
 	//
 	// Any of "GOVERNMENT_ID", "SELFIE", "RESIDENCY", "UNKNOWN".

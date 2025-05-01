@@ -29,7 +29,9 @@ func TestAPIV2AccountOrderFulfillmentGet(t *testing.T) {
 	_, err := client.API.V2.Accounts.OrderFulfillments.Get(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		dinariapisdk.APIV2AccountOrderFulfillmentGetParams{
+			AccountID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		},
 	)
 	if err != nil {
 		var apierr *dinariapisdk.Error
