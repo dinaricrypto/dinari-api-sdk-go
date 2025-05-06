@@ -1,4 +1,4 @@
-package param
+package paramutil
 
 import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/encoding/json/sentinel"

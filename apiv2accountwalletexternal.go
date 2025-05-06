@@ -66,8 +66,7 @@ type Apiv2AccountWalletExternalGetNonceResponse struct {
 	Message string `json:"message,required"`
 	// Single-use identifier
 	Nonce string `json:"nonce,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Message     resp.Field
 		Nonce       resp.Field
@@ -94,12 +93,6 @@ type APIV2AccountWalletExternalConnectParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2AccountWalletExternalConnectParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
-
 func (r APIV2AccountWalletExternalConnectParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2AccountWalletExternalConnectParams
 	return param.MarshalObject(r, (*shadow)(&r))
@@ -109,12 +102,6 @@ type APIV2AccountWalletExternalGetNonceParams struct {
 	// Address of the wallet to connect
 	WalletAddress string `query:"wallet_address,required" format:"eth_address" json:"-"`
 	paramObj
-}
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2AccountWalletExternalGetNonceParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
 }
 
 // URLQuery serializes [APIV2AccountWalletExternalGetNonceParams]'s query

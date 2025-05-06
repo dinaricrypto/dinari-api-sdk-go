@@ -56,8 +56,7 @@ type Apiv2MarketDataGetMarketHoursResponse struct {
 	// Timestamp in ISO 8601 format at which the current session opened or null if the
 	// market is currently closed
 	CurrentSessionOpenDt time.Time `json:"current_session_open_dt" format:"date-time"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		IsMarketOpen          resp.Field
 		NextSessionCloseDt    resp.Field

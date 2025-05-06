@@ -55,8 +55,7 @@ type Wallet struct {
 	IsAmlFlagged bool `json:"is_aml_flagged,required"`
 	// Indicates whether the wallet is a Dinari-managed wallet
 	IsManagedWallet bool `json:"is_managed_wallet,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Address         resp.Field
 		IsAmlFlagged    resp.Field
