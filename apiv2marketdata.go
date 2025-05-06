@@ -10,7 +10,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2MarketDataService contains methods and other services that help with
@@ -56,14 +56,14 @@ type Apiv2MarketDataGetMarketHoursResponse struct {
 	// Timestamp in ISO 8601 format at which the current session opened or null if the
 	// market is currently closed
 	CurrentSessionOpenDt time.Time `json:"current_session_open_dt" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		IsMarketOpen          resp.Field
-		NextSessionCloseDt    resp.Field
-		NextSessionOpenDt     resp.Field
-		CurrentSessionCloseDt resp.Field
-		CurrentSessionOpenDt  resp.Field
-		ExtraFields           map[string]resp.Field
+		IsMarketOpen          respjson.Field
+		NextSessionCloseDt    respjson.Field
+		NextSessionOpenDt     respjson.Field
+		CurrentSessionCloseDt respjson.Field
+		CurrentSessionOpenDt  respjson.Field
+		ExtraFields           map[string]respjson.Field
 		raw                   string
 	} `json:"-"`
 }

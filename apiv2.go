@@ -9,7 +9,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2Service contains methods and other services that help with interacting with
@@ -48,10 +48,10 @@ func (r *APIV2Service) GetHealth(ctx context.Context, opts ...option.RequestOpti
 type Apiv2GetHealthResponse struct {
 	// Status of server
 	Status string `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Status      resp.Field
-		ExtraFields map[string]resp.Field
+		Status      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }

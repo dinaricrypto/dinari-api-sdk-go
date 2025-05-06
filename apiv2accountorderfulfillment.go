@@ -12,7 +12,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2AccountOrderFulfillmentService contains methods and other services that
@@ -83,18 +83,18 @@ type OrderFulfillment struct {
 	TransactionHash string `json:"transaction_hash,required" format:"hex_string"`
 	// Fee amount of payment token spent
 	PaymentTokenFee float64 `json:"payment_token_fee"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID                 resp.Field
-		AssetTokenFilled   resp.Field
-		AssetTokenSpent    resp.Field
-		OrderID            resp.Field
-		PaymentTokenFilled resp.Field
-		PaymentTokenSpent  resp.Field
-		TransactionDt      resp.Field
-		TransactionHash    resp.Field
-		PaymentTokenFee    resp.Field
-		ExtraFields        map[string]resp.Field
+		ID                 respjson.Field
+		AssetTokenFilled   respjson.Field
+		AssetTokenSpent    respjson.Field
+		OrderID            respjson.Field
+		PaymentTokenFilled respjson.Field
+		PaymentTokenSpent  respjson.Field
+		TransactionDt      respjson.Field
+		TransactionHash    respjson.Field
+		PaymentTokenFee    respjson.Field
+		ExtraFields        map[string]respjson.Field
 		raw                string
 	} `json:"-"`
 }

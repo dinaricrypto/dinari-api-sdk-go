@@ -12,7 +12,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2AccountOrderService contains methods and other services that help with
@@ -147,23 +147,23 @@ type Order struct {
 	Fees []map[string]any `json:"fees"`
 	// Total amount of network fee taken in USD
 	NetworkFeeInUsd float64 `json:"network_fee_in_usd"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID                    resp.Field
-		AssetTokenQuantity    resp.Field
-		BrokerageOrderStatus  resp.Field
-		ChainID               resp.Field
-		OrderContractAddress  resp.Field
-		OrderSide             resp.Field
-		OrderTif              resp.Field
-		OrderTransactionHash  resp.Field
-		OrderType             resp.Field
-		PaymentTokenQuantity  resp.Field
-		SmartContractOrderID  resp.Field
-		CancelTransactionHash resp.Field
-		Fees                  resp.Field
-		NetworkFeeInUsd       resp.Field
-		ExtraFields           map[string]resp.Field
+		ID                    respjson.Field
+		AssetTokenQuantity    respjson.Field
+		BrokerageOrderStatus  respjson.Field
+		ChainID               respjson.Field
+		OrderContractAddress  respjson.Field
+		OrderSide             respjson.Field
+		OrderTif              respjson.Field
+		OrderTransactionHash  respjson.Field
+		OrderType             respjson.Field
+		PaymentTokenQuantity  respjson.Field
+		SmartContractOrderID  respjson.Field
+		CancelTransactionHash respjson.Field
+		Fees                  respjson.Field
+		NetworkFeeInUsd       respjson.Field
+		ExtraFields           map[string]respjson.Field
 		raw                   string
 	} `json:"-"`
 }
@@ -228,14 +228,14 @@ type Apiv2AccountOrderGetEstimatedFeeResponse struct {
 	Fees []Apiv2AccountOrderGetEstimatedFeeResponseFee `json:"fees,required"`
 	// Address of payment token used for fees
 	PaymentToken string `json:"payment_token,required" format:"eth_address"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ChainID           resp.Field
-		FeeQuote          resp.Field
-		FeeQuoteSignature resp.Field
-		Fees              resp.Field
-		PaymentToken      resp.Field
-		ExtraFields       map[string]resp.Field
+		ChainID           respjson.Field
+		FeeQuote          respjson.Field
+		FeeQuoteSignature respjson.Field
+		Fees              respjson.Field
+		PaymentToken      respjson.Field
+		ExtraFields       map[string]respjson.Field
 		raw               string
 	} `json:"-"`
 }
@@ -253,14 +253,14 @@ type Apiv2AccountOrderGetEstimatedFeeResponseFeeQuote struct {
 	OrderID   string `json:"orderId,required" format:"bigint"`
 	Requester string `json:"requester,required" format:"eth_address"`
 	Timestamp int64  `json:"timestamp,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Deadline    resp.Field
-		Fee         resp.Field
-		OrderID     resp.Field
-		Requester   resp.Field
-		Timestamp   resp.Field
-		ExtraFields map[string]resp.Field
+		Deadline    respjson.Field
+		Fee         respjson.Field
+		OrderID     respjson.Field
+		Requester   respjson.Field
+		Timestamp   respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -285,12 +285,12 @@ type Apiv2AccountOrderGetEstimatedFeeResponseFee struct {
 	// Any of "SPONSORED_NETWORK", "NETWORK", "TRADING", "ORDER", "PARTNER_ORDER",
 	// "PARTNER_TRADING".
 	Type string `json:"type,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		FeeInEth    resp.Field
-		FeeInWei    resp.Field
-		Type        resp.Field
-		ExtraFields map[string]resp.Field
+		FeeInEth    respjson.Field
+		FeeInWei    respjson.Field
+		Type        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }

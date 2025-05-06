@@ -12,7 +12,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2EntityService contains methods and other services that help with
@@ -91,14 +91,14 @@ type Entity struct {
 	Name string `json:"name"`
 	// Nationality of the entity
 	Nationality string `json:"nationality"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID            resp.Field
-		EntityType    resp.Field
-		IsKYCComplete resp.Field
-		Name          resp.Field
-		Nationality   resp.Field
-		ExtraFields   map[string]resp.Field
+		ID            respjson.Field
+		EntityType    respjson.Field
+		IsKYCComplete respjson.Field
+		Name          respjson.Field
+		Nationality   respjson.Field
+		ExtraFields   map[string]respjson.Field
 		raw           string
 	} `json:"-"`
 }

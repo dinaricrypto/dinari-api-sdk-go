@@ -15,7 +15,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2MarketDataStockService contains methods and other services that help with
@@ -123,19 +123,19 @@ type Apiv2MarketDataStockListResponse struct {
 	DisplayName string `json:"display_name,nullable"`
 	// The URL of the logo of the stock. The preferred format is svg.
 	LogoURL string `json:"logo_url,nullable"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID             resp.Field
-		IsFractionable resp.Field
-		Name           resp.Field
-		Symbol         resp.Field
-		Cik            resp.Field
-		CompositeFigi  resp.Field
-		Cusip          resp.Field
-		Description    resp.Field
-		DisplayName    resp.Field
-		LogoURL        resp.Field
-		ExtraFields    map[string]resp.Field
+		ID             respjson.Field
+		IsFractionable respjson.Field
+		Name           respjson.Field
+		Symbol         respjson.Field
+		Cik            respjson.Field
+		CompositeFigi  respjson.Field
+		Cusip          respjson.Field
+		Description    respjson.Field
+		DisplayName    respjson.Field
+		LogoURL        respjson.Field
+		ExtraFields    map[string]respjson.Field
 		raw            string
 	} `json:"-"`
 }
@@ -184,18 +184,18 @@ type Apiv2MarketDataStockGetDividendsResponse struct {
 	RecordDate string `json:"record_date"`
 	// Ticker symbol of the stock.
 	Ticker string `json:"ticker"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CashAmount      resp.Field
-		Currency        resp.Field
-		DeclarationDate resp.Field
-		DividendType    resp.Field
-		ExDividendDate  resp.Field
-		Frequency       resp.Field
-		PayDate         resp.Field
-		RecordDate      resp.Field
-		Ticker          resp.Field
-		ExtraFields     map[string]resp.Field
+		CashAmount      respjson.Field
+		Currency        respjson.Field
+		DeclarationDate respjson.Field
+		DividendType    respjson.Field
+		ExDividendDate  respjson.Field
+		Frequency       respjson.Field
+		PayDate         respjson.Field
+		RecordDate      respjson.Field
+		Ticker          respjson.Field
+		ExtraFields     map[string]respjson.Field
 		raw             string
 	} `json:"-"`
 }
@@ -218,14 +218,14 @@ type Apiv2MarketDataStockGetHistoricalPricesResponse struct {
 	Open float64 `json:"open,required"`
 	// The Unix timestamp in seconds for the start of the aggregate window.
 	Timestamp int64 `json:"timestamp,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Close       resp.Field
-		High        resp.Field
-		Low         resp.Field
-		Open        resp.Field
-		Timestamp   resp.Field
-		ExtraFields map[string]resp.Field
+		Close       respjson.Field
+		High        respjson.Field
+		Low         respjson.Field
+		Open        respjson.Field
+		Timestamp   respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -252,15 +252,15 @@ type Apiv2MarketDataStockGetNewsResponse struct {
 	// The mobile friendly Accelerated Mobile Page (AMP) URL of the news article if
 	// available
 	AmpURL string `json:"amp_url"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ArticleURL  resp.Field
-		Description resp.Field
-		ImageURL    resp.Field
-		PublishedDt resp.Field
-		Publisher   resp.Field
-		AmpURL      resp.Field
-		ExtraFields map[string]resp.Field
+		ArticleURL  respjson.Field
+		Description respjson.Field
+		ImageURL    respjson.Field
+		PublishedDt respjson.Field
+		Publisher   respjson.Field
+		AmpURL      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -296,21 +296,21 @@ type Apiv2MarketDataStockGetQuoteResponse struct {
 	Volume float64 `json:"volume"`
 	// The number of shares outstanding in the given time period
 	WeightedSharesOutstanding int64 `json:"weighted_shares_outstanding"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Price                     resp.Field
-		StockID                   resp.Field
-		Change                    resp.Field
-		ChangePercent             resp.Field
-		Close                     resp.Field
-		High                      resp.Field
-		Low                       resp.Field
-		MarketCap                 resp.Field
-		Open                      resp.Field
-		PreviousClose             resp.Field
-		Volume                    resp.Field
-		WeightedSharesOutstanding resp.Field
-		ExtraFields               map[string]resp.Field
+		Price                     respjson.Field
+		StockID                   respjson.Field
+		Change                    respjson.Field
+		ChangePercent             respjson.Field
+		Close                     respjson.Field
+		High                      respjson.Field
+		Low                       respjson.Field
+		MarketCap                 respjson.Field
+		Open                      respjson.Field
+		PreviousClose             respjson.Field
+		Volume                    respjson.Field
+		WeightedSharesOutstanding respjson.Field
+		ExtraFields               map[string]respjson.Field
 		raw                       string
 	} `json:"-"`
 }

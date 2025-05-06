@@ -13,7 +13,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2EntityKYCService contains methods and other services that help with
@@ -116,21 +116,21 @@ type KYCData struct {
 	MiddleName string `json:"middle_name,nullable"`
 	// ID number of the official tax document of the country the entity belongs to
 	TaxIDNumber string `json:"tax_id_number"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CountryCode        resp.Field
-		LastName           resp.Field
-		AddressCity        resp.Field
-		AddressPostalCode  resp.Field
-		AddressStreet1     resp.Field
-		AddressStreet2     resp.Field
-		AddressSubdivision resp.Field
-		BirthDate          resp.Field
-		Email              resp.Field
-		FirstName          resp.Field
-		MiddleName         resp.Field
-		TaxIDNumber        resp.Field
-		ExtraFields        map[string]resp.Field
+		CountryCode        respjson.Field
+		LastName           respjson.Field
+		AddressCity        respjson.Field
+		AddressPostalCode  respjson.Field
+		AddressStreet1     respjson.Field
+		AddressStreet2     respjson.Field
+		AddressSubdivision respjson.Field
+		BirthDate          respjson.Field
+		Email              respjson.Field
+		FirstName          respjson.Field
+		MiddleName         respjson.Field
+		TaxIDNumber        respjson.Field
+		ExtraFields        map[string]respjson.Field
 		raw                string
 	} `json:"-"`
 }
@@ -212,14 +212,14 @@ type KYCInfo struct {
 	Data KYCData `json:"data"`
 	// Name of the KYC provider that provided the KYC check
 	ProviderName string `json:"provider_name"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID           resp.Field
-		Status       resp.Field
-		CheckedDt    resp.Field
-		Data         resp.Field
-		ProviderName resp.Field
-		ExtraFields  map[string]resp.Field
+		ID           respjson.Field
+		Status       respjson.Field
+		CheckedDt    respjson.Field
+		Data         respjson.Field
+		ProviderName respjson.Field
+		ExtraFields  map[string]respjson.Field
 		raw          string
 	} `json:"-"`
 }
@@ -247,11 +247,11 @@ type Apiv2EntityKYCGetURLResponse struct {
 	EmbedURL string `json:"embed_url,required"`
 	// Timestamp at which the KYC request will be expired
 	ExpirationDt time.Time `json:"expiration_dt,required" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		EmbedURL     resp.Field
-		ExpirationDt resp.Field
-		ExtraFields  map[string]resp.Field
+		EmbedURL     respjson.Field
+		ExpirationDt respjson.Field
+		ExtraFields  map[string]respjson.Field
 		raw          string
 	} `json:"-"`
 }
@@ -274,13 +274,13 @@ type Apiv2EntityKYCUploadDocumentResponse struct {
 	Filename string `json:"filename,required"`
 	// URL to access the document. Expires in 1 hour
 	URL string `json:"url,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID           resp.Field
-		DocumentType resp.Field
-		Filename     resp.Field
-		URL          resp.Field
-		ExtraFields  map[string]resp.Field
+		ID           respjson.Field
+		DocumentType respjson.Field
+		Filename     respjson.Field
+		URL          respjson.Field
+		ExtraFields  map[string]respjson.Field
 		raw          string
 	} `json:"-"`
 }

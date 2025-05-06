@@ -12,7 +12,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2AccountService contains methods and other services that help with
@@ -120,11 +120,11 @@ type Apiv2AccountGetCashResponse struct {
 	Amount float64 `json:"amount,required"`
 	// Currency (e.g. USD)
 	Currency string `json:"currency,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Amount      resp.Field
-		Currency    resp.Field
-		ExtraFields map[string]resp.Field
+		Amount      respjson.Field
+		Currency    respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -145,13 +145,13 @@ type Apiv2AccountGetDividendPaymentsResponse struct {
 	PaymentDate time.Time `json:"payment_date,required" format:"date"`
 	// ID of the stock for which the dividend was paid.
 	StockID string `json:"stock_id,required" format:"bigint"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Amount      resp.Field
-		Currency    resp.Field
-		PaymentDate resp.Field
-		StockID     resp.Field
-		ExtraFields map[string]resp.Field
+		Amount      respjson.Field
+		Currency    respjson.Field
+		PaymentDate respjson.Field
+		StockID     respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -170,12 +170,12 @@ type Apiv2AccountGetInterestPaymentsResponse struct {
 	Currency string `json:"currency,required"`
 	// Date of interest payment. In US Eastern time zone
 	PaymentDate time.Time `json:"payment_date,required" format:"date"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Amount      resp.Field
-		Currency    resp.Field
-		PaymentDate resp.Field
-		ExtraFields map[string]resp.Field
+		Amount      respjson.Field
+		Currency    respjson.Field
+		PaymentDate respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -191,10 +191,10 @@ func (r *Apiv2AccountGetInterestPaymentsResponse) UnmarshalJSON(data []byte) err
 type Apiv2AccountGetPortfolioResponse struct {
 	// Stock Balance details for all owned stocks
 	Assets []Apiv2AccountGetPortfolioResponseAsset `json:"assets,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Assets      resp.Field
-		ExtraFields map[string]resp.Field
+		Assets      respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -213,12 +213,12 @@ type Apiv2AccountGetPortfolioResponseAsset struct {
 	MarketValue float64 `json:"market_value,required"`
 	// ID of Stock
 	StockID string `json:"stock_id,required" format:"bigint"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Amount      resp.Field
-		MarketValue resp.Field
-		StockID     resp.Field
-		ExtraFields map[string]resp.Field
+		Amount      respjson.Field
+		MarketValue respjson.Field
+		StockID     respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
