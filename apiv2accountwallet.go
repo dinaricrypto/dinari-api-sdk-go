@@ -11,7 +11,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2AccountWalletService contains methods and other services that help with
@@ -55,12 +55,12 @@ type Wallet struct {
 	IsAmlFlagged bool `json:"is_aml_flagged,required"`
 	// Indicates whether the wallet is a Dinari-managed wallet
 	IsManagedWallet bool `json:"is_managed_wallet,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Address         resp.Field
-		IsAmlFlagged    resp.Field
-		IsManagedWallet resp.Field
-		ExtraFields     map[string]resp.Field
+		Address         respjson.Field
+		IsAmlFlagged    respjson.Field
+		IsManagedWallet respjson.Field
+		ExtraFields     map[string]respjson.Field
 		raw             string
 	} `json:"-"`
 }

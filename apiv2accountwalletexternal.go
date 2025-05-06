@@ -14,7 +14,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2AccountWalletExternalService contains methods and other services that help
@@ -66,11 +66,11 @@ type Apiv2AccountWalletExternalGetNonceResponse struct {
 	Message string `json:"message,required"`
 	// Single-use identifier
 	Nonce string `json:"nonce,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Message     resp.Field
-		Nonce       resp.Field
-		ExtraFields map[string]resp.Field
+		Message     respjson.Field
+		Nonce       respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }

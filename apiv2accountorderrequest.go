@@ -14,7 +14,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2AccountOrderRequestService contains methods and other services that help
@@ -147,14 +147,14 @@ type OrderRequest struct {
 	// ID of order created from the order request. This is the primary identifier for
 	// the `/orders` endpoint
 	OrderID string `json:"order_id" format:"uuid"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		AccountID        resp.Field
-		ConfirmationCode resp.Field
-		CreatedDt        resp.Field
-		Status           resp.Field
-		OrderID          resp.Field
-		ExtraFields      map[string]resp.Field
+		AccountID        respjson.Field
+		ConfirmationCode respjson.Field
+		CreatedDt        respjson.Field
+		Status           respjson.Field
+		OrderID          respjson.Field
+		ExtraFields      map[string]respjson.Field
 		raw              string
 	} `json:"-"`
 }

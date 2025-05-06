@@ -15,7 +15,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2MarketDataStockSplitService contains methods and other services that help
@@ -102,17 +102,17 @@ type StockSplit struct {
 	Status StockSplitStatus `json:"status,required"`
 	// Reference to the id of the stock for this split
 	StockID string `json:"stock_id,required" format:"bigint"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID          resp.Field
-		ExDate      resp.Field
-		PayableDate resp.Field
-		RecordDate  resp.Field
-		SplitFrom   resp.Field
-		SplitTo     resp.Field
-		Status      resp.Field
-		StockID     resp.Field
-		ExtraFields map[string]resp.Field
+		ID          respjson.Field
+		ExDate      respjson.Field
+		PayableDate respjson.Field
+		RecordDate  respjson.Field
+		SplitFrom   respjson.Field
+		SplitTo     respjson.Field
+		Status      respjson.Field
+		StockID     respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }

@@ -15,7 +15,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2EntityAccountService contains methods and other services that help with
@@ -71,13 +71,13 @@ type Account struct {
 	EntityID string `json:"entity_id,required" format:"uuid"`
 	// Indicates whether the account is active
 	IsActive bool `json:"is_active,required"`
-	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID          resp.Field
-		CreatedDt   resp.Field
-		EntityID    resp.Field
-		IsActive    resp.Field
-		ExtraFields map[string]resp.Field
+		ID          respjson.Field
+		CreatedDt   respjson.Field
+		EntityID    respjson.Field
+		IsActive    respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
