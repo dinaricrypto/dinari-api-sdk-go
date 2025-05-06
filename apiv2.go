@@ -48,8 +48,7 @@ func (r *APIV2Service) GetHealth(ctx context.Context, opts ...option.RequestOpti
 type Apiv2GetHealthResponse struct {
 	// Status of server
 	Status string `json:"status,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Status      resp.Field
 		ExtraFields map[string]resp.Field

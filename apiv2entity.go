@@ -91,8 +91,7 @@ type Entity struct {
 	Name string `json:"name"`
 	// Nationality of the entity
 	Nationality string `json:"nationality"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		ID            resp.Field
 		EntityType    resp.Field
@@ -123,10 +122,6 @@ type APIV2EntityNewParams struct {
 	Name string `json:"name,required"`
 	paramObj
 }
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2EntityNewParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 
 func (r APIV2EntityNewParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2EntityNewParams

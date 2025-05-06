@@ -123,8 +123,7 @@ type Apiv2MarketDataStockListResponse struct {
 	DisplayName string `json:"display_name,nullable"`
 	// The URL of the logo of the stock. The preferred format is svg.
 	LogoURL string `json:"logo_url,nullable"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		ID             resp.Field
 		IsFractionable resp.Field
@@ -185,8 +184,7 @@ type Apiv2MarketDataStockGetDividendsResponse struct {
 	RecordDate string `json:"record_date"`
 	// Ticker symbol of the stock.
 	Ticker string `json:"ticker"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		CashAmount      resp.Field
 		Currency        resp.Field
@@ -220,8 +218,7 @@ type Apiv2MarketDataStockGetHistoricalPricesResponse struct {
 	Open float64 `json:"open,required"`
 	// The Unix timestamp in seconds for the start of the aggregate window.
 	Timestamp int64 `json:"timestamp,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Close       resp.Field
 		High        resp.Field
@@ -255,8 +252,7 @@ type Apiv2MarketDataStockGetNewsResponse struct {
 	// The mobile friendly Accelerated Mobile Page (AMP) URL of the news article if
 	// available
 	AmpURL string `json:"amp_url"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		ArticleURL  resp.Field
 		Description resp.Field
@@ -300,8 +296,7 @@ type Apiv2MarketDataStockGetQuoteResponse struct {
 	Volume float64 `json:"volume"`
 	// The number of shares outstanding in the given time period
 	WeightedSharesOutstanding int64 `json:"weighted_shares_outstanding"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Price                     resp.Field
 		StockID                   resp.Field
@@ -334,10 +329,6 @@ type APIV2MarketDataStockListParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2MarketDataStockListParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 // URLQuery serializes [APIV2MarketDataStockListParams]'s query parameters as
 // `url.Values`.
 func (r APIV2MarketDataStockListParams) URLQuery() (v url.Values, err error) {
@@ -353,12 +344,6 @@ type APIV2MarketDataStockGetHistoricalPricesParams struct {
 	// Any of "DAY", "WEEK", "MONTH", "YEAR".
 	Timespan APIV2MarketDataStockGetHistoricalPricesParamsTimespan `query:"timespan,omitzero,required" json:"-"`
 	paramObj
-}
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2MarketDataStockGetHistoricalPricesParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
 }
 
 // URLQuery serializes [APIV2MarketDataStockGetHistoricalPricesParams]'s query
@@ -384,12 +369,6 @@ type APIV2MarketDataStockGetNewsParams struct {
 	// The number of news articles to return, default is 10 max is 25
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	paramObj
-}
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2MarketDataStockGetNewsParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
 }
 
 // URLQuery serializes [APIV2MarketDataStockGetNewsParams]'s query parameters as

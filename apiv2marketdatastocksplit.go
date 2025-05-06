@@ -102,8 +102,7 @@ type StockSplit struct {
 	Status StockSplitStatus `json:"status,required"`
 	// Reference to the id of the stock for this split
 	StockID string `json:"stock_id,required" format:"bigint"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		ID          resp.Field
 		ExDate      resp.Field
@@ -140,12 +139,6 @@ type APIV2MarketDataStockSplitGetParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2MarketDataStockSplitGetParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
-
 // URLQuery serializes [APIV2MarketDataStockSplitGetParams]'s query parameters as
 // `url.Values`.
 func (r APIV2MarketDataStockSplitGetParams) URLQuery() (v url.Values, err error) {
@@ -159,12 +152,6 @@ type APIV2MarketDataStockSplitListParams struct {
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	paramObj
-}
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2MarketDataStockSplitListParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
 }
 
 // URLQuery serializes [APIV2MarketDataStockSplitListParams]'s query parameters as

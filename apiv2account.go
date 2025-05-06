@@ -120,8 +120,7 @@ type Apiv2AccountGetCashResponse struct {
 	Amount float64 `json:"amount,required"`
 	// Currency (e.g. USD)
 	Currency string `json:"currency,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Amount      resp.Field
 		Currency    resp.Field
@@ -146,8 +145,7 @@ type Apiv2AccountGetDividendPaymentsResponse struct {
 	PaymentDate time.Time `json:"payment_date,required" format:"date"`
 	// ID of the stock for which the dividend was paid.
 	StockID string `json:"stock_id,required" format:"bigint"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Amount      resp.Field
 		Currency    resp.Field
@@ -172,8 +170,7 @@ type Apiv2AccountGetInterestPaymentsResponse struct {
 	Currency string `json:"currency,required"`
 	// Date of interest payment. In US Eastern time zone
 	PaymentDate time.Time `json:"payment_date,required" format:"date"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Amount      resp.Field
 		Currency    resp.Field
@@ -194,8 +191,7 @@ func (r *Apiv2AccountGetInterestPaymentsResponse) UnmarshalJSON(data []byte) err
 type Apiv2AccountGetPortfolioResponse struct {
 	// Stock Balance details for all owned stocks
 	Assets []Apiv2AccountGetPortfolioResponseAsset `json:"assets,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Assets      resp.Field
 		ExtraFields map[string]resp.Field
@@ -217,8 +213,7 @@ type Apiv2AccountGetPortfolioResponseAsset struct {
 	MarketValue float64 `json:"market_value,required"`
 	// ID of Stock
 	StockID string `json:"stock_id,required" format:"bigint"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		Amount      resp.Field
 		MarketValue resp.Field

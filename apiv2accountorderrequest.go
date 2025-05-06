@@ -126,9 +126,6 @@ type LimitOrderRequestInputParam struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f LimitOrderRequestInputParam) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 func (r LimitOrderRequestInputParam) MarshalJSON() (data []byte, err error) {
 	type shadow LimitOrderRequestInputParam
 	return param.MarshalObject(r, (*shadow)(&r))
@@ -150,8 +147,7 @@ type OrderRequest struct {
 	// ID of order created from the order request. This is the primary identifier for
 	// the `/orders` endpoint
 	OrderID string `json:"order_id" format:"uuid"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [resp.Field.Valid].
 	JSON struct {
 		AccountID        resp.Field
 		ConfirmationCode resp.Field
@@ -184,22 +180,10 @@ type APIV2AccountOrderRequestGetParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2AccountOrderRequestGetParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
-
 type APIV2AccountOrderRequestNewLimitBuyParams struct {
 	// Input parameters for placing a limit order.
 	LimitOrderRequestInput LimitOrderRequestInputParam
 	paramObj
-}
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2AccountOrderRequestNewLimitBuyParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
 }
 
 func (r APIV2AccountOrderRequestNewLimitBuyParams) MarshalJSON() (data []byte, err error) {
@@ -210,12 +194,6 @@ type APIV2AccountOrderRequestNewLimitSellParams struct {
 	// Input parameters for placing a limit order.
 	LimitOrderRequestInput LimitOrderRequestInputParam
 	paramObj
-}
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2AccountOrderRequestNewLimitSellParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
 }
 
 func (r APIV2AccountOrderRequestNewLimitSellParams) MarshalJSON() (data []byte, err error) {
@@ -233,12 +211,6 @@ type APIV2AccountOrderRequestNewMarketBuyParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2AccountOrderRequestNewMarketBuyParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
-
 func (r APIV2AccountOrderRequestNewMarketBuyParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2AccountOrderRequestNewMarketBuyParams
 	return param.MarshalObject(r, (*shadow)(&r))
@@ -251,12 +223,6 @@ type APIV2AccountOrderRequestNewMarketSellParams struct {
 	// ID of stock, as returned by the `/stocks` endpoint, e.g. 1
 	StockID string `json:"stock_id,required" format:"bigint"`
 	paramObj
-}
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2AccountOrderRequestNewMarketSellParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
 }
 
 func (r APIV2AccountOrderRequestNewMarketSellParams) MarshalJSON() (data []byte, err error) {
