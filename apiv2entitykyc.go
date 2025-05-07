@@ -188,6 +188,9 @@ func (r KYCDataParam) MarshalJSON() (data []byte, err error) {
 	type shadow KYCDataParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *KYCDataParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type KYCDocumentType string
 
@@ -303,6 +306,9 @@ func (r APIV2EntityKYCSubmitParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2EntityKYCSubmitParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *APIV2EntityKYCSubmitParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type APIV2EntityKYCUploadDocumentParams struct {
 	EntityID string `path:"entity_id,required" format:"uuid" json:"-"`
@@ -316,4 +322,7 @@ type APIV2EntityKYCUploadDocumentParams struct {
 func (r APIV2EntityKYCUploadDocumentParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2EntityKYCUploadDocumentParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *APIV2EntityKYCUploadDocumentParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }

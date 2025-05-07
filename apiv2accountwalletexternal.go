@@ -97,6 +97,9 @@ func (r APIV2AccountWalletExternalConnectParams) MarshalJSON() (data []byte, err
 	type shadow APIV2AccountWalletExternalConnectParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *APIV2AccountWalletExternalConnectParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type APIV2AccountWalletExternalGetNonceParams struct {
 	// Address of the wallet to connect

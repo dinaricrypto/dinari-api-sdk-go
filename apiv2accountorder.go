@@ -325,6 +325,9 @@ func (r APIV2AccountOrderGetEstimatedFeeParams) MarshalJSON() (data []byte, err 
 	type shadow APIV2AccountOrderGetEstimatedFeeParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *APIV2AccountOrderGetEstimatedFeeParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type APIV2AccountOrderGetFulfillmentsParams struct {
 	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
