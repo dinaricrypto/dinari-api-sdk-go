@@ -130,6 +130,9 @@ func (r LimitOrderRequestInputParam) MarshalJSON() (data []byte, err error) {
 	type shadow LimitOrderRequestInputParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *LimitOrderRequestInputParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 // Request to create an order
 type OrderRequest struct {
@@ -189,6 +192,9 @@ type APIV2AccountOrderRequestNewLimitBuyParams struct {
 func (r APIV2AccountOrderRequestNewLimitBuyParams) MarshalJSON() (data []byte, err error) {
 	return json.Marshal(r.LimitOrderRequestInput)
 }
+func (r *APIV2AccountOrderRequestNewLimitBuyParams) UnmarshalJSON(data []byte) error {
+	return r.LimitOrderRequestInput.UnmarshalJSON(data)
+}
 
 type APIV2AccountOrderRequestNewLimitSellParams struct {
 	// Input parameters for placing a limit order.
@@ -198,6 +204,9 @@ type APIV2AccountOrderRequestNewLimitSellParams struct {
 
 func (r APIV2AccountOrderRequestNewLimitSellParams) MarshalJSON() (data []byte, err error) {
 	return json.Marshal(r.LimitOrderRequestInput)
+}
+func (r *APIV2AccountOrderRequestNewLimitSellParams) UnmarshalJSON(data []byte) error {
+	return r.LimitOrderRequestInput.UnmarshalJSON(data)
 }
 
 type APIV2AccountOrderRequestNewMarketBuyParams struct {
@@ -215,6 +224,9 @@ func (r APIV2AccountOrderRequestNewMarketBuyParams) MarshalJSON() (data []byte, 
 	type shadow APIV2AccountOrderRequestNewMarketBuyParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *APIV2AccountOrderRequestNewMarketBuyParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type APIV2AccountOrderRequestNewMarketSellParams struct {
 	// Quantity of stock to trade. Must be a positive number with a precision of up to
@@ -228,4 +240,7 @@ type APIV2AccountOrderRequestNewMarketSellParams struct {
 func (r APIV2AccountOrderRequestNewMarketSellParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2AccountOrderRequestNewMarketSellParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *APIV2AccountOrderRequestNewMarketSellParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }

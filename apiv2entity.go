@@ -127,3 +127,6 @@ func (r APIV2EntityNewParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2EntityNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *APIV2EntityNewParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
