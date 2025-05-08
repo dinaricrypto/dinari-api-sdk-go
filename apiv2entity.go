@@ -12,7 +12,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2EntityService contains methods and other services that help with
@@ -91,15 +91,14 @@ type Entity struct {
 	Name string `json:"name"`
 	// Nationality of the entity
 	Nationality string `json:"nationality"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID            resp.Field
-		EntityType    resp.Field
-		IsKYCComplete resp.Field
-		Name          resp.Field
-		Nationality   resp.Field
-		ExtraFields   map[string]resp.Field
+		ID            respjson.Field
+		EntityType    respjson.Field
+		IsKYCComplete respjson.Field
+		Name          respjson.Field
+		Nationality   respjson.Field
+		ExtraFields   map[string]respjson.Field
 		raw           string
 	} `json:"-"`
 }
@@ -124,11 +123,10 @@ type APIV2EntityNewParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2EntityNewParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 func (r APIV2EntityNewParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2EntityNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *APIV2EntityNewParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }

@@ -13,7 +13,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2EntityKYCService contains methods and other services that help with
@@ -72,9 +72,9 @@ func (r *APIV2EntityKYCService) Submit(ctx context.Context, entityID string, bod
 }
 
 // Uploads KYC-related documentation (for Partner KYC-enabled entities).
-func (r *APIV2EntityKYCService) UploadDocument(ctx context.Context, entityID string, kycID string, body APIV2EntityKYCUploadDocumentParams, opts ...option.RequestOption) (res *Apiv2EntityKYCUploadDocumentResponse, err error) {
+func (r *APIV2EntityKYCService) UploadDocument(ctx context.Context, kycID string, params APIV2EntityKYCUploadDocumentParams, opts ...option.RequestOption) (res *Apiv2EntityKYCUploadDocumentResponse, err error) {
 	opts = append(r.Options[:], opts...)
-	if entityID == "" {
+	if params.EntityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return
 	}
@@ -82,8 +82,8 @@ func (r *APIV2EntityKYCService) UploadDocument(ctx context.Context, entityID str
 		err = errors.New("missing required kyc_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/entities/%s/kyc/%s/document", entityID, kycID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	path := fmt.Sprintf("api/v2/entities/%s/kyc/%s/document", params.EntityID, kycID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
 
@@ -116,22 +116,21 @@ type KYCData struct {
 	MiddleName string `json:"middle_name,nullable"`
 	// ID number of the official tax document of the country the entity belongs to
 	TaxIDNumber string `json:"tax_id_number"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CountryCode        resp.Field
-		LastName           resp.Field
-		AddressCity        resp.Field
-		AddressPostalCode  resp.Field
-		AddressStreet1     resp.Field
-		AddressStreet2     resp.Field
-		AddressSubdivision resp.Field
-		BirthDate          resp.Field
-		Email              resp.Field
-		FirstName          resp.Field
-		MiddleName         resp.Field
-		TaxIDNumber        resp.Field
-		ExtraFields        map[string]resp.Field
+		CountryCode        respjson.Field
+		LastName           respjson.Field
+		AddressCity        respjson.Field
+		AddressPostalCode  respjson.Field
+		AddressStreet1     respjson.Field
+		AddressStreet2     respjson.Field
+		AddressSubdivision respjson.Field
+		BirthDate          respjson.Field
+		Email              respjson.Field
+		FirstName          respjson.Field
+		MiddleName         respjson.Field
+		TaxIDNumber        respjson.Field
+		ExtraFields        map[string]respjson.Field
 		raw                string
 	} `json:"-"`
 }
@@ -146,9 +145,9 @@ func (r *KYCData) UnmarshalJSON(data []byte) error {
 //
 // Warning: the fields of the param type will not be present. ToParam should only
 // be used at the last possible moment before sending a request. Test for this with
-// KYCDataParam.IsOverridden()
+// KYCDataParam.Overrides()
 func (r KYCData) ToParam() KYCDataParam {
-	return param.OverrideObj[KYCDataParam](r.RawJSON())
+	return param.Override[KYCDataParam](r.RawJSON())
 }
 
 // Object consisting of KYC data for an entity
@@ -185,12 +184,12 @@ type KYCDataParam struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f KYCDataParam) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 func (r KYCDataParam) MarshalJSON() (data []byte, err error) {
 	type shadow KYCDataParam
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *KYCDataParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type KYCDocumentType string
@@ -216,15 +215,14 @@ type KYCInfo struct {
 	Data KYCData `json:"data"`
 	// Name of the KYC provider that provided the KYC check
 	ProviderName string `json:"provider_name"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID           resp.Field
-		Status       resp.Field
-		CheckedDt    resp.Field
-		Data         resp.Field
-		ProviderName resp.Field
-		ExtraFields  map[string]resp.Field
+		ID           respjson.Field
+		Status       respjson.Field
+		CheckedDt    respjson.Field
+		Data         respjson.Field
+		ProviderName respjson.Field
+		ExtraFields  map[string]respjson.Field
 		raw          string
 	} `json:"-"`
 }
@@ -252,12 +250,11 @@ type Apiv2EntityKYCGetURLResponse struct {
 	EmbedURL string `json:"embed_url,required"`
 	// Timestamp at which the KYC request will be expired
 	ExpirationDt time.Time `json:"expiration_dt,required" format:"date-time"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		EmbedURL     resp.Field
-		ExpirationDt resp.Field
-		ExtraFields  map[string]resp.Field
+		EmbedURL     respjson.Field
+		ExpirationDt respjson.Field
+		ExtraFields  map[string]respjson.Field
 		raw          string
 	} `json:"-"`
 }
@@ -280,14 +277,13 @@ type Apiv2EntityKYCUploadDocumentResponse struct {
 	Filename string `json:"filename,required"`
 	// URL to access the document. Expires in 1 hour
 	URL string `json:"url,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID           resp.Field
-		DocumentType resp.Field
-		Filename     resp.Field
-		URL          resp.Field
-		ExtraFields  map[string]resp.Field
+		ID           respjson.Field
+		DocumentType respjson.Field
+		Filename     respjson.Field
+		URL          respjson.Field
+		ExtraFields  map[string]respjson.Field
 		raw          string
 	} `json:"-"`
 }
@@ -306,16 +302,16 @@ type APIV2EntityKYCSubmitParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2EntityKYCSubmitParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
-
 func (r APIV2EntityKYCSubmitParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2EntityKYCSubmitParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
+func (r *APIV2EntityKYCSubmitParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
 
 type APIV2EntityKYCUploadDocumentParams struct {
+	EntityID string `path:"entity_id,required" format:"uuid" json:"-"`
 	// Type of the document to be uploaded
 	//
 	// Any of "GOVERNMENT_ID", "SELFIE", "RESIDENCY", "UNKNOWN".
@@ -323,13 +319,10 @@ type APIV2EntityKYCUploadDocumentParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2EntityKYCUploadDocumentParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
-
 func (r APIV2EntityKYCUploadDocumentParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2EntityKYCUploadDocumentParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *APIV2EntityKYCUploadDocumentParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }

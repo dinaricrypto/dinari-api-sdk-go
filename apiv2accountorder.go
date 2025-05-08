@@ -12,7 +12,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2AccountOrderService contains methods and other services that help with
@@ -35,9 +35,9 @@ func NewAPIV2AccountOrderService(opts ...option.RequestOption) (r APIV2AccountOr
 }
 
 // Retrieves details of a specific order by its ID.
-func (r *APIV2AccountOrderService) Get(ctx context.Context, accountID string, orderID string, opts ...option.RequestOption) (res *Order, err error) {
+func (r *APIV2AccountOrderService) Get(ctx context.Context, orderID string, query APIV2AccountOrderGetParams, opts ...option.RequestOption) (res *Order, err error) {
 	opts = append(r.Options[:], opts...)
-	if accountID == "" {
+	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -45,7 +45,7 @@ func (r *APIV2AccountOrderService) Get(ctx context.Context, accountID string, or
 		err = errors.New("missing required order_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s", accountID, orderID)
+	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s", query.AccountID, orderID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -64,9 +64,9 @@ func (r *APIV2AccountOrderService) List(ctx context.Context, accountID string, o
 
 // Cancels an order by its ID. Note that this requires the order ID, not the order
 // request ID.
-func (r *APIV2AccountOrderService) Cancel(ctx context.Context, accountID string, orderID string, opts ...option.RequestOption) (res *Order, err error) {
+func (r *APIV2AccountOrderService) Cancel(ctx context.Context, orderID string, body APIV2AccountOrderCancelParams, opts ...option.RequestOption) (res *Order, err error) {
 	opts = append(r.Options[:], opts...)
-	if accountID == "" {
+	if body.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -74,7 +74,7 @@ func (r *APIV2AccountOrderService) Cancel(ctx context.Context, accountID string,
 		err = errors.New("missing required order_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s/cancel", accountID, orderID)
+	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s/cancel", body.AccountID, orderID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
 	return
 }
@@ -93,9 +93,9 @@ func (r *APIV2AccountOrderService) GetEstimatedFee(ctx context.Context, accountI
 }
 
 // Retrieves order fulfillments for a specific order.
-func (r *APIV2AccountOrderService) GetFulfillments(ctx context.Context, accountID string, orderID string, opts ...option.RequestOption) (res *[]OrderFulfillment, err error) {
+func (r *APIV2AccountOrderService) GetFulfillments(ctx context.Context, orderID string, query APIV2AccountOrderGetFulfillmentsParams, opts ...option.RequestOption) (res *[]OrderFulfillment, err error) {
 	opts = append(r.Options[:], opts...)
-	if accountID == "" {
+	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -103,7 +103,7 @@ func (r *APIV2AccountOrderService) GetFulfillments(ctx context.Context, accountI
 		err = errors.New("missing required order_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s/fulfillments", accountID, orderID)
+	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s/fulfillments", query.AccountID, orderID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -147,24 +147,23 @@ type Order struct {
 	Fees []map[string]any `json:"fees"`
 	// Total amount of network fee taken in USD
 	NetworkFeeInUsd float64 `json:"network_fee_in_usd"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID                    resp.Field
-		AssetTokenQuantity    resp.Field
-		BrokerageOrderStatus  resp.Field
-		ChainID               resp.Field
-		OrderContractAddress  resp.Field
-		OrderSide             resp.Field
-		OrderTif              resp.Field
-		OrderTransactionHash  resp.Field
-		OrderType             resp.Field
-		PaymentTokenQuantity  resp.Field
-		SmartContractOrderID  resp.Field
-		CancelTransactionHash resp.Field
-		Fees                  resp.Field
-		NetworkFeeInUsd       resp.Field
-		ExtraFields           map[string]resp.Field
+		ID                    respjson.Field
+		AssetTokenQuantity    respjson.Field
+		BrokerageOrderStatus  respjson.Field
+		ChainID               respjson.Field
+		OrderContractAddress  respjson.Field
+		OrderSide             respjson.Field
+		OrderTif              respjson.Field
+		OrderTransactionHash  respjson.Field
+		OrderType             respjson.Field
+		PaymentTokenQuantity  respjson.Field
+		SmartContractOrderID  respjson.Field
+		CancelTransactionHash respjson.Field
+		Fees                  respjson.Field
+		NetworkFeeInUsd       respjson.Field
+		ExtraFields           map[string]respjson.Field
 		raw                   string
 	} `json:"-"`
 }
@@ -229,15 +228,14 @@ type Apiv2AccountOrderGetEstimatedFeeResponse struct {
 	Fees []Apiv2AccountOrderGetEstimatedFeeResponseFee `json:"fees,required"`
 	// Address of payment token used for fees
 	PaymentToken string `json:"payment_token,required" format:"eth_address"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ChainID           resp.Field
-		FeeQuote          resp.Field
-		FeeQuoteSignature resp.Field
-		Fees              resp.Field
-		PaymentToken      resp.Field
-		ExtraFields       map[string]resp.Field
+		ChainID           respjson.Field
+		FeeQuote          respjson.Field
+		FeeQuoteSignature respjson.Field
+		Fees              respjson.Field
+		PaymentToken      respjson.Field
+		ExtraFields       map[string]respjson.Field
 		raw               string
 	} `json:"-"`
 }
@@ -255,15 +253,14 @@ type Apiv2AccountOrderGetEstimatedFeeResponseFeeQuote struct {
 	OrderID   string `json:"orderId,required" format:"bigint"`
 	Requester string `json:"requester,required" format:"eth_address"`
 	Timestamp int64  `json:"timestamp,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Deadline    resp.Field
-		Fee         resp.Field
-		OrderID     resp.Field
-		Requester   resp.Field
-		Timestamp   resp.Field
-		ExtraFields map[string]resp.Field
+		Deadline    respjson.Field
+		Fee         respjson.Field
+		OrderID     respjson.Field
+		Requester   respjson.Field
+		Timestamp   respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -288,13 +285,12 @@ type Apiv2AccountOrderGetEstimatedFeeResponseFee struct {
 	// Any of "SPONSORED_NETWORK", "NETWORK", "TRADING", "ORDER", "PARTNER_ORDER",
 	// "PARTNER_TRADING".
 	Type string `json:"type,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		FeeInEth    resp.Field
-		FeeInWei    resp.Field
-		Type        resp.Field
-		ExtraFields map[string]resp.Field
+		FeeInEth    respjson.Field
+		FeeInWei    respjson.Field
+		Type        respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -303,6 +299,16 @@ type Apiv2AccountOrderGetEstimatedFeeResponseFee struct {
 func (r Apiv2AccountOrderGetEstimatedFeeResponseFee) RawJSON() string { return r.JSON.raw }
 func (r *Apiv2AccountOrderGetEstimatedFeeResponseFee) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type APIV2AccountOrderGetParams struct {
+	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	paramObj
+}
+
+type APIV2AccountOrderCancelParams struct {
+	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	paramObj
 }
 
 type APIV2AccountOrderGetEstimatedFeeParams struct {
@@ -315,13 +321,15 @@ type APIV2AccountOrderGetEstimatedFeeParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2AccountOrderGetEstimatedFeeParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
-
 func (r APIV2AccountOrderGetEstimatedFeeParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2AccountOrderGetEstimatedFeeParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *APIV2AccountOrderGetEstimatedFeeParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type APIV2AccountOrderGetFulfillmentsParams struct {
+	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	paramObj
 }
