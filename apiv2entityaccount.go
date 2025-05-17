@@ -15,7 +15,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2EntityAccountService contains methods and other services that help with
@@ -71,14 +71,13 @@ type Account struct {
 	EntityID string `json:"entity_id,required" format:"uuid"`
 	// Indicates whether the account is active
 	IsActive bool `json:"is_active,required"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID          resp.Field
-		CreatedDt   resp.Field
-		EntityID    resp.Field
-		IsActive    resp.Field
-		ExtraFields map[string]resp.Field
+		ID          respjson.Field
+		CreatedDt   respjson.Field
+		EntityID    respjson.Field
+		IsActive    respjson.Field
+		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
 }
@@ -94,10 +93,6 @@ type APIV2EntityAccountListParams struct {
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	paramObj
 }
-
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2EntityAccountListParams) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 
 // URLQuery serializes [APIV2EntityAccountListParams]'s query parameters as
 // `url.Values`.

@@ -14,7 +14,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2AccountOrderRequestService contains methods and other services that help
@@ -37,9 +37,9 @@ func NewAPIV2AccountOrderRequestService(opts ...option.RequestOption) (r APIV2Ac
 }
 
 // Retrieves details of a specific managed order request by its ID.
-func (r *APIV2AccountOrderRequestService) Get(ctx context.Context, accountID string, requestID string, opts ...option.RequestOption) (res *OrderRequest, err error) {
+func (r *APIV2AccountOrderRequestService) Get(ctx context.Context, requestID string, query APIV2AccountOrderRequestGetParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
-	if accountID == "" {
+	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -47,7 +47,7 @@ func (r *APIV2AccountOrderRequestService) Get(ctx context.Context, accountID str
 		err = errors.New("missing required request_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/%s", accountID, requestID)
+	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/%s", query.AccountID, requestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -126,12 +126,12 @@ type LimitOrderRequestInputParam struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f LimitOrderRequestInputParam) IsPresent() bool { return !param.IsOmitted(f) && !f.IsNull() }
 func (r LimitOrderRequestInputParam) MarshalJSON() (data []byte, err error) {
 	type shadow LimitOrderRequestInputParam
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *LimitOrderRequestInputParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Request to create an order
@@ -150,15 +150,14 @@ type OrderRequest struct {
 	// ID of order created from the order request. This is the primary identifier for
 	// the `/orders` endpoint
 	OrderID string `json:"order_id" format:"uuid"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		AccountID        resp.Field
-		ConfirmationCode resp.Field
-		CreatedDt        resp.Field
-		Status           resp.Field
-		OrderID          resp.Field
-		ExtraFields      map[string]resp.Field
+		AccountID        respjson.Field
+		ConfirmationCode respjson.Field
+		CreatedDt        respjson.Field
+		Status           respjson.Field
+		OrderID          respjson.Field
+		ExtraFields      map[string]respjson.Field
 		raw              string
 	} `json:"-"`
 }
@@ -179,20 +178,22 @@ const (
 	OrderRequestStatusCancelled OrderRequestStatus = "CANCELLED"
 )
 
+type APIV2AccountOrderRequestGetParams struct {
+	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	paramObj
+}
+
 type APIV2AccountOrderRequestNewLimitBuyParams struct {
 	// Input parameters for placing a limit order.
 	LimitOrderRequestInput LimitOrderRequestInputParam
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2AccountOrderRequestNewLimitBuyParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
-
 func (r APIV2AccountOrderRequestNewLimitBuyParams) MarshalJSON() (data []byte, err error) {
 	return json.Marshal(r.LimitOrderRequestInput)
+}
+func (r *APIV2AccountOrderRequestNewLimitBuyParams) UnmarshalJSON(data []byte) error {
+	return r.LimitOrderRequestInput.UnmarshalJSON(data)
 }
 
 type APIV2AccountOrderRequestNewLimitSellParams struct {
@@ -201,14 +202,11 @@ type APIV2AccountOrderRequestNewLimitSellParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2AccountOrderRequestNewLimitSellParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
-
 func (r APIV2AccountOrderRequestNewLimitSellParams) MarshalJSON() (data []byte, err error) {
 	return json.Marshal(r.LimitOrderRequestInput)
+}
+func (r *APIV2AccountOrderRequestNewLimitSellParams) UnmarshalJSON(data []byte) error {
+	return r.LimitOrderRequestInput.UnmarshalJSON(data)
 }
 
 type APIV2AccountOrderRequestNewMarketBuyParams struct {
@@ -222,15 +220,12 @@ type APIV2AccountOrderRequestNewMarketBuyParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2AccountOrderRequestNewMarketBuyParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
-
 func (r APIV2AccountOrderRequestNewMarketBuyParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2AccountOrderRequestNewMarketBuyParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *APIV2AccountOrderRequestNewMarketBuyParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type APIV2AccountOrderRequestNewMarketSellParams struct {
@@ -242,13 +237,10 @@ type APIV2AccountOrderRequestNewMarketSellParams struct {
 	paramObj
 }
 
-// IsPresent returns true if the field's value is not omitted and not the JSON
-// "null". To check if this field is omitted, use [param.IsOmitted].
-func (f APIV2AccountOrderRequestNewMarketSellParams) IsPresent() bool {
-	return !param.IsOmitted(f) && !f.IsNull()
-}
-
 func (r APIV2AccountOrderRequestNewMarketSellParams) MarshalJSON() (data []byte, err error) {
 	type shadow APIV2AccountOrderRequestNewMarketSellParams
 	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *APIV2AccountOrderRequestNewMarketSellParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }

@@ -12,7 +12,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/resp"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2AccountOrderFulfillmentService contains methods and other services that
@@ -35,9 +35,9 @@ func NewAPIV2AccountOrderFulfillmentService(opts ...option.RequestOption) (r API
 }
 
 // Retrieves details of a specific order fulfillment by its ID.
-func (r *APIV2AccountOrderFulfillmentService) Get(ctx context.Context, accountID string, fulfillmentID string, opts ...option.RequestOption) (res *OrderFulfillment, err error) {
+func (r *APIV2AccountOrderFulfillmentService) Get(ctx context.Context, fulfillmentID string, query APIV2AccountOrderFulfillmentGetParams, opts ...option.RequestOption) (res *OrderFulfillment, err error) {
 	opts = append(r.Options[:], opts...)
-	if accountID == "" {
+	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -45,7 +45,7 @@ func (r *APIV2AccountOrderFulfillmentService) Get(ctx context.Context, accountID
 		err = errors.New("missing required fulfillment_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/accounts/%s/order_fulfillments/%s", accountID, fulfillmentID)
+	path := fmt.Sprintf("api/v2/accounts/%s/order_fulfillments/%s", query.AccountID, fulfillmentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
 }
@@ -83,19 +83,18 @@ type OrderFulfillment struct {
 	TransactionHash string `json:"transaction_hash,required" format:"hex_string"`
 	// Fee amount of payment token spent
 	PaymentTokenFee float64 `json:"payment_token_fee"`
-	// Metadata for the response, check the presence of optional fields with the
-	// [resp.Field.IsPresent] method.
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID                 resp.Field
-		AssetTokenFilled   resp.Field
-		AssetTokenSpent    resp.Field
-		OrderID            resp.Field
-		PaymentTokenFilled resp.Field
-		PaymentTokenSpent  resp.Field
-		TransactionDt      resp.Field
-		TransactionHash    resp.Field
-		PaymentTokenFee    resp.Field
-		ExtraFields        map[string]resp.Field
+		ID                 respjson.Field
+		AssetTokenFilled   respjson.Field
+		AssetTokenSpent    respjson.Field
+		OrderID            respjson.Field
+		PaymentTokenFilled respjson.Field
+		PaymentTokenSpent  respjson.Field
+		TransactionDt      respjson.Field
+		TransactionHash    respjson.Field
+		PaymentTokenFee    respjson.Field
+		ExtraFields        map[string]respjson.Field
 		raw                string
 	} `json:"-"`
 }
@@ -104,4 +103,9 @@ type OrderFulfillment struct {
 func (r OrderFulfillment) RawJSON() string { return r.JSON.raw }
 func (r *OrderFulfillment) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type APIV2AccountOrderFulfillmentGetParams struct {
+	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	paramObj
 }
