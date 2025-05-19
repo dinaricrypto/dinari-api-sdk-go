@@ -25,6 +25,7 @@ func TestAPIV2MarketDataGetMarketHours(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.MarketData.GetMarketHours(context.TODO())
 	if err != nil {

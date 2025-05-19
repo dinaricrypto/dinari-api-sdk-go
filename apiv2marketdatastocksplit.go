@@ -37,8 +37,8 @@ func NewAPIV2MarketDataStockSplitService(opts ...option.RequestOption) (r APIV2M
 	return
 }
 
-// Returns a list of stock splits for a given stock id. The splits are ordered by
-// the date they were created, with the most recent split first.
+// Get a list of stock splits for a specific `Stock`. The splits are ordered by the
+// date they were created, with the most recent split first.
 //
 // In an example 10-for-1 stock split, trading will be halted for the stock at the
 // end of the `payable_date`, as the split transitions from `PENDING` to
@@ -57,8 +57,9 @@ func (r *APIV2MarketDataStockSplitService) Get(ctx context.Context, stockID stri
 	return
 }
 
-// Returns a list of stock splits. The splits are ordered by the date they were
-// created, with the most recent split first.
+// Get a list of stock splits for `Stocks` available for trade via Dinari. The
+// splits are ordered by the date they were created, with the most recent split
+// first.
 //
 // In an example 10-for-1 stock split, trading will be halted for the stock at the
 // end of the `payable_date`, as the split transitions from `PENDING` to
@@ -73,35 +74,37 @@ func (r *APIV2MarketDataStockSplitService) List(ctx context.Context, query APIV2
 	return
 }
 
-// StockSplit contains data for a stock split, including the stock id, the number
-// of shares before and after the split, the record date, payable date, ex-date,
-// and the status of the split.
+// Information about a stock split, including the `Stock` ID, the number of shares
+// before and after the split, the record date, payable date, ex-date, and the
+// status of the split.
 type StockSplit struct {
-	// Unique identifier for the stock split
-	ID string `json:"id,required" format:"bigint"`
-	// Ex-date of the split (Eastern Time Zone). First day the stock trades at
-	// post-split prices. Typically is last in the process, and the main important date
-	// for investors.
+	// ID of the `StockSplit`
+	ID string `json:"id,required" format:"uuid"`
+	// Ex-date of the split in Eastern Time Zone. First day the stock trades at
+	// post-split prices. Typically is last date in the process, and the main important
+	// date for investors. In ISO 8601 format, YYYY-MM-DD.
 	ExDate time.Time `json:"ex_date,required" format:"date"`
-	// Payable date (Eastern Time Zone) of the split. Date when company will send out
-	// the new shares. Mainly for record keeping by brokerages, who forward the shares
-	// to eventual owners. Typically is second in the process.
+	// Payable date of the split in Eastern Time Zone. This is the date when company
+	// will send out the new shares. Mainly for record keeping by brokerages, who
+	// forward the shares to eventual owners. Typically is the second date in the
+	// process. In ISO 8601 format, YYYY-MM-DD.
 	PayableDate time.Time `json:"payable_date,required" format:"date"`
-	// Record date (Eastern Time Zone) of the split, for company to determine where to
+	// Record date of the split in Eastern Time Zone, for company to determine where to
 	// send their new shares. Mainly for record keeping by brokerages, who forward the
-	// shares to eventual owners. Typically is first in the process.
+	// shares to eventual owners. Typically is the first date in the process. In ISO
+	// 8601 format, YYYY-MM-DD.
 	RecordDate time.Time `json:"record_date,required" format:"date"`
 	// The number of shares before the split. In a 10-for-1 split, this would be 1.
 	SplitFrom float64 `json:"split_from,required"`
 	// The number of shares after the split. In a 10-for-1 split, this would be 10.
 	SplitTo float64 `json:"split_to,required"`
-	// The status of Dinari's processing of the split. Stocks for which a split is
-	// `IN_PROGRESS` will not be available for trading.
+	// The status of Dinari's processing of the `StockSplit`. `Stocks` for which this
+	// status is `IN_PROGRESS` will not be available for trading.
 	//
 	// Any of "PENDING", "IN_PROGRESS", "COMPLETE".
 	Status StockSplitStatus `json:"status,required"`
-	// Reference to the id of the stock for this split
-	StockID string `json:"stock_id,required" format:"bigint"`
+	// ID of the `Stock` whose shares are being split.
+	StockID string `json:"stock_id,required" format:"uuid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID          respjson.Field
@@ -123,8 +126,8 @@ func (r *StockSplit) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// The status of Dinari's processing of the split. Stocks for which a split is
-// `IN_PROGRESS` will not be available for trading.
+// The status of Dinari's processing of the `StockSplit`. `Stocks` for which this
+// status is `IN_PROGRESS` will not be available for trading.
 type StockSplitStatus string
 
 const (

@@ -25,6 +25,7 @@ func TestAPIV2MarketDataStockListWithOptionalParams(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.MarketData.Stocks.List(context.TODO(), dinariapisdk.APIV2MarketDataStockListParams{
 		Page:     dinariapisdk.Int(1),
@@ -52,8 +53,9 @@ func TestAPIV2MarketDataStockGetDividends(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
-	_, err := client.API.V2.MarketData.Stocks.GetDividends(context.TODO(), "stock_id")
+	_, err := client.API.V2.MarketData.Stocks.GetDividends(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
 		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
@@ -75,10 +77,11 @@ func TestAPIV2MarketDataStockGetHistoricalPrices(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.MarketData.Stocks.GetHistoricalPrices(
 		context.TODO(),
-		"stock_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdk.APIV2MarketDataStockGetHistoricalPricesParams{
 			Timespan: dinariapisdk.APIV2MarketDataStockGetHistoricalPricesParamsTimespanDay,
 		},
@@ -104,10 +107,11 @@ func TestAPIV2MarketDataStockGetNewsWithOptionalParams(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.MarketData.Stocks.GetNews(
 		context.TODO(),
-		"stock_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdk.APIV2MarketDataStockGetNewsParams{
 			Limit: dinariapisdk.Int(1),
 		},
@@ -133,8 +137,9 @@ func TestAPIV2MarketDataStockGetQuote(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
-	_, err := client.API.V2.MarketData.Stocks.GetQuote(context.TODO(), "stock_id")
+	_, err := client.API.V2.MarketData.Stocks.GetQuote(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
 		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {

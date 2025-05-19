@@ -25,12 +25,13 @@ func TestAPIV2AccountWalletExternalConnect(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.Accounts.Wallet.External.Connect(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdk.APIV2AccountWalletExternalConnectParams{
-			ChainID:       0,
+			ChainID:       dinariapisdk.APIV2AccountWalletExternalConnectParamsChainIDEip155_1,
 			Nonce:         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			Signature:     "0xeaF12bD1DfFd",
 			WalletAddress: "wallet_address",
@@ -57,6 +58,7 @@ func TestAPIV2AccountWalletExternalGetNonce(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.Accounts.Wallet.External.GetNonce(
 		context.TODO(),

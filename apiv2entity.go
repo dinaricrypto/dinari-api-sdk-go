@@ -38,8 +38,8 @@ func NewAPIV2EntityService(opts ...option.RequestOption) (r APIV2EntityService) 
 	return
 }
 
-// Creates a new Entity to be managed by your organization. The Entity represents
-// an individual customer of your organization.
+// Create a new `Entity` to be managed by your organization. This `Entity`
+// represents an individual customer of your organization.
 func (r *APIV2EntityService) New(ctx context.Context, body APIV2EntityNewParams, opts ...option.RequestOption) (res *Entity, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "api/v2/entities/"
@@ -47,7 +47,7 @@ func (r *APIV2EntityService) New(ctx context.Context, body APIV2EntityNewParams,
 	return
 }
 
-// Retrieves a specific customer Entity of your organization by their ID.
+// Get a specific customer `Entity` of your organization by their ID.
 func (r *APIV2EntityService) Get(ctx context.Context, entityID string, opts ...option.RequestOption) (res *Entity, err error) {
 	opts = append(r.Options[:], opts...)
 	if entityID == "" {
@@ -59,8 +59,8 @@ func (r *APIV2EntityService) Get(ctx context.Context, entityID string, opts ...o
 	return
 }
 
-// Returns a list of all direct Entities your organization manages. An Entity
-// represents an individual customer of your organization.
+// Get a list of all direct `Entities` your organization manages. These `Entities`
+// represent individual customers of your organization.
 func (r *APIV2EntityService) List(ctx context.Context, opts ...option.RequestOption) (res *[]Entity, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "api/v2/entities/"
@@ -68,7 +68,7 @@ func (r *APIV2EntityService) List(ctx context.Context, opts ...option.RequestOpt
 	return
 }
 
-// Returns the current authenticated Entity.
+// Get the current authenticated `Entity`, which represents your organization.
 func (r *APIV2EntityService) GetCurrent(ctx context.Context, opts ...option.RequestOption) (res *Entity, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "api/v2/entities/me"
@@ -76,20 +76,21 @@ func (r *APIV2EntityService) GetCurrent(ctx context.Context, opts ...option.Requ
 	return
 }
 
-// Information about an entity, which can be either an individual or an
+// Information about an `Entity`, which can be either an individual or an
 // organization.
 type Entity struct {
-	// Unique identifier for the entity
+	// Unique ID of the `Entity`.
 	ID string `json:"id,required" format:"uuid"`
-	// Type of entity
+	// Type of `Entity`. `ORGANIZATION` for Dinari Partners and `INDIVIDUAL` for their
+	// individual customers.
 	//
 	// Any of "INDIVIDUAL", "ORGANIZATION".
 	EntityType EntityEntityType `json:"entity_type,required"`
-	// Indicates if Entity completed KYC
+	// Indicates if `Entity` completed KYC.
 	IsKYCComplete bool `json:"is_kyc_complete,required"`
-	// Name of Entity
+	// Name of `Entity`.
 	Name string `json:"name"`
-	// Nationality of the entity
+	// Nationality or home country of the `Entity`.
 	Nationality string `json:"nationality"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -109,7 +110,8 @@ func (r *Entity) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Type of entity
+// Type of `Entity`. `ORGANIZATION` for Dinari Partners and `INDIVIDUAL` for their
+// individual customers.
 type EntityEntityType string
 
 const (
@@ -118,7 +120,7 @@ const (
 )
 
 type APIV2EntityNewParams struct {
-	// Name of the entity
+	// Name of the `Entity`.
 	Name string `json:"name,required"`
 	paramObj
 }

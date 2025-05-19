@@ -3,13 +3,19 @@
 package dinariapisdk
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"io"
+	"mime/multipart"
 	"net/http"
+	"net/url"
 	"time"
 
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiform"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
@@ -35,7 +41,11 @@ func NewAPIV2EntityKYCService(opts ...option.RequestOption) (r APIV2EntityKYCSer
 	return
 }
 
-// Retrieves KYC data of the entity.
+// Get most recent KYC data of the `Entity`.
+//
+// If there are any completed KYC checks, data from the most recent one will be
+// returned. If there are no completed KYC checks, the most recent KYC check
+// information, regardless of status, will be returned.
 func (r *APIV2EntityKYCService) Get(ctx context.Context, entityID string, opts ...option.RequestOption) (res *KYCInfo, err error) {
 	opts = append(r.Options[:], opts...)
 	if entityID == "" {
@@ -47,19 +57,11 @@ func (r *APIV2EntityKYCService) Get(ctx context.Context, entityID string, opts .
 	return
 }
 
-// Gets an iframe URL for managed (self-service) KYC.
-func (r *APIV2EntityKYCService) GetURL(ctx context.Context, entityID string, opts ...option.RequestOption) (res *Apiv2EntityKYCGetURLResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	if entityID == "" {
-		err = errors.New("missing required entity_id parameter")
-		return
-	}
-	path := fmt.Sprintf("api/v2/entities/%s/kyc/url", entityID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
-// Submits KYC data manually (for Partner KYC-enabled entities).
+// Submit KYC data directly, for partners that are provisioned to provide their own
+// KYC data.
+//
+// This feature is available for everyone in sandbox mode, and for specifically
+// provisioned partners in production.
 func (r *APIV2EntityKYCService) Submit(ctx context.Context, entityID string, body APIV2EntityKYCSubmitParams, opts ...option.RequestOption) (res *KYCInfo, err error) {
 	opts = append(r.Options[:], opts...)
 	if entityID == "" {
@@ -71,7 +73,8 @@ func (r *APIV2EntityKYCService) Submit(ctx context.Context, entityID string, bod
 	return
 }
 
-// Uploads KYC-related documentation (for Partner KYC-enabled entities).
+// Upload KYC-related documentation for partners that are provisioned to provide
+// their own KYC data.
 func (r *APIV2EntityKYCService) UploadDocument(ctx context.Context, kycID string, params APIV2EntityKYCUploadDocumentParams, opts ...option.RequestOption) (res *Apiv2EntityKYCUploadDocumentResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if params.EntityID == "" {
@@ -87,34 +90,34 @@ func (r *APIV2EntityKYCService) UploadDocument(ctx context.Context, kycID string
 	return
 }
 
-// Object consisting of KYC data for an entity
+// KYC data for an `Entity`.
 type KYCData struct {
-	// ISO 3166-1 alpha 2 country code of citizenship or the country the organization
-	// is based out of.
+	// Country of citizenship or home country of the organization. ISO 3166-1 alpha 2
+	// country code.
 	CountryCode string `json:"country_code,required"`
-	// Last name of the person
+	// Last name of the person.
 	LastName string `json:"last_name,required"`
 	// City of address. Not all international addresses use this attribute.
 	AddressCity string `json:"address_city"`
-	// ZIP or postal code of residence address. Not all international addresses use
-	// this attribute.
+	// Postal code of residence address. Not all international addresses use this
+	// attribute.
 	AddressPostalCode string `json:"address_postal_code"`
-	// Street name of address.
+	// Street address of address.
 	AddressStreet1 string `json:"address_street_1"`
 	// Extension of address, usually apartment or suite number.
 	AddressStreet2 string `json:"address_street_2"`
 	// State or subdivision of address. In the US, this should be the unabbreviated
-	// name. Not all international addresses use this attribute.
+	// name of the state. Not all international addresses use this attribute.
 	AddressSubdivision string `json:"address_subdivision"`
-	// Birth date of the individual
+	// Birth date of the individual. In ISO 8601 format, YYYY-MM-DD.
 	BirthDate time.Time `json:"birth_date" format:"date"`
-	// Email address
-	Email string `json:"email,nullable"`
-	// First name of the person, or name of the organization
-	FirstName string `json:"first_name,nullable"`
+	// Email address.
+	Email string `json:"email"`
+	// First name of the person.
+	FirstName string `json:"first_name"`
 	// Middle name of the user
-	MiddleName string `json:"middle_name,nullable"`
-	// ID number of the official tax document of the country the entity belongs to
+	MiddleName string `json:"middle_name"`
+	// ID number of the official tax document of the country the entity belongs to.
 	TaxIDNumber string `json:"tax_id_number"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -150,36 +153,36 @@ func (r KYCData) ToParam() KYCDataParam {
 	return param.Override[KYCDataParam](r.RawJSON())
 }
 
-// Object consisting of KYC data for an entity
+// KYC data for an `Entity`.
 //
 // The properties CountryCode, LastName are required.
 type KYCDataParam struct {
-	// ISO 3166-1 alpha 2 country code of citizenship or the country the organization
-	// is based out of.
+	// Country of citizenship or home country of the organization. ISO 3166-1 alpha 2
+	// country code.
 	CountryCode string `json:"country_code,required"`
-	// Last name of the person
+	// Last name of the person.
 	LastName string `json:"last_name,required"`
-	// Email address
-	Email param.Opt[string] `json:"email,omitzero"`
-	// First name of the person, or name of the organization
-	FirstName param.Opt[string] `json:"first_name,omitzero"`
-	// Middle name of the user
-	MiddleName param.Opt[string] `json:"middle_name,omitzero"`
 	// City of address. Not all international addresses use this attribute.
 	AddressCity param.Opt[string] `json:"address_city,omitzero"`
-	// ZIP or postal code of residence address. Not all international addresses use
-	// this attribute.
+	// Postal code of residence address. Not all international addresses use this
+	// attribute.
 	AddressPostalCode param.Opt[string] `json:"address_postal_code,omitzero"`
-	// Street name of address.
+	// Street address of address.
 	AddressStreet1 param.Opt[string] `json:"address_street_1,omitzero"`
 	// Extension of address, usually apartment or suite number.
 	AddressStreet2 param.Opt[string] `json:"address_street_2,omitzero"`
 	// State or subdivision of address. In the US, this should be the unabbreviated
-	// name. Not all international addresses use this attribute.
+	// name of the state. Not all international addresses use this attribute.
 	AddressSubdivision param.Opt[string] `json:"address_subdivision,omitzero"`
-	// Birth date of the individual
+	// Birth date of the individual. In ISO 8601 format, YYYY-MM-DD.
 	BirthDate param.Opt[time.Time] `json:"birth_date,omitzero" format:"date"`
-	// ID number of the official tax document of the country the entity belongs to
+	// Email address.
+	Email param.Opt[string] `json:"email,omitzero"`
+	// First name of the person.
+	FirstName param.Opt[string] `json:"first_name,omitzero"`
+	// Middle name of the user
+	MiddleName param.Opt[string] `json:"middle_name,omitzero"`
+	// ID number of the official tax document of the country the entity belongs to.
 	TaxIDNumber param.Opt[string] `json:"tax_id_number,omitzero"`
 	paramObj
 }
@@ -201,29 +204,26 @@ const (
 	KYCDocumentTypeUnknown      KYCDocumentType = "UNKNOWN"
 )
 
-// KYC information for an entity
+// KYC information for an `Entity`.
 type KYCInfo struct {
-	// Unique identifier for the KYC check
-	ID string `json:"id,required" format:"bigint"`
-	// KYC status
+	// ID of the KYC check.
+	ID string `json:"id,required" format:"uuid"`
+	// KYC check status.
 	//
 	// Any of "PASS", "FAIL", "PENDING", "INCOMPLETE".
 	Status KYCInfoStatus `json:"status,required"`
-	// Timestamp when the KYC was last checked
+	// Datetime when the KYC was last checked. ISO 8601 timestamp.
 	CheckedDt time.Time `json:"checked_dt" format:"date-time"`
-	// Object consisting of KYC data for an entity
+	// KYC data for an `Entity`.
 	Data KYCData `json:"data"`
-	// Name of the KYC provider that provided the KYC check
-	ProviderName string `json:"provider_name"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID           respjson.Field
-		Status       respjson.Field
-		CheckedDt    respjson.Field
-		Data         respjson.Field
-		ProviderName respjson.Field
-		ExtraFields  map[string]respjson.Field
-		raw          string
+		ID          respjson.Field
+		Status      respjson.Field
+		CheckedDt   respjson.Field
+		Data        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
 	} `json:"-"`
 }
 
@@ -233,7 +233,7 @@ func (r *KYCInfo) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// KYC status
+// KYC check status.
 type KYCInfoStatus string
 
 const (
@@ -243,39 +243,17 @@ const (
 	KYCInfoStatusIncomplete KYCInfoStatus = "INCOMPLETE"
 )
 
-// URL for a managed KYC flow for the entity that can be shown in an iframe
-type Apiv2EntityKYCGetURLResponse struct {
-	// URL of a managed KYC flow interface for the entity. This URL is unique per KYC
-	// attempt.
-	EmbedURL string `json:"embed_url,required"`
-	// Timestamp at which the KYC request will be expired
-	ExpirationDt time.Time `json:"expiration_dt,required" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		EmbedURL     respjson.Field
-		ExpirationDt respjson.Field
-		ExtraFields  map[string]respjson.Field
-		raw          string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r Apiv2EntityKYCGetURLResponse) RawJSON() string { return r.JSON.raw }
-func (r *Apiv2EntityKYCGetURLResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Document associated with KYC for an entity
+// A document associated with KYC for an `Entity`.
 type Apiv2EntityKYCUploadDocumentResponse struct {
-	// ID of the document
+	// ID of the document.
 	ID string `json:"id,required" format:"uuid"`
-	// Type of the document
+	// Type of document.
 	//
 	// Any of "GOVERNMENT_ID", "SELFIE", "RESIDENCY", "UNKNOWN".
 	DocumentType KYCDocumentType `json:"document_type,required"`
-	// Filename of the document
+	// Filename of document.
 	Filename string `json:"filename,required"`
-	// URL to access the document. Expires in 1 hour
+	// Temporary URL to access the document. Expires in 1 hour.
 	URL string `json:"url,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -295,9 +273,9 @@ func (r *Apiv2EntityKYCUploadDocumentResponse) UnmarshalJSON(data []byte) error 
 }
 
 type APIV2EntityKYCSubmitParams struct {
-	// Object consisting of KYC data for an entity
+	// KYC data for an `Entity`.
 	Data KYCDataParam `json:"data,omitzero,required"`
-	// Name of the KYC provider that provided the KYC information
+	// Name of the KYC provider that provided the KYC information.
 	ProviderName string `json:"provider_name,required"`
 	paramObj
 }
@@ -312,17 +290,36 @@ func (r *APIV2EntityKYCSubmitParams) UnmarshalJSON(data []byte) error {
 
 type APIV2EntityKYCUploadDocumentParams struct {
 	EntityID string `path:"entity_id,required" format:"uuid" json:"-"`
-	// Type of the document to be uploaded
+	// Type of `KYCDocument` to be uploaded.
 	//
 	// Any of "GOVERNMENT_ID", "SELFIE", "RESIDENCY", "UNKNOWN".
-	DocumentType KYCDocumentType `json:"document_type,omitzero,required"`
+	DocumentType KYCDocumentType `query:"document_type,omitzero,required" json:"-"`
+	// File to be uploaded. Must be a valid image or PDF file (jpg, jpeg, png, pdf)
+	// less than 10MB in size.
+	File io.Reader `json:"file,omitzero,required" format:"binary"`
 	paramObj
 }
 
-func (r APIV2EntityKYCUploadDocumentParams) MarshalJSON() (data []byte, err error) {
-	type shadow APIV2EntityKYCUploadDocumentParams
-	return param.MarshalObject(r, (*shadow)(&r))
+func (r APIV2EntityKYCUploadDocumentParams) MarshalMultipart() (data []byte, contentType string, err error) {
+	buf := bytes.NewBuffer(nil)
+	writer := multipart.NewWriter(buf)
+	err = apiform.MarshalRoot(r, writer)
+	if err != nil {
+		writer.Close()
+		return nil, "", err
+	}
+	err = writer.Close()
+	if err != nil {
+		return nil, "", err
+	}
+	return buf.Bytes(), writer.FormDataContentType(), nil
 }
-func (r *APIV2EntityKYCUploadDocumentParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
+
+// URLQuery serializes [APIV2EntityKYCUploadDocumentParams]'s query parameters as
+// `url.Values`.
+func (r APIV2EntityKYCUploadDocumentParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }

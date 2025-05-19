@@ -37,7 +37,8 @@ func NewAPIV2EntityAccountService(opts ...option.RequestOption) (r APIV2EntityAc
 	return
 }
 
-// Creates a new Account for the given Entity.
+// Create a new `Account` for a specific `Entity`. This `Entity` represents your
+// organization itself, or an individual customer of your organization.
 func (r *APIV2EntityAccountService) New(ctx context.Context, entityID string, opts ...option.RequestOption) (res *Account, err error) {
 	opts = append(r.Options[:], opts...)
 	if entityID == "" {
@@ -49,7 +50,9 @@ func (r *APIV2EntityAccountService) New(ctx context.Context, entityID string, op
 	return
 }
 
-// Retrieves a list of Accounts that belong to a specific Entity.
+// Get a list of all `Accounts` that belong to a specific `Entity`. This `Entity`
+// represents your organization itself, or an individual customer of your
+// organization.
 func (r *APIV2EntityAccountService) List(ctx context.Context, entityID string, query APIV2EntityAccountListParams, opts ...option.RequestOption) (res *[]Account, err error) {
 	opts = append(r.Options[:], opts...)
 	if entityID == "" {
@@ -61,15 +64,15 @@ func (r *APIV2EntityAccountService) List(ctx context.Context, entityID string, q
 	return
 }
 
-// Information about an account owned by an entity
+// Information about an `Account` owned by an `Entity`.
 type Account struct {
-	// Unique identifier for the account
+	// Unique ID for the `Account`.
 	ID string `json:"id,required" format:"uuid"`
-	// Timestamp when the account was created
+	// Datetime when the `Account` was created. ISO 8601 timestamp.
 	CreatedDt time.Time `json:"created_dt,required" format:"date-time"`
-	// Identifier for the Entity that owns the account
+	// ID for the `Entity` that owns the `Account`.
 	EntityID string `json:"entity_id,required" format:"uuid"`
-	// Indicates whether the account is active
+	// Indicates whether the `Account` is active.
 	IsActive bool `json:"is_active,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {

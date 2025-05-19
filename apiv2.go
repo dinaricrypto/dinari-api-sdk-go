@@ -3,13 +3,7 @@
 package dinariapisdk
 
 import (
-	"context"
-	"net/http"
-
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // APIV2Service contains methods and other services that help with interacting with
@@ -35,29 +29,4 @@ func NewAPIV2Service(opts ...option.RequestOption) (r APIV2Service) {
 	r.Entities = NewAPIV2EntityService(opts...)
 	r.Accounts = NewAPIV2AccountService(opts...)
 	return
-}
-
-// Get Health Status
-func (r *APIV2Service) GetHealth(ctx context.Context, opts ...option.RequestOption) (res *Apiv2GetHealthResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	path := "api/v2/_health/"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
-type Apiv2GetHealthResponse struct {
-	// Status of server
-	Status string `json:"status,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Status      respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r Apiv2GetHealthResponse) RawJSON() string { return r.JSON.raw }
-func (r *Apiv2GetHealthResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
 }

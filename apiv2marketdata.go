@@ -34,8 +34,8 @@ func NewAPIV2MarketDataService(opts ...option.RequestOption) (r APIV2MarketDataS
 	return
 }
 
-// Returns an object containing the market hours for the current day and next open
-// trading day.
+// Get the market hours for the current trading session and next open trading
+// session.
 func (r *APIV2MarketDataService) GetMarketHours(ctx context.Context, opts ...option.RequestOption) (res *Apiv2MarketDataGetMarketHoursResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "api/v2/market_data/market_hours/"
@@ -46,15 +46,15 @@ func (r *APIV2MarketDataService) GetMarketHours(ctx context.Context, opts ...opt
 type Apiv2MarketDataGetMarketHoursResponse struct {
 	// Whether or not the market is open
 	IsMarketOpen bool `json:"is_market_open,required"`
-	// Timestamp in ISO 8601 format at which the next session closes
+	// Datetime at which the next session closes. ISO 8601 timestamp.
 	NextSessionCloseDt time.Time `json:"next_session_close_dt,required" format:"date-time"`
-	// Timestamp in ISO 8601 format at which the next session opens
+	// Datetime at which the next session opens. ISO 8601 timestamp.
 	NextSessionOpenDt time.Time `json:"next_session_open_dt,required" format:"date-time"`
-	// Timestamp in ISO 8601 format at which the current session closes or null if the
-	// market is currently closed
+	// Datetime at which the current session closes. `null` if the market is currently
+	// closed. ISO 8601 timestamp.
 	CurrentSessionCloseDt time.Time `json:"current_session_close_dt" format:"date-time"`
-	// Timestamp in ISO 8601 format at which the current session opened or null if the
-	// market is currently closed
+	// Datetime at which the current session opened. `null` if the market is currently
+	// closed. ISO 8601 timestamp.
 	CurrentSessionOpenDt time.Time `json:"current_session_open_dt" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {

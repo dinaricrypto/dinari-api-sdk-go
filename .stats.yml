@@ -1,4 +1,4 @@
-configured_endpoints: 41
-openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/dinari--inc-dash%2Fdinari-22fe6a6fa11bdfcf80e3711e11a36048467a49475b7f897892bc1079eca6969d.yml
-openapi_spec_hash: 399a68928772cca2776c8116ee4e2c06
-config_hash: 361cfc9c9972903c5cdc488d3d34c6a3
+configured_endpoints: 36
+openapi_spec_url: https://storage.googleapis.com/stainless-sdk-openapi-specs/dinari--inc-dash%2Fdinari-0c38030fd73b67b430f788dd68d6b80b05f96a604c3b2aef324437bfe29f92f6.yml
+openapi_spec_hash: 30f05101719a0c1c8af15c17a1fc35e3
+config_hash: 9ef1d4dfa5ba2423a92492e16e266744

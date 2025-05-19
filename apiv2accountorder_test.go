@@ -25,6 +25,7 @@ func TestAPIV2AccountOrderGet(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.Accounts.Orders.Get(
 		context.TODO(),
@@ -42,7 +43,7 @@ func TestAPIV2AccountOrderGet(t *testing.T) {
 	}
 }
 
-func TestAPIV2AccountOrderList(t *testing.T) {
+func TestAPIV2AccountOrderListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -54,8 +55,16 @@ func TestAPIV2AccountOrderList(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
-	_, err := client.API.V2.Accounts.Orders.List(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+	_, err := client.API.V2.Accounts.Orders.List(
+		context.TODO(),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		dinariapisdk.APIV2AccountOrderListParams{
+			Page:     dinariapisdk.Int(1),
+			PageSize: dinariapisdk.Int(1),
+		},
+	)
 	if err != nil {
 		var apierr *dinariapisdk.Error
 		if errors.As(err, &apierr) {
@@ -77,6 +86,7 @@ func TestAPIV2AccountOrderCancel(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.Accounts.Orders.Cancel(
 		context.TODO(),
@@ -94,7 +104,7 @@ func TestAPIV2AccountOrderCancel(t *testing.T) {
 	}
 }
 
-func TestAPIV2AccountOrderGetEstimatedFee(t *testing.T) {
+func TestAPIV2AccountOrderGetFulfillmentsWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -106,45 +116,15 @@ func TestAPIV2AccountOrderGetEstimatedFee(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
-	)
-	_, err := client.API.V2.Accounts.Orders.GetEstimatedFee(
-		context.TODO(),
-		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinariapisdk.APIV2AccountOrderGetEstimatedFeeParams{
-			ChainID:         0,
-			ContractAddress: "contract_address",
-			OrderData: map[string]string{
-				"foo": "string",
-			},
-		},
-	)
-	if err != nil {
-		var apierr *dinariapisdk.Error
-		if errors.As(err, &apierr) {
-			t.Log(string(apierr.DumpRequest(true)))
-		}
-		t.Fatalf("err should be nil: %s", err.Error())
-	}
-}
-
-func TestAPIV2AccountOrderGetFulfillments(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
-	baseURL := "http://localhost:4010"
-	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
-		baseURL = envURL
-	}
-	if !testutil.CheckTestServer(t, baseURL) {
-		return
-	}
-	client := dinariapisdk.NewClient(
-		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.Accounts.Orders.GetFulfillments(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdk.APIV2AccountOrderGetFulfillmentsParams{
 			AccountID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+			Page:      dinariapisdk.Int(1),
+			PageSize:  dinariapisdk.Int(1),
 		},
 	)
 	if err != nil {
