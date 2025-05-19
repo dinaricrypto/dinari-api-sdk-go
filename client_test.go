@@ -27,6 +27,7 @@ func TestUserAgentHeader(t *testing.T) {
 	var userAgent string
 	client := dinariapisdk.NewClient(
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -38,7 +39,7 @@ func TestUserAgentHeader(t *testing.T) {
 			},
 		}),
 	)
-	client.API.V2.GetHealth(context.Background())
+	client.API.V2.MarketData.GetMarketHours(context.Background())
 	if userAgent != fmt.Sprintf("Dinari/Go %s", internal.PackageVersion) {
 		t.Errorf("Expected User-Agent to be correct, but got: %#v", userAgent)
 	}
@@ -48,6 +49,7 @@ func TestRetryAfter(t *testing.T) {
 	retryCountHeaders := make([]string, 0)
 	client := dinariapisdk.NewClient(
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -62,7 +64,7 @@ func TestRetryAfter(t *testing.T) {
 			},
 		}),
 	)
-	_, err := client.API.V2.GetHealth(context.Background())
+	_, err := client.API.V2.MarketData.GetMarketHours(context.Background())
 	if err == nil {
 		t.Error("Expected there to be a cancel error")
 	}
@@ -82,6 +84,7 @@ func TestDeleteRetryCountHeader(t *testing.T) {
 	retryCountHeaders := make([]string, 0)
 	client := dinariapisdk.NewClient(
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -97,7 +100,7 @@ func TestDeleteRetryCountHeader(t *testing.T) {
 		}),
 		option.WithHeaderDel("X-Stainless-Retry-Count"),
 	)
-	_, err := client.API.V2.GetHealth(context.Background())
+	_, err := client.API.V2.MarketData.GetMarketHours(context.Background())
 	if err == nil {
 		t.Error("Expected there to be a cancel error")
 	}
@@ -112,6 +115,7 @@ func TestOverwriteRetryCountHeader(t *testing.T) {
 	retryCountHeaders := make([]string, 0)
 	client := dinariapisdk.NewClient(
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -127,7 +131,7 @@ func TestOverwriteRetryCountHeader(t *testing.T) {
 		}),
 		option.WithHeader("X-Stainless-Retry-Count", "42"),
 	)
-	_, err := client.API.V2.GetHealth(context.Background())
+	_, err := client.API.V2.MarketData.GetMarketHours(context.Background())
 	if err == nil {
 		t.Error("Expected there to be a cancel error")
 	}
@@ -142,6 +146,7 @@ func TestRetryAfterMs(t *testing.T) {
 	attempts := 0
 	client := dinariapisdk.NewClient(
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -156,7 +161,7 @@ func TestRetryAfterMs(t *testing.T) {
 			},
 		}),
 	)
-	_, err := client.API.V2.GetHealth(context.Background())
+	_, err := client.API.V2.MarketData.GetMarketHours(context.Background())
 	if err == nil {
 		t.Error("Expected there to be a cancel error")
 	}
@@ -168,6 +173,7 @@ func TestRetryAfterMs(t *testing.T) {
 func TestContextCancel(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -179,7 +185,7 @@ func TestContextCancel(t *testing.T) {
 	)
 	cancelCtx, cancel := context.WithCancel(context.Background())
 	cancel()
-	_, err := client.API.V2.GetHealth(cancelCtx)
+	_, err := client.API.V2.MarketData.GetMarketHours(cancelCtx)
 	if err == nil {
 		t.Error("Expected there to be a cancel error")
 	}
@@ -188,6 +194,7 @@ func TestContextCancel(t *testing.T) {
 func TestContextCancelDelay(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 		option.WithHTTPClient(&http.Client{
 			Transport: &closureTransport{
 				fn: func(req *http.Request) (*http.Response, error) {
@@ -199,7 +206,7 @@ func TestContextCancelDelay(t *testing.T) {
 	)
 	cancelCtx, cancel := context.WithTimeout(context.Background(), 2*time.Millisecond)
 	defer cancel()
-	_, err := client.API.V2.GetHealth(cancelCtx)
+	_, err := client.API.V2.MarketData.GetMarketHours(cancelCtx)
 	if err == nil {
 		t.Error("expected there to be a cancel error")
 	}
@@ -216,6 +223,7 @@ func TestContextDeadline(t *testing.T) {
 	go func() {
 		client := dinariapisdk.NewClient(
 			option.WithAPIKey("My API Key"),
+			option.WithSecret("My Secret"),
 			option.WithHTTPClient(&http.Client{
 				Transport: &closureTransport{
 					fn: func(req *http.Request) (*http.Response, error) {
@@ -225,7 +233,7 @@ func TestContextDeadline(t *testing.T) {
 				},
 			}),
 		)
-		_, err := client.API.V2.GetHealth(deadlineCtx)
+		_, err := client.API.V2.MarketData.GetMarketHours(deadlineCtx)
 		if err == nil {
 			t.Error("expected there to be a deadline error")
 		}

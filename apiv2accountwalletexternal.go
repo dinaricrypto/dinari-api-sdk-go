@@ -36,7 +36,7 @@ func NewAPIV2AccountWalletExternalService(opts ...option.RequestOption) (r APIV2
 	return
 }
 
-// Connects a wallet to the account using the nonce and signature
+// Connect a `Wallet` to the `Account` after verifying the signature.
 func (r *APIV2AccountWalletExternalService) Connect(ctx context.Context, accountID string, body APIV2AccountWalletExternalConnectParams, opts ...option.RequestOption) (res *Wallet, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
@@ -48,7 +48,7 @@ func (r *APIV2AccountWalletExternalService) Connect(ctx context.Context, account
 	return
 }
 
-// Gets a nonce and message to be signed in order to verify wallet ownership.
+// Get a nonce and message to be signed in order to verify `Wallet` ownership.
 func (r *APIV2AccountWalletExternalService) GetNonce(ctx context.Context, accountID string, query APIV2AccountWalletExternalGetNonceParams, opts ...option.RequestOption) (res *Apiv2AccountWalletExternalGetNonceResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
@@ -60,9 +60,9 @@ func (r *APIV2AccountWalletExternalService) GetNonce(ctx context.Context, accoun
 	return
 }
 
-// Wallet connection message for Dinari-managed wallets
+// Connection message to sign to prove ownership of the `Wallet`.
 type Apiv2AccountWalletExternalGetNonceResponse struct {
-	// Message to be signed by the wallet
+	// Message to be signed by the `Wallet`
 	Message string `json:"message,required"`
 	// Single-use identifier
 	Nonce string `json:"nonce,required"`
@@ -82,13 +82,16 @@ func (r *Apiv2AccountWalletExternalGetNonceResponse) UnmarshalJSON(data []byte) 
 }
 
 type APIV2AccountWalletExternalConnectParams struct {
-	// Blockchain the wallet to link is on
-	ChainID int64 `json:"chain_id,required"`
-	// Nonce used to sign the wallet connection message
+	// CAIP-2 formatted chain ID of the blockchain the `Wallet` to link is on.
+	//
+	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
+	// "eip155:98866".
+	ChainID APIV2AccountWalletExternalConnectParamsChainID `json:"chain_id,omitzero,required"`
+	// Nonce contained within the connection message.
 	Nonce string `json:"nonce,required" format:"uuid"`
-	// Signature payload from signing the wallet connection message with the wallet
+	// Signature payload from signing the connection message with the `Wallet`.
 	Signature string `json:"signature,required" format:"hex_string"`
-	// Address of the wallet
+	// Address of the `Wallet`.
 	WalletAddress string `json:"wallet_address,required" format:"eth_address"`
 	paramObj
 }
@@ -101,8 +104,20 @@ func (r *APIV2AccountWalletExternalConnectParams) UnmarshalJSON(data []byte) err
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// CAIP-2 formatted chain ID of the blockchain the `Wallet` to link is on.
+type APIV2AccountWalletExternalConnectParamsChainID string
+
+const (
+	APIV2AccountWalletExternalConnectParamsChainIDEip155_1     APIV2AccountWalletExternalConnectParamsChainID = "eip155:1"
+	APIV2AccountWalletExternalConnectParamsChainIDEip155_42161 APIV2AccountWalletExternalConnectParamsChainID = "eip155:42161"
+	APIV2AccountWalletExternalConnectParamsChainIDEip155_8453  APIV2AccountWalletExternalConnectParamsChainID = "eip155:8453"
+	APIV2AccountWalletExternalConnectParamsChainIDEip155_81457 APIV2AccountWalletExternalConnectParamsChainID = "eip155:81457"
+	APIV2AccountWalletExternalConnectParamsChainIDEip155_7887  APIV2AccountWalletExternalConnectParamsChainID = "eip155:7887"
+	APIV2AccountWalletExternalConnectParamsChainIDEip155_98866 APIV2AccountWalletExternalConnectParamsChainID = "eip155:98866"
+)
+
 type APIV2AccountWalletExternalGetNonceParams struct {
-	// Address of the wallet to connect
+	// Address of the `Wallet` to connect.
 	WalletAddress string `query:"wallet_address,required" format:"eth_address" json:"-"`
 	paramObj
 }

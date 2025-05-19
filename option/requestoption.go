@@ -269,6 +269,14 @@ func WithEnvironmentProduction() RequestOption {
 func WithAPIKey(value string) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
 		r.APIKey = value
-		return r.Apply(WithHeader("authorization", fmt.Sprintf("Bearer %s", r.APIKey)))
+		return r.Apply(WithHeader("X-API-Key-Id", r.APIKey))
+	})
+}
+
+// WithSecret returns a RequestOption that sets the client setting "secret".
+func WithSecret(value string) RequestOption {
+	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
+		r.Secret = value
+		return r.Apply(WithHeader("X-API-Secret-Key", r.Secret))
 	})
 }

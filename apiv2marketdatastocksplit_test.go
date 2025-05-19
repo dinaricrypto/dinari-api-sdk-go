@@ -25,10 +25,11 @@ func TestAPIV2MarketDataStockSplitGetWithOptionalParams(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.MarketData.Stocks.Splits.Get(
 		context.TODO(),
-		"stock_id",
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdk.APIV2MarketDataStockSplitGetParams{
 			Page:     dinariapisdk.Int(1),
 			PageSize: dinariapisdk.Int(1),
@@ -55,6 +56,7 @@ func TestAPIV2MarketDataStockSplitListWithOptionalParams(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.MarketData.Stocks.Splits.List(context.TODO(), dinariapisdk.APIV2MarketDataStockSplitListParams{
 		Page:     dinariapisdk.Int(1),

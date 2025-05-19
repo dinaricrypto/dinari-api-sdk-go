@@ -25,6 +25,7 @@ func TestAPIV2EntityNew(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.Entities.New(context.TODO(), dinariapisdk.APIV2EntityNewParams{
 		Name: "x",
@@ -50,6 +51,7 @@ func TestAPIV2EntityGet(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.Entities.Get(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
@@ -73,6 +75,7 @@ func TestAPIV2EntityList(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.Entities.List(context.TODO())
 	if err != nil {
@@ -96,6 +99,7 @@ func TestAPIV2EntityGetCurrent(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.Entities.GetCurrent(context.TODO())
 	if err != nil {

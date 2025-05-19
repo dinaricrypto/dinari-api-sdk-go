@@ -8,9 +8,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
@@ -36,35 +38,19 @@ func NewAPIV2AccountOrderRequestService(opts ...option.RequestOption) (r APIV2Ac
 	return
 }
 
-// Retrieves details of a specific managed order request by its ID.
-func (r *APIV2AccountOrderRequestService) Get(ctx context.Context, requestID string, query APIV2AccountOrderRequestGetParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
-	opts = append(r.Options[:], opts...)
-	if query.AccountID == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	if requestID == "" {
-		err = errors.New("missing required request_id parameter")
-		return
-	}
-	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/%s", query.AccountID, requestID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
-// Lists managed order requests.
-func (r *APIV2AccountOrderRequestService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]OrderRequest, err error) {
+// Lists managed `OrderRequests`.
+func (r *APIV2AccountOrderRequestService) List(ctx context.Context, accountID string, query APIV2AccountOrderRequestListParams, opts ...option.RequestOption) (res *[]OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_requests", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-// Creates a managed limit buy request.
+// Create a managed limit buy `OrderRequest`.
 func (r *APIV2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accountID string, body APIV2AccountOrderRequestNewLimitBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
@@ -76,7 +62,7 @@ func (r *APIV2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accou
 	return
 }
 
-// Creates a managed limit sell request.
+// Create a managed limit sell `OrderRequest`.
 func (r *APIV2AccountOrderRequestService) NewLimitSell(ctx context.Context, accountID string, body APIV2AccountOrderRequestNewLimitSellParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
@@ -88,7 +74,7 @@ func (r *APIV2AccountOrderRequestService) NewLimitSell(ctx context.Context, acco
 	return
 }
 
-// Creates a managed market buy request.
+// Create a managed market buy `OrderRequest`.
 func (r *APIV2AccountOrderRequestService) NewMarketBuy(ctx context.Context, accountID string, body APIV2AccountOrderRequestNewMarketBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
@@ -100,7 +86,7 @@ func (r *APIV2AccountOrderRequestService) NewMarketBuy(ctx context.Context, acco
 	return
 }
 
-// Creates a managed market sell request.
+// Create a managed market sell `OrderRequest`.
 func (r *APIV2AccountOrderRequestService) NewMarketSell(ctx context.Context, accountID string, body APIV2AccountOrderRequestNewMarketSellParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
@@ -112,17 +98,17 @@ func (r *APIV2AccountOrderRequestService) NewMarketSell(ctx context.Context, acc
 	return
 }
 
-// Input parameters for placing a limit order.
+// Input parameters for creating a limit `OrderRequest`.
 //
 // The properties AssetQuantity, LimitPrice, StockID are required.
 type LimitOrderRequestInputParam struct {
-	// Quantity of stock to trade. Must be a positive integer.
+	// Quantity of shares to trade. Must be a positive integer.
 	AssetQuantity int64 `json:"asset_quantity,required"`
 	// Price at which to execute the order. Must be a positive number with a precision
 	// of up to 2 decimal places.
 	LimitPrice float64 `json:"limit_price,required"`
-	// ID of stock, as returned by the `/stocks` endpoint, e.g. 1
-	StockID string `json:"stock_id,required" format:"bigint"`
+	// ID of `Stock`.
+	StockID string `json:"stock_id,required" format:"uuid"`
 	paramObj
 }
 
@@ -134,31 +120,52 @@ func (r *LimitOrderRequestInputParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Request to create an order
+// A request to create an `Order`.
+//
+// An `OrderRequest` is created when a user places an order through the Dinari API.
+// The `OrderRequest` is then fulfilled by creating an `Order` on-chain.
+//
+// The `OrderRequest` is a record of the user's intent to place an order, while the
+// `Order` is the actual transaction that occurs on the blockchain.
 type OrderRequest struct {
-	// ID of account placing the order
+	// ID of `OrderRequest`. This is the primary identifier for the `/order_requests`
+	// routes.
+	ID string `json:"id,required" format:"uuid"`
+	// ID of `Account` placing the `OrderRequest`.
 	AccountID string `json:"account_id,required" format:"uuid"`
-	// Confirmation code of order request. This is the primary identifier for the
-	// `/order_requests` endpoint
-	ConfirmationCode string `json:"confirmation_code,required" format:"uuid"`
-	// Timestamp at which the order request was created.
+	// Datetime at which the `OrderRequest` was created. ISO 8601 timestamp.
 	CreatedDt time.Time `json:"created_dt,required" format:"date-time"`
-	// Status of order request
+	// Indicates whether `Order` is a buy or sell.
+	//
+	// Any of "BUY", "SELL".
+	OrderSide OrderRequestOrderSide `json:"order_side,required"`
+	// Indicates how long `Order` is valid for.
+	//
+	// Any of "DAY", "GTC", "IOC", "FOK".
+	OrderTif OrderRequestOrderTif `json:"order_tif,required"`
+	// Type of `Order`.
+	//
+	// Any of "MARKET", "LIMIT".
+	OrderType OrderRequestOrderType `json:"order_type,required"`
+	// Status of `OrderRequest`.
 	//
 	// Any of "PENDING", "SUBMITTED", "ERROR", "CANCELLED".
 	Status OrderRequestStatus `json:"status,required"`
-	// ID of order created from the order request. This is the primary identifier for
-	// the `/orders` endpoint
+	// ID of `Order` created from the `OrderRequest`. This is the primary identifier
+	// for the `/orders` routes.
 	OrderID string `json:"order_id" format:"uuid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		AccountID        respjson.Field
-		ConfirmationCode respjson.Field
-		CreatedDt        respjson.Field
-		Status           respjson.Field
-		OrderID          respjson.Field
-		ExtraFields      map[string]respjson.Field
-		raw              string
+		ID          respjson.Field
+		AccountID   respjson.Field
+		CreatedDt   respjson.Field
+		OrderSide   respjson.Field
+		OrderTif    respjson.Field
+		OrderType   respjson.Field
+		Status      respjson.Field
+		OrderID     respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
 	} `json:"-"`
 }
 
@@ -168,7 +175,33 @@ func (r *OrderRequest) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Status of order request
+// Indicates whether `Order` is a buy or sell.
+type OrderRequestOrderSide string
+
+const (
+	OrderRequestOrderSideBuy  OrderRequestOrderSide = "BUY"
+	OrderRequestOrderSideSell OrderRequestOrderSide = "SELL"
+)
+
+// Indicates how long `Order` is valid for.
+type OrderRequestOrderTif string
+
+const (
+	OrderRequestOrderTifDay OrderRequestOrderTif = "DAY"
+	OrderRequestOrderTifGtc OrderRequestOrderTif = "GTC"
+	OrderRequestOrderTifIoc OrderRequestOrderTif = "IOC"
+	OrderRequestOrderTifFok OrderRequestOrderTif = "FOK"
+)
+
+// Type of `Order`.
+type OrderRequestOrderType string
+
+const (
+	OrderRequestOrderTypeMarket OrderRequestOrderType = "MARKET"
+	OrderRequestOrderTypeLimit  OrderRequestOrderType = "LIMIT"
+)
+
+// Status of `OrderRequest`.
 type OrderRequestStatus string
 
 const (
@@ -178,13 +211,23 @@ const (
 	OrderRequestStatusCancelled OrderRequestStatus = "CANCELLED"
 )
 
-type APIV2AccountOrderRequestGetParams struct {
-	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+type APIV2AccountOrderRequestListParams struct {
+	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
+	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	paramObj
 }
 
+// URLQuery serializes [APIV2AccountOrderRequestListParams]'s query parameters as
+// `url.Values`.
+func (r APIV2AccountOrderRequestListParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
 type APIV2AccountOrderRequestNewLimitBuyParams struct {
-	// Input parameters for placing a limit order.
+	// Input parameters for creating a limit `OrderRequest`.
 	LimitOrderRequestInput LimitOrderRequestInputParam
 	paramObj
 }
@@ -197,7 +240,7 @@ func (r *APIV2AccountOrderRequestNewLimitBuyParams) UnmarshalJSON(data []byte) e
 }
 
 type APIV2AccountOrderRequestNewLimitSellParams struct {
-	// Input parameters for placing a limit order.
+	// Input parameters for creating a limit `OrderRequest`.
 	LimitOrderRequestInput LimitOrderRequestInputParam
 	paramObj
 }
@@ -210,13 +253,11 @@ func (r *APIV2AccountOrderRequestNewLimitSellParams) UnmarshalJSON(data []byte) 
 }
 
 type APIV2AccountOrderRequestNewMarketBuyParams struct {
-	// Amount of USD to pay or receive for the order. Must be a positive number with a
-	// precision of up to 2 decimal places.
+	// Amount of currency (USD for US equities and ETFS) to pay or receive for the
+	// order. Must be a positive number with a precision of up to 2 decimal places.
 	PaymentAmount float64 `json:"payment_amount,required"`
-	// ID of stock, as returned by the `/stocks` endpoint, e.g. 1
-	StockID string `json:"stock_id,required" format:"bigint"`
-	// Whether to include fees in the `payment_amount` input field.
-	IncludeFees param.Opt[bool] `json:"include_fees,omitzero"`
+	// ID of `Stock`.
+	StockID string `json:"stock_id,required" format:"uuid"`
 	paramObj
 }
 
@@ -229,11 +270,11 @@ func (r *APIV2AccountOrderRequestNewMarketBuyParams) UnmarshalJSON(data []byte) 
 }
 
 type APIV2AccountOrderRequestNewMarketSellParams struct {
-	// Quantity of stock to trade. Must be a positive number with a precision of up to
+	// Quantity of shares to trade. Must be a positive number with a precision of up to
 	// 9 decimal places.
 	AssetQuantity float64 `json:"asset_quantity,required"`
-	// ID of stock, as returned by the `/stocks` endpoint, e.g. 1
-	StockID string `json:"stock_id,required" format:"bigint"`
+	// ID of `Stock`.
+	StockID string `json:"stock_id,required" format:"uuid"`
 	paramObj
 }
 

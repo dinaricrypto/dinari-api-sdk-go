@@ -23,10 +23,11 @@ func TestUsage(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
-	response, err := client.API.V2.GetHealth(context.TODO())
+	response, err := client.API.V2.MarketData.GetMarketHours(context.TODO())
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", response.Status)
+	t.Logf("%+v\n", response.IsMarketOpen)
 }

@@ -7,8 +7,11 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
+	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
@@ -34,7 +37,7 @@ func NewAPIV2AccountOrderService(opts ...option.RequestOption) (r APIV2AccountOr
 	return
 }
 
-// Retrieves details of a specific order by its ID.
+// Get a specific `Order` by its ID.
 func (r *APIV2AccountOrderService) Get(ctx context.Context, orderID string, query APIV2AccountOrderGetParams, opts ...option.RequestOption) (res *Order, err error) {
 	opts = append(r.Options[:], opts...)
 	if query.AccountID == "" {
@@ -50,20 +53,28 @@ func (r *APIV2AccountOrderService) Get(ctx context.Context, orderID string, quer
 	return
 }
 
-// Lists all orders under the account.
-func (r *APIV2AccountOrderService) List(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]Order, err error) {
+// Get a list of all `Orders` under the `Account`.
+func (r *APIV2AccountOrderService) List(ctx context.Context, accountID string, query APIV2AccountOrderListParams, opts ...option.RequestOption) (res *[]Order, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/orders", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
-// Cancels an order by its ID. Note that this requires the order ID, not the order
-// request ID.
+// Cancel an `Order` by its ID. Note that this requires the `Order` ID, not the
+// `OrderRequest` ID. Once you submit a cancellation request, it cannot be undone.
+// Be advised that orders with a status of PENDING_FILL, PENDING_ESCROW, FILLED,
+// REJECTED, or CANCELLED cannot be cancelled.
+//
+// `Order` cancellation is not guaranteed nor is it immediate. The `Order` may
+// still be executed if the cancellation request is not received in time.
+//
+// Check the status using the "Get Order by ID" endpoint to confirm whether the
+// `Order` has been cancelled.
 func (r *APIV2AccountOrderService) Cancel(ctx context.Context, orderID string, body APIV2AccountOrderCancelParams, opts ...option.RequestOption) (res *Order, err error) {
 	opts = append(r.Options[:], opts...)
 	if body.AccountID == "" {
@@ -79,23 +90,10 @@ func (r *APIV2AccountOrderService) Cancel(ctx context.Context, orderID string, b
 	return
 }
 
-// Gets estimated fee data for an order to be placed directly through our
-// contracts.
-func (r *APIV2AccountOrderService) GetEstimatedFee(ctx context.Context, accountID string, body APIV2AccountOrderGetEstimatedFeeParams, opts ...option.RequestOption) (res *Apiv2AccountOrderGetEstimatedFeeResponse, err error) {
+// Get `OrderFulfillments` for a specific `Order`.
+func (r *APIV2AccountOrderService) GetFulfillments(ctx context.Context, orderID string, params APIV2AccountOrderGetFulfillmentsParams, opts ...option.RequestOption) (res *[]OrderFulfillment, err error) {
 	opts = append(r.Options[:], opts...)
-	if accountID == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	path := fmt.Sprintf("api/v2/accounts/%s/orders/estimated_fee", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
-}
-
-// Retrieves order fulfillments for a specific order.
-func (r *APIV2AccountOrderService) GetFulfillments(ctx context.Context, orderID string, query APIV2AccountOrderGetFulfillmentsParams, opts ...option.RequestOption) (res *[]OrderFulfillment, err error) {
-	opts = append(r.Options[:], opts...)
-	if query.AccountID == "" {
+	if params.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
@@ -103,66 +101,80 @@ func (r *APIV2AccountOrderService) GetFulfillments(ctx context.Context, orderID 
 		err = errors.New("missing required order_id parameter")
 		return
 	}
-	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s/fulfillments", query.AccountID, orderID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s/fulfillments", params.AccountID, orderID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
 	return
 }
 
 type Order struct {
-	// Identifier of the order
+	// ID of the `Order`.
 	ID string `json:"id,required" format:"uuid"`
-	// Total amount of assets involved
-	AssetTokenQuantity float64 `json:"asset_token_quantity,required"`
-	// Status of the order
+	// CAIP-2 formatted chain ID of the blockchain that the `Order` transaction was run
+	// on.
+	//
+	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
+	// "eip155:98866".
+	ChainID OrderChainID `json:"chain_id,required"`
+	// Datetime at which the `Order` was created. ISO 8601 timestamp.
+	CreatedDt time.Time `json:"created_dt,required" format:"date-time"`
+	// Smart contract address that `Order` was created from.
+	OrderContractAddress string `json:"order_contract_address,required" format:"eth_address"`
+	// Indicates whether `Order` is a buy or sell.
+	//
+	// Any of "BUY", "SELL".
+	OrderSide OrderOrderSide `json:"order_side,required"`
+	// Time in force. Indicates how long `Order` is valid for.
+	//
+	// Any of "DAY", "GTC", "IOC", "FOK".
+	OrderTif OrderOrderTif `json:"order_tif,required"`
+	// Transaction hash for the `Order` creation.
+	OrderTransactionHash string `json:"order_transaction_hash,required" format:"hex_string"`
+	// Type of `Order`.
+	//
+	// Any of "MARKET", "LIMIT".
+	OrderType OrderOrderType `json:"order_type,required"`
+	// Status of the `Order`.
 	//
 	// Any of "PENDING_SUBMIT", "PENDING_CANCEL", "PENDING_ESCROW", "PENDING_FILL",
 	// "ESCROWED", "SUBMITTED", "CANCELLED", "FILLED", "REJECTED", "REQUIRING_CONTACT",
 	// "ERROR".
-	BrokerageOrderStatus OrderBrokerageOrderStatus `json:"brokerage_order_status,required"`
-	// Blockchain that transaction was run on
-	ChainID int64 `json:"chain_id,required"`
-	// Smart Contract address that order came from
-	OrderContractAddress string `json:"order_contract_address,required" format:"eth_address"`
-	// Indicates if order is a buy or sell
-	//
-	// Any of "BUY", "SELL".
-	OrderSide OrderOrderSide `json:"order_side,required"`
-	// Indicates how long order is valid
-	//
-	// Any of "DAY", "GTC", "IOC", "FOK".
-	OrderTif OrderOrderTif `json:"order_tif,required"`
-	// Transaction hash for the order
-	OrderTransactionHash string `json:"order_transaction_hash,required" format:"hex_string"`
-	// Indicates what type of order
-	//
-	// Any of "MARKET", "LIMIT".
-	OrderType OrderOrderType `json:"order_type,required"`
-	// Total amount of payment involved
-	PaymentTokenQuantity float64 `json:"payment_token_quantity,required"`
-	// Unique identifier of this Order generated by the order contract.
-	SmartContractOrderID string `json:"smart_contract_order_id,required"`
-	// Transaction hash for cancellation of order
+	Status OrderStatus `json:"status,required"`
+	// The `Stock` ID associated with the `Order`
+	StockID string `json:"stock_id,required" format:"uuid"`
+	// The dShare asset token address.
+	AssetToken string `json:"asset_token" format:"eth_address"`
+	// Total amount of assets involved.
+	AssetTokenQuantity float64 `json:"asset_token_quantity"`
+	// Transaction hash for cancellation of `Order`, if the `Order` was cancelled.
 	CancelTransactionHash string `json:"cancel_transaction_hash" format:"hex_string"`
-	// List of fees associated with order
-	Fees []map[string]any `json:"fees"`
-	// Total amount of network fee taken in USD
-	NetworkFeeInUsd float64 `json:"network_fee_in_usd"`
+	// Fee amount associated with `Order`.
+	Fee float64 `json:"fee"`
+	// For limit `Orders`, the price per asset, specified in the `Stock`'s native
+	// currency (USD for US equities and ETFs).
+	LimitPrice float64 `json:"limit_price"`
+	// The payment token (stablecoin) address.
+	PaymentToken string `json:"payment_token" format:"eth_address"`
+	// Total amount of payment involved.
+	PaymentTokenQuantity float64 `json:"payment_token_quantity"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                    respjson.Field
-		AssetTokenQuantity    respjson.Field
-		BrokerageOrderStatus  respjson.Field
 		ChainID               respjson.Field
+		CreatedDt             respjson.Field
 		OrderContractAddress  respjson.Field
 		OrderSide             respjson.Field
 		OrderTif              respjson.Field
 		OrderTransactionHash  respjson.Field
 		OrderType             respjson.Field
-		PaymentTokenQuantity  respjson.Field
-		SmartContractOrderID  respjson.Field
+		Status                respjson.Field
+		StockID               respjson.Field
+		AssetToken            respjson.Field
+		AssetTokenQuantity    respjson.Field
 		CancelTransactionHash respjson.Field
-		Fees                  respjson.Field
-		NetworkFeeInUsd       respjson.Field
+		Fee                   respjson.Field
+		LimitPrice            respjson.Field
+		PaymentToken          respjson.Field
+		PaymentTokenQuantity  respjson.Field
 		ExtraFields           map[string]respjson.Field
 		raw                   string
 	} `json:"-"`
@@ -174,24 +186,20 @@ func (r *Order) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Status of the order
-type OrderBrokerageOrderStatus string
+// CAIP-2 formatted chain ID of the blockchain that the `Order` transaction was run
+// on.
+type OrderChainID string
 
 const (
-	OrderBrokerageOrderStatusPendingSubmit    OrderBrokerageOrderStatus = "PENDING_SUBMIT"
-	OrderBrokerageOrderStatusPendingCancel    OrderBrokerageOrderStatus = "PENDING_CANCEL"
-	OrderBrokerageOrderStatusPendingEscrow    OrderBrokerageOrderStatus = "PENDING_ESCROW"
-	OrderBrokerageOrderStatusPendingFill      OrderBrokerageOrderStatus = "PENDING_FILL"
-	OrderBrokerageOrderStatusEscrowed         OrderBrokerageOrderStatus = "ESCROWED"
-	OrderBrokerageOrderStatusSubmitted        OrderBrokerageOrderStatus = "SUBMITTED"
-	OrderBrokerageOrderStatusCancelled        OrderBrokerageOrderStatus = "CANCELLED"
-	OrderBrokerageOrderStatusFilled           OrderBrokerageOrderStatus = "FILLED"
-	OrderBrokerageOrderStatusRejected         OrderBrokerageOrderStatus = "REJECTED"
-	OrderBrokerageOrderStatusRequiringContact OrderBrokerageOrderStatus = "REQUIRING_CONTACT"
-	OrderBrokerageOrderStatusError            OrderBrokerageOrderStatus = "ERROR"
+	OrderChainIDEip155_1     OrderChainID = "eip155:1"
+	OrderChainIDEip155_42161 OrderChainID = "eip155:42161"
+	OrderChainIDEip155_8453  OrderChainID = "eip155:8453"
+	OrderChainIDEip155_81457 OrderChainID = "eip155:81457"
+	OrderChainIDEip155_7887  OrderChainID = "eip155:7887"
+	OrderChainIDEip155_98866 OrderChainID = "eip155:98866"
 )
 
-// Indicates if order is a buy or sell
+// Indicates whether `Order` is a buy or sell.
 type OrderOrderSide string
 
 const (
@@ -199,7 +207,7 @@ const (
 	OrderOrderSideSell OrderOrderSide = "SELL"
 )
 
-// Indicates how long order is valid
+// Time in force. Indicates how long `Order` is valid for.
 type OrderOrderTif string
 
 const (
@@ -209,7 +217,7 @@ const (
 	OrderOrderTifFok OrderOrderTif = "FOK"
 )
 
-// Indicates what type of order
+// Type of `Order`.
 type OrderOrderType string
 
 const (
@@ -217,93 +225,41 @@ const (
 	OrderOrderTypeLimit  OrderOrderType = "LIMIT"
 )
 
-type Apiv2AccountOrderGetEstimatedFeeResponse struct {
-	// Chain where the order is placed
-	ChainID int64 `json:"chain_id,required"`
-	// FeeQuote structure to pass into contracts
-	FeeQuote Apiv2AccountOrderGetEstimatedFeeResponseFeeQuote `json:"fee_quote,required"`
-	// Signed FeeQuote structure to pass into contracts
-	FeeQuoteSignature string `json:"fee_quote_signature,required" format:"hex_string"`
-	// Breakdown of fees
-	Fees []Apiv2AccountOrderGetEstimatedFeeResponseFee `json:"fees,required"`
-	// Address of payment token used for fees
-	PaymentToken string `json:"payment_token,required" format:"eth_address"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ChainID           respjson.Field
-		FeeQuote          respjson.Field
-		FeeQuoteSignature respjson.Field
-		Fees              respjson.Field
-		PaymentToken      respjson.Field
-		ExtraFields       map[string]respjson.Field
-		raw               string
-	} `json:"-"`
-}
+// Status of the `Order`.
+type OrderStatus string
 
-// Returns the unmodified JSON received from the API
-func (r Apiv2AccountOrderGetEstimatedFeeResponse) RawJSON() string { return r.JSON.raw }
-func (r *Apiv2AccountOrderGetEstimatedFeeResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// FeeQuote structure to pass into contracts
-type Apiv2AccountOrderGetEstimatedFeeResponseFeeQuote struct {
-	Deadline  int64  `json:"deadline,required"`
-	Fee       string `json:"fee,required" format:"bigint"`
-	OrderID   string `json:"orderId,required" format:"bigint"`
-	Requester string `json:"requester,required" format:"eth_address"`
-	Timestamp int64  `json:"timestamp,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Deadline    respjson.Field
-		Fee         respjson.Field
-		OrderID     respjson.Field
-		Requester   respjson.Field
-		Timestamp   respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r Apiv2AccountOrderGetEstimatedFeeResponseFeeQuote) RawJSON() string { return r.JSON.raw }
-func (r *Apiv2AccountOrderGetEstimatedFeeResponseFeeQuote) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type Apiv2AccountOrderGetEstimatedFeeResponseFee struct {
-	// The quantity of the fee paid via payment token in ETH
-	// <a href='https://ethereum.org/en/developers/docs/intro-to-ether/#what-is-ether' target='_blank'>(what
-	// is ETH?)</a>
-	FeeInEth float64 `json:"fee_in_eth,required"`
-	// The quantity of the fee paid via payment token in wei
-	// <a href='https://ethereum.org/en/developers/docs/intro-to-ether/#denominations' target='_blank'>(what
-	// is wei?)</a>
-	FeeInWei string `json:"fee_in_wei,required" format:"bigint"`
-	// Type of fee
-	//
-	// Any of "SPONSORED_NETWORK", "NETWORK", "TRADING", "ORDER", "PARTNER_ORDER",
-	// "PARTNER_TRADING".
-	Type string `json:"type,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		FeeInEth    respjson.Field
-		FeeInWei    respjson.Field
-		Type        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r Apiv2AccountOrderGetEstimatedFeeResponseFee) RawJSON() string { return r.JSON.raw }
-func (r *Apiv2AccountOrderGetEstimatedFeeResponseFee) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
+const (
+	OrderStatusPendingSubmit    OrderStatus = "PENDING_SUBMIT"
+	OrderStatusPendingCancel    OrderStatus = "PENDING_CANCEL"
+	OrderStatusPendingEscrow    OrderStatus = "PENDING_ESCROW"
+	OrderStatusPendingFill      OrderStatus = "PENDING_FILL"
+	OrderStatusEscrowed         OrderStatus = "ESCROWED"
+	OrderStatusSubmitted        OrderStatus = "SUBMITTED"
+	OrderStatusCancelled        OrderStatus = "CANCELLED"
+	OrderStatusFilled           OrderStatus = "FILLED"
+	OrderStatusRejected         OrderStatus = "REJECTED"
+	OrderStatusRequiringContact OrderStatus = "REQUIRING_CONTACT"
+	OrderStatusError            OrderStatus = "ERROR"
+)
 
 type APIV2AccountOrderGetParams struct {
 	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
 	paramObj
+}
+
+type APIV2AccountOrderListParams struct {
+	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
+	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	paramObj
+}
+
+// URLQuery serializes [APIV2AccountOrderListParams]'s query parameters as
+// `url.Values`.
+func (r APIV2AccountOrderListParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }
 
 type APIV2AccountOrderCancelParams struct {
@@ -311,25 +267,18 @@ type APIV2AccountOrderCancelParams struct {
 	paramObj
 }
 
-type APIV2AccountOrderGetEstimatedFeeParams struct {
-	// Chain where the order is placed
-	ChainID int64 `json:"chain_id,required"`
-	// Order contract address
-	ContractAddress string `json:"contract_address,required" format:"eth_address"`
-	// Order data from which to calculate the fees. To be specified in the future
-	OrderData map[string]string `json:"order_data,omitzero,required"`
-	paramObj
-}
-
-func (r APIV2AccountOrderGetEstimatedFeeParams) MarshalJSON() (data []byte, err error) {
-	type shadow APIV2AccountOrderGetEstimatedFeeParams
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *APIV2AccountOrderGetEstimatedFeeParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type APIV2AccountOrderGetFulfillmentsParams struct {
-	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	AccountID string           `path:"account_id,required" format:"uuid" json:"-"`
+	Page      param.Opt[int64] `query:"page,omitzero" json:"-"`
+	PageSize  param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	paramObj
+}
+
+// URLQuery serializes [APIV2AccountOrderGetFulfillmentsParams]'s query parameters
+// as `url.Values`.
+func (r APIV2AccountOrderGetFulfillmentsParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }

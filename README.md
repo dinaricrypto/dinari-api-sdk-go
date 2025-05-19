@@ -51,12 +51,13 @@ import (
 func main() {
 	client := dinariapisdk.NewClient(
 		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("DINARI_API_KEY")
+		option.WithSecret("My Secret"),  // defaults to os.LookupEnv("DINARI_SECRET")
 	)
-	response, err := client.API.V2.GetHealth(context.TODO())
+	response, err := client.API.V2.MarketData.GetMarketHours(context.TODO())
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", response.Status)
+	fmt.Printf("%+v\n", response.IsMarketOpen)
 }
 
 ```
@@ -262,7 +263,7 @@ client := dinariapisdk.NewClient(
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.API.V2.GetHealth(context.TODO(), ...,
+client.API.V2.MarketData.GetMarketHours(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -291,14 +292,14 @@ When the API returns a non-success status code, we return an error with type
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.API.V2.GetHealth(context.TODO())
+_, err := client.API.V2.MarketData.GetMarketHours(context.TODO())
 if err != nil {
 	var apierr *dinariapisdk.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/api/v2/_health/": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/api/v2/market_data/market_hours/": 400 Bad Request { ... }
 }
 ```
 
@@ -316,7 +317,7 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.API.V2.GetHealth(
+client.API.V2.MarketData.GetMarketHours(
 	ctx,
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
@@ -336,6 +337,30 @@ file returned by `os.Open` will be sent with the file name on disk.
 We also provide a helper `dinariapisdk.File(reader io.Reader, filename string, contentType string)`
 which can be used to wrap any `io.Reader` with the appropriate file name and content type.
 
+```go
+// A file from the file system
+file, err := os.Open("/path/to/file")
+dinariapisdk.APIV2EntityKYCUploadDocumentParams{
+	EntityID:     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+	DocumentType: dinariapisdk.KYCDocumentTypeGovernmentID,
+	File:         file,
+}
+
+// A file from a string
+dinariapisdk.APIV2EntityKYCUploadDocumentParams{
+	EntityID:     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+	DocumentType: dinariapisdk.KYCDocumentTypeGovernmentID,
+	File:         strings.NewReader("my file contents"),
+}
+
+// With a custom filename and contentType
+dinariapisdk.APIV2EntityKYCUploadDocumentParams{
+	EntityID:     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+	DocumentType: dinariapisdk.KYCDocumentTypeGovernmentID,
+	File:         dinariapisdk.File(strings.NewReader(`{"hello": "foo"}`), "file.go", "application/json"),
+}
+```
+
 ### Retries
 
 Certain errors will be automatically retried 2 times by default, with a short exponential backoff.
@@ -351,7 +376,7 @@ client := dinariapisdk.NewClient(
 )
 
 // Override per-request:
-client.API.V2.GetHealth(context.TODO(), option.WithMaxRetries(5))
+client.API.V2.MarketData.GetMarketHours(context.TODO(), option.WithMaxRetries(5))
 ```
 
 ### Accessing raw response data (e.g. response headers)
@@ -362,7 +387,7 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-response, err := client.API.V2.GetHealth(context.TODO(), option.WithResponseInto(&response))
+response, err := client.API.V2.MarketData.GetMarketHours(context.TODO(), option.WithResponseInto(&response))
 if err != nil {
 	// handle error
 }

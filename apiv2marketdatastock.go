@@ -39,7 +39,7 @@ func NewAPIV2MarketDataStockService(opts ...option.RequestOption) (r APIV2Market
 	return
 }
 
-// Returns a list of stocks available for trading.
+// Get a list of `Stocks`.
 func (r *APIV2MarketDataStockService) List(ctx context.Context, query APIV2MarketDataStockListParams, opts ...option.RequestOption) (res *[]Apiv2MarketDataStockListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "api/v2/market_data/stocks/"
@@ -47,9 +47,10 @@ func (r *APIV2MarketDataStockService) List(ctx context.Context, query APIV2Marke
 	return
 }
 
-// Returns a list of announced stock dividend details for a specified stock. Note
-// that this data applies only to actual stocks. Yield received for holding dShares
-// may differ from this.
+// Get a list of announced stock dividend details for a specified `Stock`.
+//
+// Note that this data applies only to actual stocks. Yield received for holding
+// tokenized shares may differ from this.
 func (r *APIV2MarketDataStockService) GetDividends(ctx context.Context, stockID string, opts ...option.RequestOption) (res *[]Apiv2MarketDataStockGetDividendsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if stockID == "" {
@@ -61,8 +62,8 @@ func (r *APIV2MarketDataStockService) GetDividends(ctx context.Context, stockID 
 	return
 }
 
-// Returns a list of historical prices for a specified stock. Each index in the
-// array represents a single tick in a price chart.
+// Get historical price data for a specified `Stock`. Each index in the array
+// represents a single tick in a price chart.
 func (r *APIV2MarketDataStockService) GetHistoricalPrices(ctx context.Context, stockID string, query APIV2MarketDataStockGetHistoricalPricesParams, opts ...option.RequestOption) (res *[]Apiv2MarketDataStockGetHistoricalPricesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if stockID == "" {
@@ -74,8 +75,8 @@ func (r *APIV2MarketDataStockService) GetHistoricalPrices(ctx context.Context, s
 	return
 }
 
-// Get the most recent news articles relating to a stock, including a summary of
-// the article and a link to the original source
+// Get the most recent news articles relating to a `Stock`, including a summary of
+// the article and a link to the original source.
 func (r *APIV2MarketDataStockService) GetNews(ctx context.Context, stockID string, query APIV2MarketDataStockGetNewsParams, opts ...option.RequestOption) (res *[]Apiv2MarketDataStockGetNewsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if stockID == "" {
@@ -87,7 +88,7 @@ func (r *APIV2MarketDataStockService) GetNews(ctx context.Context, stockID strin
 	return
 }
 
-// Returns a stock quote for a specified stock.
+// Get quote for a specified `Stock`.
 func (r *APIV2MarketDataStockService) GetQuote(ctx context.Context, stockID string, opts ...option.RequestOption) (res *Apiv2MarketDataStockGetQuoteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if stockID == "" {
@@ -101,32 +102,39 @@ func (r *APIV2MarketDataStockService) GetQuote(ctx context.Context, stockID stri
 
 // Information about stock available for trading.
 type Apiv2MarketDataStockListResponse struct {
-	// Unique identifier for the stock
-	ID string `json:"id,required" format:"bigint"`
-	// Whether the stock allows for fractional trading. If it is not fractionable,
-	// Dinari only supports limit orders for the stock.
+	// ID of the `Stock`
+	ID string `json:"id,required" format:"uuid"`
+	// Whether the `Stock` allows for fractional trading. If it is not fractionable,
+	// Dinari only supports limit orders for the `Stock`.
 	IsFractionable bool `json:"is_fractionable,required"`
-	// Stock Name
+	// Whether the `Stock` is available for trading.
+	IsTradable bool `json:"is_tradable,required"`
+	// Company name
 	Name string `json:"name,required"`
-	// Ticker symbol of the stock
+	// Ticker symbol
 	Symbol string `json:"symbol,required"`
 	// SEC Central Index Key. Refer to
 	// [this link](https://www.sec.gov/submit-filings/filer-support-resources/how-do-i-guides/understand-utilize-edgar-ciks-passphrases-access-codes)
+	// for more information.
 	Cik string `json:"cik,nullable"`
-	// Composite FIGI ID. Refer to [this link](https://www.openfigi.com/about/figi)
+	// Composite FIGI ID. Refer to [this link](https://www.openfigi.com/about/figi) for
+	// more information.
 	CompositeFigi string `json:"composite_figi,nullable"`
-	// CUSIP ID. Refer to [this link](https://www.cusip.com/identifiers.html)
+	// CUSIP ID. Refer to [this link](https://www.cusip.com/identifiers.html) for more
+	// information.
 	Cusip string `json:"cusip,nullable"`
-	// Description of the company and what they do/offer.
+	// Description of the company and their services.
 	Description string `json:"description,nullable"`
-	// Name of Stock for application display
+	// Name of `Stock` for application display. If defined, this supercedes the `name`
+	// field for displaying the name.
 	DisplayName string `json:"display_name,nullable"`
-	// The URL of the logo of the stock. The preferred format is svg.
+	// URL of the company's logo. Supported formats are SVG and PNG.
 	LogoURL string `json:"logo_url,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID             respjson.Field
 		IsFractionable respjson.Field
+		IsTradable     respjson.Field
 		Name           respjson.Field
 		Symbol         respjson.Field
 		Cik            respjson.Field
@@ -146,43 +154,39 @@ func (r *Apiv2MarketDataStockListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Details of a dividend announcement for a stock.
+// Information about a dividend announcement for a `Stock`.
 type Apiv2MarketDataStockGetDividendsResponse struct {
 	// Cash amount of the dividend per share owned.
 	CashAmount float64 `json:"cash_amount"`
 	// Currency in which the dividend is paid.
 	Currency string `json:"currency"`
-	// Date on which the dividend was announced.
-	DeclarationDate string `json:"declaration_date"`
+	// Date on which the dividend was announced. In ISO 8601 format, YYYY-MM-DD.
+	DeclarationDate time.Time `json:"declaration_date" format:"date"`
 	// Type of dividend. Dividends that have been paid and/or are expected to be paid
-	// on consistent schedules are denoted as CD. Special Cash dividends that have been
-	// paid that are infrequent or unusual, and/or can not be expected to occur in the
-	// future are denoted as SC. Long-Term and Short-Term capital gain distributions
-	// are denoted as LT and ST, respectively.
+	// on consistent schedules are denoted as `CD`. Special Cash dividends that have
+	// been paid that are infrequent or unusual, and/or can not be expected to occur in
+	// the future are denoted as `SC`. Long-term and short-term capital gain
+	// distributions are denoted as `LT` and `ST`, respectively.
 	DividendType string `json:"dividend_type"`
-	// Date on or after which a stock is traded without the right to receive the next
-	// dividend payment. (If you purchase a stock on or after the ex-dividend date, you
-	// will not receive the upcoming dividend.)
-	ExDividendDate string `json:"ex_dividend_date"`
+	// Date on or after which a `Stock` is traded without the right to receive the next
+	// dividend payment. If you purchase a `Stock` on or after the ex-dividend date,
+	// you will not receive the upcoming dividend. In ISO 8601 format, YYYY-MM-DD.
+	ExDividendDate time.Time `json:"ex_dividend_date" format:"date"`
 	// Frequency of the dividend. The following values are possible:
 	//
-	//	1 - Annual
-	//
-	//	2 - Semi-Annual
-	//
-	//	4 - Quarterly
-	//
-	//	12 - Monthly
-	//
-	//	52 - Weekly
-	//
-	//	365 - Daily
+	// - `1` - Annual
+	// - `2` - Semi-Annual
+	// - `4` - Quarterly
+	// - `12` - Monthly
+	// - `52` - Weekly
+	// - `365` - Daily
 	Frequency int64 `json:"frequency"`
-	// Date that the dividend is paid out.
-	PayDate string `json:"pay_date"`
-	// Date that the stock must be held to receive the dividend; set by the company.
-	RecordDate string `json:"record_date"`
-	// Ticker symbol of the stock.
+	// Date on which the dividend is paid out. In ISO 8601 format, YYYY-MM-DD.
+	PayDate time.Time `json:"pay_date" format:"date"`
+	// Date that the shares must be held to receive the dividend; set by the company.
+	// In ISO 8601 format, YYYY-MM-DD.
+	RecordDate time.Time `json:"record_date" format:"date"`
+	// Ticker symbol of the `Stock`.
 	Ticker string `json:"ticker"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -206,17 +210,17 @@ func (r *Apiv2MarketDataStockGetDividendsResponse) UnmarshalJSON(data []byte) er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Datapoint of historical price data for a stock.
+// Datapoint of historical price data for a `Stock`.
 type Apiv2MarketDataStockGetHistoricalPricesResponse struct {
-	// Close price of the stock in the given time period.
+	// Close price from the given time period.
 	Close float64 `json:"close,required"`
-	// Highest price of the stock in the given time period.
+	// Highest price from the given time period.
 	High float64 `json:"high,required"`
-	// Lowest price of the stock in the given time period.
+	// Lowest price from the given time period.
 	Low float64 `json:"low,required"`
-	// Open price of the stock in the given time period.
+	// Open price from the given time period.
 	Open float64 `json:"open,required"`
-	// The Unix timestamp in seconds for the start of the aggregate window.
+	// The UNIX timestamp in seconds for the start of the aggregate window.
 	Timestamp int64 `json:"timestamp,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -236,8 +240,8 @@ func (r *Apiv2MarketDataStockGetHistoricalPricesResponse) UnmarshalJSON(data []b
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// This represents a news article relating to a stock ticker symbol which includes
-// a summary of the article and a link to the original source.
+// A news article relating to a `Stock` which includes a summary of the article and
+// a link to the original source.
 type Apiv2MarketDataStockGetNewsResponse struct {
 	// URL of the news article
 	ArticleURL string `json:"article_url,required"`
@@ -245,11 +249,11 @@ type Apiv2MarketDataStockGetNewsResponse struct {
 	Description string `json:"description,required"`
 	// URL of the image for the news article
 	ImageURL string `json:"image_url,required"`
-	// Timestamp when the article was published
+	// Datetime when the article was published. ISO 8601 timestamp.
 	PublishedDt time.Time `json:"published_dt,required" format:"date-time"`
 	// The publisher of the news article
 	Publisher string `json:"publisher,required"`
-	// The mobile friendly Accelerated Mobile Page (AMP) URL of the news article if
+	// Mobile-friendly Accelerated Mobile Page (AMP) URL of the news article, if
 	// available
 	AmpURL string `json:"amp_url"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -273,28 +277,29 @@ func (r *Apiv2MarketDataStockGetNewsResponse) UnmarshalJSON(data []byte) error {
 
 type Apiv2MarketDataStockGetQuoteResponse struct {
 	// The ask price.
-	Price   float64 `json:"price,required"`
-	StockID string  `json:"stock_id,required" format:"bigint"`
+	Price float64 `json:"price,required"`
+	// ID of the `Stock`
+	StockID string `json:"stock_id,required" format:"uuid"`
 	// The change in price from the previous close.
 	Change float64 `json:"change"`
 	// The percentage change in price from the previous close.
 	ChangePercent float64 `json:"change_percent"`
-	// The close price for the stock in the given time period.
+	// The close price from the given time period.
 	Close float64 `json:"close"`
-	// The highest price for the stock in the given time period
+	// The highest price from the given time period
 	High float64 `json:"high"`
-	// The lowest price for the stock in the given time period.
+	// The lowest price from the given time period.
 	Low float64 `json:"low"`
 	// The most recent close price of the ticker multiplied by weighted outstanding
-	// shares
+	// shares.
 	MarketCap int64 `json:"market_cap"`
-	// The open price for the stock in the given time period.
+	// The open price from the given time period.
 	Open float64 `json:"open"`
-	// The close price for the stock for the previous trading day.
+	// The close price for the `Stock` from the previous trading session.
 	PreviousClose float64 `json:"previous_close"`
-	// The trading volume of the stock in the given time period.
+	// The trading volume from the given time period.
 	Volume float64 `json:"volume"`
-	// The number of shares outstanding in the given time period
+	// The number of shares outstanding in the given time period.
 	WeightedSharesOutstanding int64 `json:"weighted_shares_outstanding"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
@@ -324,7 +329,7 @@ func (r *Apiv2MarketDataStockGetQuoteResponse) UnmarshalJSON(data []byte) error 
 type APIV2MarketDataStockListParams struct {
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
-	// List of stock symbols to query. If not provided, all stocks are returned.
+	// List of `Stock` symbols to query. If not provided, all `Stocks` are returned.
 	Symbols []string `query:"symbols,omitzero" json:"-"`
 	paramObj
 }
@@ -366,7 +371,7 @@ const (
 )
 
 type APIV2MarketDataStockGetNewsParams struct {
-	// The number of news articles to return, default is 10 max is 25
+	// The number of articles to return.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	paramObj
 }

@@ -25,6 +25,7 @@ func TestAPIV2EntityAccountNew(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.Entities.Accounts.New(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
@@ -48,6 +49,7 @@ func TestAPIV2EntityAccountListWithOptionalParams(t *testing.T) {
 	client := dinariapisdk.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKey("My API Key"),
+		option.WithSecret("My Secret"),
 	)
 	_, err := client.API.V2.Entities.Accounts.List(
 		context.TODO(),

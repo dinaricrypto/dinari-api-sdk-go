@@ -35,7 +35,7 @@ func NewAPIV2AccountWalletService(opts ...option.RequestOption) (r APIV2AccountW
 	return
 }
 
-// Retrieves details of the wallet connected to the account.
+// Get the wallet connected to the `Account`.
 func (r *APIV2AccountWalletService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *Wallet, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
@@ -47,13 +47,13 @@ func (r *APIV2AccountWalletService) Get(ctx context.Context, accountID string, o
 	return
 }
 
-// Information about a digital wallet
+// Information about a blockchain `Wallet`.
 type Wallet struct {
-	// Address of the wallet
+	// Address of the `Wallet`.
 	Address string `json:"address,required"`
-	// Indicates whether the wallet is flagged for AML violations
+	// Indicates whether the `Wallet` is flagged for AML violation.
 	IsAmlFlagged bool `json:"is_aml_flagged,required"`
-	// Indicates whether the wallet is a Dinari-managed wallet
+	// Indicates whether the `Wallet` is a Dinari-managed wallet.
 	IsManagedWallet bool `json:"is_managed_wallet,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
