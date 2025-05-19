@@ -1,15 +1,15 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk_test
+package dinari_test
 
 import (
 	"context"
 	"os"
 	"testing"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/testutil"
-	"github.com/dinaricrypto/dinari-api-sdk-go/option"
+	"github.com/stainless-sdks/dinari-go"
+	"github.com/stainless-sdks/dinari-go/internal/testutil"
+	"github.com/stainless-sdks/dinari-go/option"
 )
 
 func TestUsage(t *testing.T) {
@@ -20,14 +20,14 @@ func TestUsage(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinariapisdk.NewClient(
+	client := dinari.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
-		option.WithSecret("My Secret"),
+		option.WithAPIKeyID("My API Key ID"),
+		option.WithAPISecretKey("My API Secret Key"),
 	)
-	response, err := client.API.V2.MarketData.GetMarketHours(context.TODO())
+	stocks, err := client.V2.MarketData.Stocks.List(context.TODO(), dinari.V2MarketDataStockListParams{})
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", response.IsMarketOpen)
+	t.Logf("%+v\n", stocks)
 }

@@ -1,10 +1,10 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk
+package dinari
 
 import (
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apierror"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/internal/apierror"
+	"github.com/stainless-sdks/dinari-go/packages/param"
 )
 
 // aliased to make [param.APIUnion] private when embedding

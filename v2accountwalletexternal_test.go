@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk_test
+package dinari_test
 
 import (
 	"context"
@@ -8,12 +8,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/testutil"
-	"github.com/dinaricrypto/dinari-api-sdk-go/option"
+	"github.com/stainless-sdks/dinari-go"
+	"github.com/stainless-sdks/dinari-go/internal/testutil"
+	"github.com/stainless-sdks/dinari-go/option"
 )
 
-func TestAPIV2AccountWalletExternalConnect(t *testing.T) {
+func TestV2AccountWalletExternalConnect(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -22,23 +22,23 @@ func TestAPIV2AccountWalletExternalConnect(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinariapisdk.NewClient(
+	client := dinari.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
-		option.WithSecret("My Secret"),
+		option.WithAPIKeyID("My API Key ID"),
+		option.WithAPISecretKey("My API Secret Key"),
 	)
-	_, err := client.API.V2.Accounts.Wallet.External.Connect(
+	_, err := client.V2.Accounts.Wallet.External.Connect(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinariapisdk.APIV2AccountWalletExternalConnectParams{
-			ChainID:       dinariapisdk.APIV2AccountWalletExternalConnectParamsChainIDEip155_1,
+		dinari.V2AccountWalletExternalConnectParams{
+			ChainID:       dinari.ChainEip155_1,
 			Nonce:         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			Signature:     "0xeaF12bD1DfFd",
 			WalletAddress: "wallet_address",
 		},
 	)
 	if err != nil {
-		var apierr *dinariapisdk.Error
+		var apierr *dinari.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -46,7 +46,7 @@ func TestAPIV2AccountWalletExternalConnect(t *testing.T) {
 	}
 }
 
-func TestAPIV2AccountWalletExternalGetNonce(t *testing.T) {
+func TestV2AccountWalletExternalGetNonce(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -55,20 +55,20 @@ func TestAPIV2AccountWalletExternalGetNonce(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinariapisdk.NewClient(
+	client := dinari.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
-		option.WithSecret("My Secret"),
+		option.WithAPIKeyID("My API Key ID"),
+		option.WithAPISecretKey("My API Secret Key"),
 	)
-	_, err := client.API.V2.Accounts.Wallet.External.GetNonce(
+	_, err := client.V2.Accounts.Wallet.External.GetNonce(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinariapisdk.APIV2AccountWalletExternalGetNonceParams{
+		dinari.V2AccountWalletExternalGetNonceParams{
 			WalletAddress: "wallet_address",
 		},
 	)
 	if err != nil {
-		var apierr *dinariapisdk.Error
+		var apierr *dinari.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

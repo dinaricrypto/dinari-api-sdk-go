@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk
+package dinari
 
 import (
 	"context"
@@ -11,35 +11,51 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
-	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
+	"github.com/stainless-sdks/dinari-go/internal/apijson"
+	"github.com/stainless-sdks/dinari-go/internal/apiquery"
+	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
+	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/stainless-sdks/dinari-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/respjson"
 )
 
-// APIV2AccountOrderRequestService contains methods and other services that help
-// with interacting with the dinari API.
+// V2AccountOrderRequestService contains methods and other services that help with
+// interacting with the dinari API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewAPIV2AccountOrderRequestService] method instead.
-type APIV2AccountOrderRequestService struct {
+// the [NewV2AccountOrderRequestService] method instead.
+type V2AccountOrderRequestService struct {
 	Options []option.RequestOption
 }
 
-// NewAPIV2AccountOrderRequestService generates a new service that applies the
-// given options to each request. These options are applied after the parent
-// client's options (if there is one), and before any request-specific options.
-func NewAPIV2AccountOrderRequestService(opts ...option.RequestOption) (r APIV2AccountOrderRequestService) {
-	r = APIV2AccountOrderRequestService{}
+// NewV2AccountOrderRequestService generates a new service that applies the given
+// options to each request. These options are applied after the parent client's
+// options (if there is one), and before any request-specific options.
+func NewV2AccountOrderRequestService(opts ...option.RequestOption) (r V2AccountOrderRequestService) {
+	r = V2AccountOrderRequestService{}
 	r.Options = opts
 	return
 }
 
+// Get a specific managed `OrderRequest` by its ID.
+func (r *V2AccountOrderRequestService) Get(ctx context.Context, orderRequestID string, query V2AccountOrderRequestGetParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
+	opts = append(r.Options[:], opts...)
+	if query.AccountID == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if orderRequestID == "" {
+		err = errors.New("missing required order_request_id parameter")
+		return
+	}
+	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/%s", query.AccountID, orderRequestID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
 // Lists managed `OrderRequests`.
-func (r *APIV2AccountOrderRequestService) List(ctx context.Context, accountID string, query APIV2AccountOrderRequestListParams, opts ...option.RequestOption) (res *[]OrderRequest, err error) {
+func (r *V2AccountOrderRequestService) List(ctx context.Context, accountID string, query V2AccountOrderRequestListParams, opts ...option.RequestOption) (res *[]OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -51,7 +67,7 @@ func (r *APIV2AccountOrderRequestService) List(ctx context.Context, accountID st
 }
 
 // Create a managed limit buy `OrderRequest`.
-func (r *APIV2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accountID string, body APIV2AccountOrderRequestNewLimitBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
+func (r *V2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accountID string, body V2AccountOrderRequestNewLimitBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -63,7 +79,7 @@ func (r *APIV2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accou
 }
 
 // Create a managed limit sell `OrderRequest`.
-func (r *APIV2AccountOrderRequestService) NewLimitSell(ctx context.Context, accountID string, body APIV2AccountOrderRequestNewLimitSellParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
+func (r *V2AccountOrderRequestService) NewLimitSell(ctx context.Context, accountID string, body V2AccountOrderRequestNewLimitSellParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -75,7 +91,7 @@ func (r *APIV2AccountOrderRequestService) NewLimitSell(ctx context.Context, acco
 }
 
 // Create a managed market buy `OrderRequest`.
-func (r *APIV2AccountOrderRequestService) NewMarketBuy(ctx context.Context, accountID string, body APIV2AccountOrderRequestNewMarketBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
+func (r *V2AccountOrderRequestService) NewMarketBuy(ctx context.Context, accountID string, body V2AccountOrderRequestNewMarketBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -87,7 +103,7 @@ func (r *APIV2AccountOrderRequestService) NewMarketBuy(ctx context.Context, acco
 }
 
 // Create a managed market sell `OrderRequest`.
-func (r *APIV2AccountOrderRequestService) NewMarketSell(ctx context.Context, accountID string, body APIV2AccountOrderRequestNewMarketSellParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
+func (r *V2AccountOrderRequestService) NewMarketSell(ctx context.Context, accountID string, body V2AccountOrderRequestNewMarketSellParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -101,7 +117,7 @@ func (r *APIV2AccountOrderRequestService) NewMarketSell(ctx context.Context, acc
 // Input parameters for creating a limit `OrderRequest`.
 //
 // The properties AssetQuantity, LimitPrice, StockID are required.
-type LimitOrderRequestInputParam struct {
+type CreateLimitOrderInputParam struct {
 	// Quantity of shares to trade. Must be a positive integer.
 	AssetQuantity int64 `json:"asset_quantity,required"`
 	// Price at which to execute the order. Must be a positive number with a precision
@@ -112,11 +128,11 @@ type LimitOrderRequestInputParam struct {
 	paramObj
 }
 
-func (r LimitOrderRequestInputParam) MarshalJSON() (data []byte, err error) {
-	type shadow LimitOrderRequestInputParam
+func (r CreateLimitOrderInputParam) MarshalJSON() (data []byte, err error) {
+	type shadow CreateLimitOrderInputParam
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *LimitOrderRequestInputParam) UnmarshalJSON(data []byte) error {
+func (r *CreateLimitOrderInputParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -138,15 +154,15 @@ type OrderRequest struct {
 	// Indicates whether `Order` is a buy or sell.
 	//
 	// Any of "BUY", "SELL".
-	OrderSide OrderRequestOrderSide `json:"order_side,required"`
+	OrderSide OrderSide `json:"order_side,required"`
 	// Indicates how long `Order` is valid for.
 	//
 	// Any of "DAY", "GTC", "IOC", "FOK".
-	OrderTif OrderRequestOrderTif `json:"order_tif,required"`
+	OrderTif OrderTif `json:"order_tif,required"`
 	// Type of `Order`.
 	//
 	// Any of "MARKET", "LIMIT".
-	OrderType OrderRequestOrderType `json:"order_type,required"`
+	OrderType OrderType `json:"order_type,required"`
 	// Status of `OrderRequest`.
 	//
 	// Any of "PENDING", "SUBMITTED", "ERROR", "CANCELLED".
@@ -175,32 +191,6 @@ func (r *OrderRequest) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Indicates whether `Order` is a buy or sell.
-type OrderRequestOrderSide string
-
-const (
-	OrderRequestOrderSideBuy  OrderRequestOrderSide = "BUY"
-	OrderRequestOrderSideSell OrderRequestOrderSide = "SELL"
-)
-
-// Indicates how long `Order` is valid for.
-type OrderRequestOrderTif string
-
-const (
-	OrderRequestOrderTifDay OrderRequestOrderTif = "DAY"
-	OrderRequestOrderTifGtc OrderRequestOrderTif = "GTC"
-	OrderRequestOrderTifIoc OrderRequestOrderTif = "IOC"
-	OrderRequestOrderTifFok OrderRequestOrderTif = "FOK"
-)
-
-// Type of `Order`.
-type OrderRequestOrderType string
-
-const (
-	OrderRequestOrderTypeMarket OrderRequestOrderType = "MARKET"
-	OrderRequestOrderTypeLimit  OrderRequestOrderType = "LIMIT"
-)
-
 // Status of `OrderRequest`.
 type OrderRequestStatus string
 
@@ -211,48 +201,53 @@ const (
 	OrderRequestStatusCancelled OrderRequestStatus = "CANCELLED"
 )
 
-type APIV2AccountOrderRequestListParams struct {
+type V2AccountOrderRequestGetParams struct {
+	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	paramObj
+}
+
+type V2AccountOrderRequestListParams struct {
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	paramObj
 }
 
-// URLQuery serializes [APIV2AccountOrderRequestListParams]'s query parameters as
+// URLQuery serializes [V2AccountOrderRequestListParams]'s query parameters as
 // `url.Values`.
-func (r APIV2AccountOrderRequestListParams) URLQuery() (v url.Values, err error) {
+func (r V2AccountOrderRequestListParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type APIV2AccountOrderRequestNewLimitBuyParams struct {
+type V2AccountOrderRequestNewLimitBuyParams struct {
 	// Input parameters for creating a limit `OrderRequest`.
-	LimitOrderRequestInput LimitOrderRequestInputParam
+	CreateLimitOrderInput CreateLimitOrderInputParam
 	paramObj
 }
 
-func (r APIV2AccountOrderRequestNewLimitBuyParams) MarshalJSON() (data []byte, err error) {
-	return json.Marshal(r.LimitOrderRequestInput)
+func (r V2AccountOrderRequestNewLimitBuyParams) MarshalJSON() (data []byte, err error) {
+	return json.Marshal(r.CreateLimitOrderInput)
 }
-func (r *APIV2AccountOrderRequestNewLimitBuyParams) UnmarshalJSON(data []byte) error {
-	return r.LimitOrderRequestInput.UnmarshalJSON(data)
+func (r *V2AccountOrderRequestNewLimitBuyParams) UnmarshalJSON(data []byte) error {
+	return r.CreateLimitOrderInput.UnmarshalJSON(data)
 }
 
-type APIV2AccountOrderRequestNewLimitSellParams struct {
+type V2AccountOrderRequestNewLimitSellParams struct {
 	// Input parameters for creating a limit `OrderRequest`.
-	LimitOrderRequestInput LimitOrderRequestInputParam
+	CreateLimitOrderInput CreateLimitOrderInputParam
 	paramObj
 }
 
-func (r APIV2AccountOrderRequestNewLimitSellParams) MarshalJSON() (data []byte, err error) {
-	return json.Marshal(r.LimitOrderRequestInput)
+func (r V2AccountOrderRequestNewLimitSellParams) MarshalJSON() (data []byte, err error) {
+	return json.Marshal(r.CreateLimitOrderInput)
 }
-func (r *APIV2AccountOrderRequestNewLimitSellParams) UnmarshalJSON(data []byte) error {
-	return r.LimitOrderRequestInput.UnmarshalJSON(data)
+func (r *V2AccountOrderRequestNewLimitSellParams) UnmarshalJSON(data []byte) error {
+	return r.CreateLimitOrderInput.UnmarshalJSON(data)
 }
 
-type APIV2AccountOrderRequestNewMarketBuyParams struct {
+type V2AccountOrderRequestNewMarketBuyParams struct {
 	// Amount of currency (USD for US equities and ETFS) to pay or receive for the
 	// order. Must be a positive number with a precision of up to 2 decimal places.
 	PaymentAmount float64 `json:"payment_amount,required"`
@@ -261,15 +256,15 @@ type APIV2AccountOrderRequestNewMarketBuyParams struct {
 	paramObj
 }
 
-func (r APIV2AccountOrderRequestNewMarketBuyParams) MarshalJSON() (data []byte, err error) {
-	type shadow APIV2AccountOrderRequestNewMarketBuyParams
+func (r V2AccountOrderRequestNewMarketBuyParams) MarshalJSON() (data []byte, err error) {
+	type shadow V2AccountOrderRequestNewMarketBuyParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *APIV2AccountOrderRequestNewMarketBuyParams) UnmarshalJSON(data []byte) error {
+func (r *V2AccountOrderRequestNewMarketBuyParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIV2AccountOrderRequestNewMarketSellParams struct {
+type V2AccountOrderRequestNewMarketSellParams struct {
 	// Quantity of shares to trade. Must be a positive number with a precision of up to
 	// 9 decimal places.
 	AssetQuantity float64 `json:"asset_quantity,required"`
@@ -278,10 +273,10 @@ type APIV2AccountOrderRequestNewMarketSellParams struct {
 	paramObj
 }
 
-func (r APIV2AccountOrderRequestNewMarketSellParams) MarshalJSON() (data []byte, err error) {
-	type shadow APIV2AccountOrderRequestNewMarketSellParams
+func (r V2AccountOrderRequestNewMarketSellParams) MarshalJSON() (data []byte, err error) {
+	type shadow V2AccountOrderRequestNewMarketSellParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *APIV2AccountOrderRequestNewMarketSellParams) UnmarshalJSON(data []byte) error {
+func (r *V2AccountOrderRequestNewMarketSellParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk_test
+package dinari_test
 
 import (
 	"context"
@@ -8,12 +8,12 @@ import (
 	"os"
 	"testing"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/testutil"
-	"github.com/dinaricrypto/dinari-api-sdk-go/option"
+	"github.com/stainless-sdks/dinari-go"
+	"github.com/stainless-sdks/dinari-go/internal/testutil"
+	"github.com/stainless-sdks/dinari-go/option"
 )
 
-func TestAPIV2MarketDataStockSplitGetWithOptionalParams(t *testing.T) {
+func TestV2AccountOrderFulfillmentGet(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -22,21 +22,20 @@ func TestAPIV2MarketDataStockSplitGetWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinariapisdk.NewClient(
+	client := dinari.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
-		option.WithSecret("My Secret"),
+		option.WithAPIKeyID("My API Key ID"),
+		option.WithAPISecretKey("My API Secret Key"),
 	)
-	_, err := client.API.V2.MarketData.Stocks.Splits.Get(
+	_, err := client.V2.Accounts.OrderFulfillments.Get(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinariapisdk.APIV2MarketDataStockSplitGetParams{
-			Page:     dinariapisdk.Int(1),
-			PageSize: dinariapisdk.Int(1),
+		dinari.V2AccountOrderFulfillmentGetParams{
+			AccountID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		},
 	)
 	if err != nil {
-		var apierr *dinariapisdk.Error
+		var apierr *dinari.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -44,7 +43,7 @@ func TestAPIV2MarketDataStockSplitGetWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestAPIV2MarketDataStockSplitListWithOptionalParams(t *testing.T) {
+func TestV2AccountOrderFulfillmentQueryWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -53,17 +52,22 @@ func TestAPIV2MarketDataStockSplitListWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinariapisdk.NewClient(
+	client := dinari.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
-		option.WithSecret("My Secret"),
+		option.WithAPIKeyID("My API Key ID"),
+		option.WithAPISecretKey("My API Secret Key"),
 	)
-	_, err := client.API.V2.MarketData.Stocks.Splits.List(context.TODO(), dinariapisdk.APIV2MarketDataStockSplitListParams{
-		Page:     dinariapisdk.Int(1),
-		PageSize: dinariapisdk.Int(1),
-	})
+	_, err := client.V2.Accounts.OrderFulfillments.Query(
+		context.TODO(),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		dinari.V2AccountOrderFulfillmentQueryParams{
+			OrderIDs: []string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"},
+			Page:     dinari.Int(1),
+			PageSize: dinari.Int(1),
+		},
+	)
 	if err != nil {
-		var apierr *dinariapisdk.Error
+		var apierr *dinari.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

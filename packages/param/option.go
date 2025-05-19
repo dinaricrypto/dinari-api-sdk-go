@@ -3,7 +3,7 @@ package param
 import (
 	"encoding/json"
 	"fmt"
-	shimjson "github.com/dinaricrypto/dinari-api-sdk-go/internal/encoding/json"
+	shimjson "github.com/stainless-sdks/dinari-go/internal/encoding/json"
 	"time"
 )
 

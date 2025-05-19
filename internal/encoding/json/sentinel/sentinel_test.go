@@ -1,7 +1,7 @@
 package sentinel_test
 
 import (
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/encoding/json/sentinel"
+	"github.com/stainless-sdks/dinari-go/internal/encoding/json/sentinel"
 	"reflect"
 	"slices"
 	"testing"

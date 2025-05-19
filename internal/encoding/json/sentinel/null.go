@@ -1,7 +1,7 @@
 package sentinel
 
 import (
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/encoding/json/shims"
+	"github.com/stainless-sdks/dinari-go/internal/encoding/json/shims"
 	"reflect"
 	"sync"
 )

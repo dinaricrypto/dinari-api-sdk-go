@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk
+package dinari
 
 import (
 	"context"
@@ -8,35 +8,35 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
-	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
+	"github.com/stainless-sdks/dinari-go/internal/apijson"
+	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
+	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/stainless-sdks/dinari-go/packages/respjson"
 )
 
-// APIV2AccountWalletService contains methods and other services that help with
+// V2AccountWalletService contains methods and other services that help with
 // interacting with the dinari API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewAPIV2AccountWalletService] method instead.
-type APIV2AccountWalletService struct {
+// the [NewV2AccountWalletService] method instead.
+type V2AccountWalletService struct {
 	Options  []option.RequestOption
-	External APIV2AccountWalletExternalService
+	External V2AccountWalletExternalService
 }
 
-// NewAPIV2AccountWalletService generates a new service that applies the given
-// options to each request. These options are applied after the parent client's
-// options (if there is one), and before any request-specific options.
-func NewAPIV2AccountWalletService(opts ...option.RequestOption) (r APIV2AccountWalletService) {
-	r = APIV2AccountWalletService{}
+// NewV2AccountWalletService generates a new service that applies the given options
+// to each request. These options are applied after the parent client's options (if
+// there is one), and before any request-specific options.
+func NewV2AccountWalletService(opts ...option.RequestOption) (r V2AccountWalletService) {
+	r = V2AccountWalletService{}
 	r.Options = opts
-	r.External = NewAPIV2AccountWalletExternalService(opts...)
+	r.External = NewV2AccountWalletExternalService(opts...)
 	return
 }
 
 // Get the wallet connected to the `Account`.
-func (r *APIV2AccountWalletService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *Wallet, err error) {
+func (r *V2AccountWalletService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *Wallet, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")

@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
+	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
 	"github.com/tidwall/sjson"
 )
 
@@ -19,7 +19,7 @@ import (
 // which can be supplied to clients, services, and methods. You can read more about this functional
 // options pattern in our [README].
 //
-// [README]: https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#readme-requestoptions
+// [README]: https://pkg.go.dev/github.com/stainless-sdks/dinari-go#readme-requestoptions
 type RequestOption = requestconfig.RequestOption
 
 // WithBaseURL returns a RequestOption that sets the BaseURL for the client.
@@ -265,18 +265,18 @@ func WithEnvironmentProduction() RequestOption {
 	return requestconfig.WithDefaultBaseURL("https://api-enterprise.sbt.dinari.com/")
 }
 
-// WithAPIKey returns a RequestOption that sets the client setting "api_key".
-func WithAPIKey(value string) RequestOption {
+// WithAPIKeyID returns a RequestOption that sets the client setting "api_key_id".
+func WithAPIKeyID(value string) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
-		r.APIKey = value
-		return r.Apply(WithHeader("X-API-Key-Id", r.APIKey))
+		r.APIKeyID = value
+		return r.Apply(WithHeader("X-API-Key-Id", r.APIKeyID))
 	})
 }
 
-// WithSecret returns a RequestOption that sets the client setting "secret".
-func WithSecret(value string) RequestOption {
+// WithAPISecretKey returns a RequestOption that sets the client setting "api_secret_key".
+func WithAPISecretKey(value string) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
-		r.Secret = value
-		return r.Apply(WithHeader("X-API-Secret-Key", r.Secret))
+		r.APISecretKey = value
+		return r.Apply(WithHeader("X-API-Secret-Key", r.APISecretKey))
 	})
 }
