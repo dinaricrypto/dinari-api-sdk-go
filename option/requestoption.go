@@ -265,6 +265,13 @@ func WithEnvironmentProduction() RequestOption {
 	return requestconfig.WithDefaultBaseURL("https://api-enterprise.sbt.dinari.com/")
 }
 
+// WithEnvironmentSandbox returns a RequestOption that sets the current
+// environment to be the "sandbox" environment. An environment specifies which base URL
+// to use by default.
+func WithEnvironmentSandbox() RequestOption {
+	return requestconfig.WithDefaultBaseURL("https://api-enterprise.sandbox.dinari.com/")
+}
+
 // WithAPIKeyID returns a RequestOption that sets the client setting "api_key_id".
 func WithAPIKeyID(value string) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {

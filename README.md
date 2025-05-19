@@ -44,6 +44,7 @@ func main() {
 	client := dinari.NewClient(
 		option.WithAPIKeyID("My API Key ID"),         // defaults to os.LookupEnv("DINARI_API_KEY_ID")
 		option.WithAPISecretKey("My API Secret Key"), // defaults to os.LookupEnv("DINARI_API_SECRET_KEY")
+		option.WithEnvironmentSandbox(),              // defaults to option.WithEnvironmentProduction()
 	)
 	stocks, err := client.V2.MarketData.Stocks.List(context.TODO(), dinari.V2MarketDataStockListParams{})
 	if err != nil {
