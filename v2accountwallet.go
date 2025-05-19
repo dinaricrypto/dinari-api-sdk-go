@@ -8,10 +8,10 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/stainless-sdks/dinari-go/internal/apijson"
-	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
-	"github.com/stainless-sdks/dinari-go/option"
-	"github.com/stainless-sdks/dinari-go/packages/respjson"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
+	"github.com/dinaricrypto/dinari-api-sdk-go/option"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // V2AccountWalletService contains methods and other services that help with

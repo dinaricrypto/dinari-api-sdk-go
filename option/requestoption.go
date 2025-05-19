@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/tidwall/sjson"
 )
 
@@ -19,7 +19,7 @@ import (
 // which can be supplied to clients, services, and methods. You can read more about this functional
 // options pattern in our [README].
 //
-// [README]: https://pkg.go.dev/github.com/stainless-sdks/dinari-go#readme-requestoptions
+// [README]: https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#readme-requestoptions
 type RequestOption = requestconfig.RequestOption
 
 // WithBaseURL returns a RequestOption that sets the BaseURL for the client.

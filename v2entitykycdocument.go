@@ -12,12 +12,12 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/stainless-sdks/dinari-go/internal/apiform"
-	"github.com/stainless-sdks/dinari-go/internal/apijson"
-	"github.com/stainless-sdks/dinari-go/internal/apiquery"
-	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
-	"github.com/stainless-sdks/dinari-go/option"
-	"github.com/stainless-sdks/dinari-go/packages/respjson"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiform"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
+	"github.com/dinaricrypto/dinari-api-sdk-go/option"
+	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
 // V2EntityKYCDocumentService contains methods and other services that help with

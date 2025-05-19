@@ -14,7 +14,7 @@ import (
 	"encoding"
 	"encoding/base64"
 	"fmt"
-	"github.com/stainless-sdks/dinari-go/internal/encoding/json/shims"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/encoding/json/shims"
 	"reflect"
 	"strconv"
 	"strings"
