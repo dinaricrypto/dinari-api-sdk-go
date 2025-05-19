@@ -18,10 +18,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/stainless-sdks/dinari-go/internal"
-	"github.com/stainless-sdks/dinari-go/internal/apierror"
-	"github.com/stainless-sdks/dinari-go/internal/apiform"
-	"github.com/stainless-sdks/dinari-go/internal/apiquery"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apierror"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiform"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
 )
 
 func getDefaultHeaders() map[string]string {

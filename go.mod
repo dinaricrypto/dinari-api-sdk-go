@@ -1,4 +1,4 @@
-module github.com/stainless-sdks/dinari-go
+module github.com/dinaricrypto/dinari-api-sdk-go
 
 go 1.21
 

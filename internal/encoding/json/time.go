@@ -2,7 +2,7 @@
 package json
 
 import (
-	"github.com/stainless-sdks/dinari-go/internal/encoding/json/shims"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/encoding/json/shims"
 	"reflect"
 	"time"
 )

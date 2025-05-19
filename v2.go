@@ -3,7 +3,7 @@
 package dinari
 
 import (
-	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 )
 
 // V2Service contains methods and other services that help with interacting with
