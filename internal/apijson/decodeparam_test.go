@@ -3,8 +3,8 @@ package apijson_test
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/internal/apijson"
+	"github.com/stainless-sdks/dinari-go/packages/param"
 	"reflect"
 	"testing"
 )

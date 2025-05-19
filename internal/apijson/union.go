@@ -2,7 +2,7 @@ package apijson
 
 import (
 	"errors"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/param"
 	"reflect"
 
 	"github.com/tidwall/gjson"

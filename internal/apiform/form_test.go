@@ -2,7 +2,7 @@ package apiform
 
 import (
 	"bytes"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/param"
 	"io"
 	"mime/multipart"
 	"strings"

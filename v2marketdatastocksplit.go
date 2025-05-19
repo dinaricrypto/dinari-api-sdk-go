@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk
+package dinari
 
 import (
 	"context"
@@ -10,50 +10,30 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
-	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
+	"github.com/stainless-sdks/dinari-go/internal/apijson"
+	"github.com/stainless-sdks/dinari-go/internal/apiquery"
+	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
+	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/stainless-sdks/dinari-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/respjson"
 )
 
-// APIV2MarketDataStockSplitService contains methods and other services that help
-// with interacting with the dinari API.
+// V2MarketDataStockSplitService contains methods and other services that help with
+// interacting with the dinari API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewAPIV2MarketDataStockSplitService] method instead.
-type APIV2MarketDataStockSplitService struct {
+// the [NewV2MarketDataStockSplitService] method instead.
+type V2MarketDataStockSplitService struct {
 	Options []option.RequestOption
 }
 
-// NewAPIV2MarketDataStockSplitService generates a new service that applies the
-// given options to each request. These options are applied after the parent
-// client's options (if there is one), and before any request-specific options.
-func NewAPIV2MarketDataStockSplitService(opts ...option.RequestOption) (r APIV2MarketDataStockSplitService) {
-	r = APIV2MarketDataStockSplitService{}
+// NewV2MarketDataStockSplitService generates a new service that applies the given
+// options to each request. These options are applied after the parent client's
+// options (if there is one), and before any request-specific options.
+func NewV2MarketDataStockSplitService(opts ...option.RequestOption) (r V2MarketDataStockSplitService) {
+	r = V2MarketDataStockSplitService{}
 	r.Options = opts
-	return
-}
-
-// Get a list of stock splits for a specific `Stock`. The splits are ordered by the
-// date they were created, with the most recent split first.
-//
-// In an example 10-for-1 stock split, trading will be halted for the stock at the
-// end of the `payable_date`, as the split transitions from `PENDING` to
-// `IN_PROGRESS`. This usually occurs over a weekend to minimize trading
-// disruptions. Each share of stock owned by a shareholder will then be converted
-// into 10 shares, and the split becomes `COMPLETE` as trading resumes on the
-// `ex_date` with new split-adjusted prices.
-func (r *APIV2MarketDataStockSplitService) Get(ctx context.Context, stockID string, query APIV2MarketDataStockSplitGetParams, opts ...option.RequestOption) (res *[]StockSplit, err error) {
-	opts = append(r.Options[:], opts...)
-	if stockID == "" {
-		err = errors.New("missing required stock_id parameter")
-		return
-	}
-	path := fmt.Sprintf("api/v2/market_data/stocks/%s/splits", stockID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -67,9 +47,29 @@ func (r *APIV2MarketDataStockSplitService) Get(ctx context.Context, stockID stri
 // disruptions. Each share of stock owned by a shareholder will then be converted
 // into 10 shares, and the split becomes `COMPLETE` as trading resumes on the
 // `ex_date` with new split-adjusted prices.
-func (r *APIV2MarketDataStockSplitService) List(ctx context.Context, query APIV2MarketDataStockSplitListParams, opts ...option.RequestOption) (res *[]StockSplit, err error) {
+func (r *V2MarketDataStockSplitService) List(ctx context.Context, query V2MarketDataStockSplitListParams, opts ...option.RequestOption) (res *[]StockSplit, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "api/v2/market_data/stocks/splits"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
+	return
+}
+
+// Get a list of stock splits for a specific `Stock`. The splits are ordered by the
+// date they were created, with the most recent split first.
+//
+// In an example 10-for-1 stock split, trading will be halted for the stock at the
+// end of the `payable_date`, as the split transitions from `PENDING` to
+// `IN_PROGRESS`. This usually occurs over a weekend to minimize trading
+// disruptions. Each share of stock owned by a shareholder will then be converted
+// into 10 shares, and the split becomes `COMPLETE` as trading resumes on the
+// `ex_date` with new split-adjusted prices.
+func (r *V2MarketDataStockSplitService) ListForStock(ctx context.Context, stockID string, query V2MarketDataStockSplitListForStockParams, opts ...option.RequestOption) (res *[]StockSplit, err error) {
+	opts = append(r.Options[:], opts...)
+	if stockID == "" {
+		err = errors.New("missing required stock_id parameter")
+		return
+	}
+	path := fmt.Sprintf("api/v2/market_data/stocks/%s/splits", stockID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
@@ -136,30 +136,30 @@ const (
 	StockSplitStatusComplete   StockSplitStatus = "COMPLETE"
 )
 
-type APIV2MarketDataStockSplitGetParams struct {
+type V2MarketDataStockSplitListParams struct {
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	paramObj
 }
 
-// URLQuery serializes [APIV2MarketDataStockSplitGetParams]'s query parameters as
+// URLQuery serializes [V2MarketDataStockSplitListParams]'s query parameters as
 // `url.Values`.
-func (r APIV2MarketDataStockSplitGetParams) URLQuery() (v url.Values, err error) {
+func (r V2MarketDataStockSplitListParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type APIV2MarketDataStockSplitListParams struct {
+type V2MarketDataStockSplitListForStockParams struct {
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	paramObj
 }
 
-// URLQuery serializes [APIV2MarketDataStockSplitListParams]'s query parameters as
-// `url.Values`.
-func (r APIV2MarketDataStockSplitListParams) URLQuery() (v url.Values, err error) {
+// URLQuery serializes [V2MarketDataStockSplitListForStockParams]'s query
+// parameters as `url.Values`.
+func (r V2MarketDataStockSplitListForStockParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,

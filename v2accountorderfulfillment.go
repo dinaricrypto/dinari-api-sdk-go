@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk
+package dinari
 
 import (
 	"context"
@@ -10,35 +10,51 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
-	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
+	"github.com/stainless-sdks/dinari-go/internal/apijson"
+	"github.com/stainless-sdks/dinari-go/internal/apiquery"
+	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
+	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/stainless-sdks/dinari-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/respjson"
 )
 
-// APIV2AccountOrderFulfillmentService contains methods and other services that
-// help with interacting with the dinari API.
+// V2AccountOrderFulfillmentService contains methods and other services that help
+// with interacting with the dinari API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewAPIV2AccountOrderFulfillmentService] method instead.
-type APIV2AccountOrderFulfillmentService struct {
+// the [NewV2AccountOrderFulfillmentService] method instead.
+type V2AccountOrderFulfillmentService struct {
 	Options []option.RequestOption
 }
 
-// NewAPIV2AccountOrderFulfillmentService generates a new service that applies the
+// NewV2AccountOrderFulfillmentService generates a new service that applies the
 // given options to each request. These options are applied after the parent
 // client's options (if there is one), and before any request-specific options.
-func NewAPIV2AccountOrderFulfillmentService(opts ...option.RequestOption) (r APIV2AccountOrderFulfillmentService) {
-	r = APIV2AccountOrderFulfillmentService{}
+func NewV2AccountOrderFulfillmentService(opts ...option.RequestOption) (r V2AccountOrderFulfillmentService) {
+	r = V2AccountOrderFulfillmentService{}
 	r.Options = opts
 	return
 }
 
+// Get a specific `OrderFulfillment` by its ID.
+func (r *V2AccountOrderFulfillmentService) Get(ctx context.Context, orderFulfillmentID string, query V2AccountOrderFulfillmentGetParams, opts ...option.RequestOption) (res *Fulfillment, err error) {
+	opts = append(r.Options[:], opts...)
+	if query.AccountID == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	if orderFulfillmentID == "" {
+		err = errors.New("missing required order_fulfillment_id parameter")
+		return
+	}
+	path := fmt.Sprintf("api/v2/accounts/%s/order_fulfillments/%s", query.AccountID, orderFulfillmentID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
 // Query `OrderFulfillments` under the `Account`.
-func (r *APIV2AccountOrderFulfillmentService) Query(ctx context.Context, accountID string, query APIV2AccountOrderFulfillmentQueryParams, opts ...option.RequestOption) (res *[]OrderFulfillment, err error) {
+func (r *V2AccountOrderFulfillmentService) Query(ctx context.Context, accountID string, query V2AccountOrderFulfillmentQueryParams, opts ...option.RequestOption) (res *[]Fulfillment, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -51,7 +67,7 @@ func (r *APIV2AccountOrderFulfillmentService) Query(ctx context.Context, account
 
 // Information about a fulfillment of an `Order`. An order may be fulfilled in
 // multiple transactions.
-type OrderFulfillment struct {
+type Fulfillment struct {
 	// ID of the `OrderFulfillment`.
 	ID string `json:"id,required" format:"uuid"`
 	// Amount of dShare asset token filled for `BUY` orders.
@@ -61,8 +77,9 @@ type OrderFulfillment struct {
 	// Blockchain that the transaction was run on.
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
-	// "eip155:98866".
-	ChainID OrderFulfillmentChainID `json:"chain_id,required"`
+	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
+	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337".
+	ChainID Chain `json:"chain_id,required"`
 	// ID of the `Order` this `OrderFulfillment` is for.
 	OrderID string `json:"order_id,required" format:"uuid"`
 	// Amount of payment token filled for `SELL` orders.
@@ -93,24 +110,17 @@ type OrderFulfillment struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r OrderFulfillment) RawJSON() string { return r.JSON.raw }
-func (r *OrderFulfillment) UnmarshalJSON(data []byte) error {
+func (r Fulfillment) RawJSON() string { return r.JSON.raw }
+func (r *Fulfillment) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Blockchain that the transaction was run on.
-type OrderFulfillmentChainID string
+type V2AccountOrderFulfillmentGetParams struct {
+	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	paramObj
+}
 
-const (
-	OrderFulfillmentChainIDEip155_1     OrderFulfillmentChainID = "eip155:1"
-	OrderFulfillmentChainIDEip155_42161 OrderFulfillmentChainID = "eip155:42161"
-	OrderFulfillmentChainIDEip155_8453  OrderFulfillmentChainID = "eip155:8453"
-	OrderFulfillmentChainIDEip155_81457 OrderFulfillmentChainID = "eip155:81457"
-	OrderFulfillmentChainIDEip155_7887  OrderFulfillmentChainID = "eip155:7887"
-	OrderFulfillmentChainIDEip155_98866 OrderFulfillmentChainID = "eip155:98866"
-)
-
-type APIV2AccountOrderFulfillmentQueryParams struct {
+type V2AccountOrderFulfillmentQueryParams struct {
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	// List of `Order` IDs to query `OrderFulfillments` for.
@@ -118,9 +128,9 @@ type APIV2AccountOrderFulfillmentQueryParams struct {
 	paramObj
 }
 
-// URLQuery serializes [APIV2AccountOrderFulfillmentQueryParams]'s query parameters
-// as `url.Values`.
-func (r APIV2AccountOrderFulfillmentQueryParams) URLQuery() (v url.Values, err error) {
+// URLQuery serializes [V2AccountOrderFulfillmentQueryParams]'s query parameters as
+// `url.Values`.
+func (r V2AccountOrderFulfillmentQueryParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,

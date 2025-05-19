@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk
+package dinari
 
 import (
 	"context"
@@ -10,37 +10,37 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
-	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
+	"github.com/stainless-sdks/dinari-go/internal/apijson"
+	"github.com/stainless-sdks/dinari-go/internal/apiquery"
+	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
+	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/stainless-sdks/dinari-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/respjson"
 )
 
-// APIV2MarketDataStockService contains methods and other services that help with
+// V2MarketDataStockService contains methods and other services that help with
 // interacting with the dinari API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewAPIV2MarketDataStockService] method instead.
-type APIV2MarketDataStockService struct {
+// the [NewV2MarketDataStockService] method instead.
+type V2MarketDataStockService struct {
 	Options []option.RequestOption
-	Splits  APIV2MarketDataStockSplitService
+	Splits  V2MarketDataStockSplitService
 }
 
-// NewAPIV2MarketDataStockService generates a new service that applies the given
+// NewV2MarketDataStockService generates a new service that applies the given
 // options to each request. These options are applied after the parent client's
 // options (if there is one), and before any request-specific options.
-func NewAPIV2MarketDataStockService(opts ...option.RequestOption) (r APIV2MarketDataStockService) {
-	r = APIV2MarketDataStockService{}
+func NewV2MarketDataStockService(opts ...option.RequestOption) (r V2MarketDataStockService) {
+	r = V2MarketDataStockService{}
 	r.Options = opts
-	r.Splits = NewAPIV2MarketDataStockSplitService(opts...)
+	r.Splits = NewV2MarketDataStockSplitService(opts...)
 	return
 }
 
 // Get a list of `Stocks`.
-func (r *APIV2MarketDataStockService) List(ctx context.Context, query APIV2MarketDataStockListParams, opts ...option.RequestOption) (res *[]Apiv2MarketDataStockListResponse, err error) {
+func (r *V2MarketDataStockService) List(ctx context.Context, query V2MarketDataStockListParams, opts ...option.RequestOption) (res *[]V2MarketDataStockListResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "api/v2/market_data/stocks/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
@@ -51,7 +51,7 @@ func (r *APIV2MarketDataStockService) List(ctx context.Context, query APIV2Marke
 //
 // Note that this data applies only to actual stocks. Yield received for holding
 // tokenized shares may differ from this.
-func (r *APIV2MarketDataStockService) GetDividends(ctx context.Context, stockID string, opts ...option.RequestOption) (res *[]Apiv2MarketDataStockGetDividendsResponse, err error) {
+func (r *V2MarketDataStockService) GetDividends(ctx context.Context, stockID string, opts ...option.RequestOption) (res *[]V2MarketDataStockGetDividendsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
@@ -64,7 +64,7 @@ func (r *APIV2MarketDataStockService) GetDividends(ctx context.Context, stockID 
 
 // Get historical price data for a specified `Stock`. Each index in the array
 // represents a single tick in a price chart.
-func (r *APIV2MarketDataStockService) GetHistoricalPrices(ctx context.Context, stockID string, query APIV2MarketDataStockGetHistoricalPricesParams, opts ...option.RequestOption) (res *[]Apiv2MarketDataStockGetHistoricalPricesResponse, err error) {
+func (r *V2MarketDataStockService) GetHistoricalPrices(ctx context.Context, stockID string, query V2MarketDataStockGetHistoricalPricesParams, opts ...option.RequestOption) (res *[]V2MarketDataStockGetHistoricalPricesResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
@@ -77,7 +77,7 @@ func (r *APIV2MarketDataStockService) GetHistoricalPrices(ctx context.Context, s
 
 // Get the most recent news articles relating to a `Stock`, including a summary of
 // the article and a link to the original source.
-func (r *APIV2MarketDataStockService) GetNews(ctx context.Context, stockID string, query APIV2MarketDataStockGetNewsParams, opts ...option.RequestOption) (res *[]Apiv2MarketDataStockGetNewsResponse, err error) {
+func (r *V2MarketDataStockService) GetNews(ctx context.Context, stockID string, query V2MarketDataStockGetNewsParams, opts ...option.RequestOption) (res *[]V2MarketDataStockGetNewsResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
@@ -89,7 +89,7 @@ func (r *APIV2MarketDataStockService) GetNews(ctx context.Context, stockID strin
 }
 
 // Get quote for a specified `Stock`.
-func (r *APIV2MarketDataStockService) GetQuote(ctx context.Context, stockID string, opts ...option.RequestOption) (res *Apiv2MarketDataStockGetQuoteResponse, err error) {
+func (r *V2MarketDataStockService) GetQuote(ctx context.Context, stockID string, opts ...option.RequestOption) (res *V2MarketDataStockGetQuoteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
@@ -101,7 +101,7 @@ func (r *APIV2MarketDataStockService) GetQuote(ctx context.Context, stockID stri
 }
 
 // Information about stock available for trading.
-type Apiv2MarketDataStockListResponse struct {
+type V2MarketDataStockListResponse struct {
 	// ID of the `Stock`
 	ID string `json:"id,required" format:"uuid"`
 	// Whether the `Stock` allows for fractional trading. If it is not fractionable,
@@ -149,13 +149,13 @@ type Apiv2MarketDataStockListResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r Apiv2MarketDataStockListResponse) RawJSON() string { return r.JSON.raw }
-func (r *Apiv2MarketDataStockListResponse) UnmarshalJSON(data []byte) error {
+func (r V2MarketDataStockListResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Information about a dividend announcement for a `Stock`.
-type Apiv2MarketDataStockGetDividendsResponse struct {
+type V2MarketDataStockGetDividendsResponse struct {
 	// Cash amount of the dividend per share owned.
 	CashAmount float64 `json:"cash_amount"`
 	// Currency in which the dividend is paid.
@@ -205,13 +205,13 @@ type Apiv2MarketDataStockGetDividendsResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r Apiv2MarketDataStockGetDividendsResponse) RawJSON() string { return r.JSON.raw }
-func (r *Apiv2MarketDataStockGetDividendsResponse) UnmarshalJSON(data []byte) error {
+func (r V2MarketDataStockGetDividendsResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockGetDividendsResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Datapoint of historical price data for a `Stock`.
-type Apiv2MarketDataStockGetHistoricalPricesResponse struct {
+type V2MarketDataStockGetHistoricalPricesResponse struct {
 	// Close price from the given time period.
 	Close float64 `json:"close,required"`
 	// Highest price from the given time period.
@@ -235,14 +235,14 @@ type Apiv2MarketDataStockGetHistoricalPricesResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r Apiv2MarketDataStockGetHistoricalPricesResponse) RawJSON() string { return r.JSON.raw }
-func (r *Apiv2MarketDataStockGetHistoricalPricesResponse) UnmarshalJSON(data []byte) error {
+func (r V2MarketDataStockGetHistoricalPricesResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockGetHistoricalPricesResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // A news article relating to a `Stock` which includes a summary of the article and
 // a link to the original source.
-type Apiv2MarketDataStockGetNewsResponse struct {
+type V2MarketDataStockGetNewsResponse struct {
 	// URL of the news article
 	ArticleURL string `json:"article_url,required"`
 	// Description of the news article
@@ -270,12 +270,12 @@ type Apiv2MarketDataStockGetNewsResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r Apiv2MarketDataStockGetNewsResponse) RawJSON() string { return r.JSON.raw }
-func (r *Apiv2MarketDataStockGetNewsResponse) UnmarshalJSON(data []byte) error {
+func (r V2MarketDataStockGetNewsResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockGetNewsResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type Apiv2MarketDataStockGetQuoteResponse struct {
+type V2MarketDataStockGetQuoteResponse struct {
 	// The ask price.
 	Price float64 `json:"price,required"`
 	// ID of the `Stock`
@@ -321,12 +321,12 @@ type Apiv2MarketDataStockGetQuoteResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r Apiv2MarketDataStockGetQuoteResponse) RawJSON() string { return r.JSON.raw }
-func (r *Apiv2MarketDataStockGetQuoteResponse) UnmarshalJSON(data []byte) error {
+func (r V2MarketDataStockGetQuoteResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockGetQuoteResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIV2MarketDataStockListParams struct {
+type V2MarketDataStockListParams struct {
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	// List of `Stock` symbols to query. If not provided, all `Stocks` are returned.
@@ -334,26 +334,26 @@ type APIV2MarketDataStockListParams struct {
 	paramObj
 }
 
-// URLQuery serializes [APIV2MarketDataStockListParams]'s query parameters as
+// URLQuery serializes [V2MarketDataStockListParams]'s query parameters as
 // `url.Values`.
-func (r APIV2MarketDataStockListParams) URLQuery() (v url.Values, err error) {
+func (r V2MarketDataStockListParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
 
-type APIV2MarketDataStockGetHistoricalPricesParams struct {
+type V2MarketDataStockGetHistoricalPricesParams struct {
 	// The timespan of the historical prices to query.
 	//
 	// Any of "DAY", "WEEK", "MONTH", "YEAR".
-	Timespan APIV2MarketDataStockGetHistoricalPricesParamsTimespan `query:"timespan,omitzero,required" json:"-"`
+	Timespan V2MarketDataStockGetHistoricalPricesParamsTimespan `query:"timespan,omitzero,required" json:"-"`
 	paramObj
 }
 
-// URLQuery serializes [APIV2MarketDataStockGetHistoricalPricesParams]'s query
+// URLQuery serializes [V2MarketDataStockGetHistoricalPricesParams]'s query
 // parameters as `url.Values`.
-func (r APIV2MarketDataStockGetHistoricalPricesParams) URLQuery() (v url.Values, err error) {
+func (r V2MarketDataStockGetHistoricalPricesParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
@@ -361,24 +361,24 @@ func (r APIV2MarketDataStockGetHistoricalPricesParams) URLQuery() (v url.Values,
 }
 
 // The timespan of the historical prices to query.
-type APIV2MarketDataStockGetHistoricalPricesParamsTimespan string
+type V2MarketDataStockGetHistoricalPricesParamsTimespan string
 
 const (
-	APIV2MarketDataStockGetHistoricalPricesParamsTimespanDay   APIV2MarketDataStockGetHistoricalPricesParamsTimespan = "DAY"
-	APIV2MarketDataStockGetHistoricalPricesParamsTimespanWeek  APIV2MarketDataStockGetHistoricalPricesParamsTimespan = "WEEK"
-	APIV2MarketDataStockGetHistoricalPricesParamsTimespanMonth APIV2MarketDataStockGetHistoricalPricesParamsTimespan = "MONTH"
-	APIV2MarketDataStockGetHistoricalPricesParamsTimespanYear  APIV2MarketDataStockGetHistoricalPricesParamsTimespan = "YEAR"
+	V2MarketDataStockGetHistoricalPricesParamsTimespanDay   V2MarketDataStockGetHistoricalPricesParamsTimespan = "DAY"
+	V2MarketDataStockGetHistoricalPricesParamsTimespanWeek  V2MarketDataStockGetHistoricalPricesParamsTimespan = "WEEK"
+	V2MarketDataStockGetHistoricalPricesParamsTimespanMonth V2MarketDataStockGetHistoricalPricesParamsTimespan = "MONTH"
+	V2MarketDataStockGetHistoricalPricesParamsTimespanYear  V2MarketDataStockGetHistoricalPricesParamsTimespan = "YEAR"
 )
 
-type APIV2MarketDataStockGetNewsParams struct {
+type V2MarketDataStockGetNewsParams struct {
 	// The number of articles to return.
 	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	paramObj
 }
 
-// URLQuery serializes [APIV2MarketDataStockGetNewsParams]'s query parameters as
+// URLQuery serializes [V2MarketDataStockGetNewsParams]'s query parameters as
 // `url.Values`.
-func (r APIV2MarketDataStockGetNewsParams) URLQuery() (v url.Values, err error) {
+func (r V2MarketDataStockGetNewsParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,

@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"time"
 
-	shimjson "github.com/dinaricrypto/dinari-api-sdk-go/internal/encoding/json"
+	shimjson "github.com/stainless-sdks/dinari-go/internal/encoding/json"
 
 	"github.com/tidwall/sjson"
 )

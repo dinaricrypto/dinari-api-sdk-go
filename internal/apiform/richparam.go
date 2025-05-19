@@ -1,7 +1,7 @@
 package apiform
 
 import (
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/param"
 	"mime/multipart"
 	"reflect"
 )

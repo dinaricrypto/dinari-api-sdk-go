@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk
+package dinari
 
 import (
 	"context"
@@ -10,36 +10,36 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
-	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
+	"github.com/stainless-sdks/dinari-go/internal/apijson"
+	"github.com/stainless-sdks/dinari-go/internal/apiquery"
+	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
+	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/stainless-sdks/dinari-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/respjson"
 )
 
-// APIV2EntityAccountService contains methods and other services that help with
+// V2EntityAccountService contains methods and other services that help with
 // interacting with the dinari API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewAPIV2EntityAccountService] method instead.
-type APIV2EntityAccountService struct {
+// the [NewV2EntityAccountService] method instead.
+type V2EntityAccountService struct {
 	Options []option.RequestOption
 }
 
-// NewAPIV2EntityAccountService generates a new service that applies the given
-// options to each request. These options are applied after the parent client's
-// options (if there is one), and before any request-specific options.
-func NewAPIV2EntityAccountService(opts ...option.RequestOption) (r APIV2EntityAccountService) {
-	r = APIV2EntityAccountService{}
+// NewV2EntityAccountService generates a new service that applies the given options
+// to each request. These options are applied after the parent client's options (if
+// there is one), and before any request-specific options.
+func NewV2EntityAccountService(opts ...option.RequestOption) (r V2EntityAccountService) {
+	r = V2EntityAccountService{}
 	r.Options = opts
 	return
 }
 
 // Create a new `Account` for a specific `Entity`. This `Entity` represents your
 // organization itself, or an individual customer of your organization.
-func (r *APIV2EntityAccountService) New(ctx context.Context, entityID string, opts ...option.RequestOption) (res *Account, err error) {
+func (r *V2EntityAccountService) New(ctx context.Context, entityID string, opts ...option.RequestOption) (res *Account, err error) {
 	opts = append(r.Options[:], opts...)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
@@ -53,7 +53,7 @@ func (r *APIV2EntityAccountService) New(ctx context.Context, entityID string, op
 // Get a list of all `Accounts` that belong to a specific `Entity`. This `Entity`
 // represents your organization itself, or an individual customer of your
 // organization.
-func (r *APIV2EntityAccountService) List(ctx context.Context, entityID string, query APIV2EntityAccountListParams, opts ...option.RequestOption) (res *[]Account, err error) {
+func (r *V2EntityAccountService) List(ctx context.Context, entityID string, query V2EntityAccountListParams, opts ...option.RequestOption) (res *[]Account, err error) {
 	opts = append(r.Options[:], opts...)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
@@ -91,15 +91,15 @@ func (r *Account) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIV2EntityAccountListParams struct {
+type V2EntityAccountListParams struct {
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	paramObj
 }
 
-// URLQuery serializes [APIV2EntityAccountListParams]'s query parameters as
+// URLQuery serializes [V2EntityAccountListParams]'s query parameters as
 // `url.Values`.
-func (r APIV2EntityAccountListParams) URLQuery() (v url.Values, err error) {
+func (r V2EntityAccountListParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,

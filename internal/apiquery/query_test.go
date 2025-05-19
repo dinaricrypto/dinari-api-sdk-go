@@ -1,7 +1,7 @@
 package apiquery
 
 import (
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/param"
 	"net/url"
 	"testing"
 	"time"

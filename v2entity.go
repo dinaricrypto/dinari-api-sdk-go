@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk
+package dinari
 
 import (
 	"context"
@@ -8,47 +8,56 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
-	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
+	"github.com/stainless-sdks/dinari-go/internal/apijson"
+	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
+	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/stainless-sdks/dinari-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/respjson"
 )
 
-// APIV2EntityService contains methods and other services that help with
-// interacting with the dinari API.
+// V2EntityService contains methods and other services that help with interacting
+// with the dinari API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewAPIV2EntityService] method instead.
-type APIV2EntityService struct {
+// the [NewV2EntityService] method instead.
+type V2EntityService struct {
 	Options  []option.RequestOption
-	Accounts APIV2EntityAccountService
-	KYC      APIV2EntityKYCService
+	Accounts V2EntityAccountService
+	KYC      V2EntityKYCService
 }
 
-// NewAPIV2EntityService generates a new service that applies the given options to
+// NewV2EntityService generates a new service that applies the given options to
 // each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewAPIV2EntityService(opts ...option.RequestOption) (r APIV2EntityService) {
-	r = APIV2EntityService{}
+func NewV2EntityService(opts ...option.RequestOption) (r V2EntityService) {
+	r = V2EntityService{}
 	r.Options = opts
-	r.Accounts = NewAPIV2EntityAccountService(opts...)
-	r.KYC = NewAPIV2EntityKYCService(opts...)
+	r.Accounts = NewV2EntityAccountService(opts...)
+	r.KYC = NewV2EntityKYCService(opts...)
 	return
 }
 
 // Create a new `Entity` to be managed by your organization. This `Entity`
 // represents an individual customer of your organization.
-func (r *APIV2EntityService) New(ctx context.Context, body APIV2EntityNewParams, opts ...option.RequestOption) (res *Entity, err error) {
+func (r *V2EntityService) New(ctx context.Context, body V2EntityNewParams, opts ...option.RequestOption) (res *Entity, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "api/v2/entities/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
+// Get a list of all direct `Entities` your organization manages. These `Entities`
+// represent individual customers of your organization.
+func (r *V2EntityService) List(ctx context.Context, opts ...option.RequestOption) (res *[]Entity, err error) {
+	opts = append(r.Options[:], opts...)
+	path := "api/v2/entities/"
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
 // Get a specific customer `Entity` of your organization by their ID.
-func (r *APIV2EntityService) Get(ctx context.Context, entityID string, opts ...option.RequestOption) (res *Entity, err error) {
+func (r *V2EntityService) GetByID(ctx context.Context, entityID string, opts ...option.RequestOption) (res *Entity, err error) {
 	opts = append(r.Options[:], opts...)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
@@ -59,17 +68,8 @@ func (r *APIV2EntityService) Get(ctx context.Context, entityID string, opts ...o
 	return
 }
 
-// Get a list of all direct `Entities` your organization manages. These `Entities`
-// represent individual customers of your organization.
-func (r *APIV2EntityService) List(ctx context.Context, opts ...option.RequestOption) (res *[]Entity, err error) {
-	opts = append(r.Options[:], opts...)
-	path := "api/v2/entities/"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
-}
-
 // Get the current authenticated `Entity`, which represents your organization.
-func (r *APIV2EntityService) GetCurrent(ctx context.Context, opts ...option.RequestOption) (res *Entity, err error) {
+func (r *V2EntityService) GetCurrent(ctx context.Context, opts ...option.RequestOption) (res *Entity, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "api/v2/entities/me"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -119,16 +119,16 @@ const (
 	EntityEntityTypeOrganization EntityEntityType = "ORGANIZATION"
 )
 
-type APIV2EntityNewParams struct {
+type V2EntityNewParams struct {
 	// Name of the `Entity`.
 	Name string `json:"name,required"`
 	paramObj
 }
 
-func (r APIV2EntityNewParams) MarshalJSON() (data []byte, err error) {
-	type shadow APIV2EntityNewParams
+func (r V2EntityNewParams) MarshalJSON() (data []byte, err error) {
+	type shadow V2EntityNewParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *APIV2EntityNewParams) UnmarshalJSON(data []byte) error {
+func (r *V2EntityNewParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }

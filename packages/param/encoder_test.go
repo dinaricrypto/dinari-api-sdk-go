@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/param"
 )
 
 type Struct struct {

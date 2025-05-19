@@ -1,43 +1,39 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk
+package dinari
 
 import (
-	"bytes"
 	"context"
 	"errors"
 	"fmt"
-	"io"
-	"mime/multipart"
 	"net/http"
-	"net/url"
 	"time"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiform"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
-	"github.com/dinaricrypto/dinari-api-sdk-go/option"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
+	"github.com/stainless-sdks/dinari-go/internal/apijson"
+	"github.com/stainless-sdks/dinari-go/internal/requestconfig"
+	"github.com/stainless-sdks/dinari-go/option"
+	"github.com/stainless-sdks/dinari-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/respjson"
 )
 
-// APIV2EntityKYCService contains methods and other services that help with
+// V2EntityKYCService contains methods and other services that help with
 // interacting with the dinari API.
 //
 // Note, unlike clients, this service does not read variables from the environment
 // automatically. You should not instantiate this service directly, and instead use
-// the [NewAPIV2EntityKYCService] method instead.
-type APIV2EntityKYCService struct {
-	Options []option.RequestOption
+// the [NewV2EntityKYCService] method instead.
+type V2EntityKYCService struct {
+	Options  []option.RequestOption
+	Document V2EntityKYCDocumentService
 }
 
-// NewAPIV2EntityKYCService generates a new service that applies the given options
-// to each request. These options are applied after the parent client's options (if
+// NewV2EntityKYCService generates a new service that applies the given options to
+// each request. These options are applied after the parent client's options (if
 // there is one), and before any request-specific options.
-func NewAPIV2EntityKYCService(opts ...option.RequestOption) (r APIV2EntityKYCService) {
-	r = APIV2EntityKYCService{}
+func NewV2EntityKYCService(opts ...option.RequestOption) (r V2EntityKYCService) {
+	r = V2EntityKYCService{}
 	r.Options = opts
+	r.Document = NewV2EntityKYCDocumentService(opts...)
 	return
 }
 
@@ -46,7 +42,7 @@ func NewAPIV2EntityKYCService(opts ...option.RequestOption) (r APIV2EntityKYCSer
 // If there are any completed KYC checks, data from the most recent one will be
 // returned. If there are no completed KYC checks, the most recent KYC check
 // information, regardless of status, will be returned.
-func (r *APIV2EntityKYCService) Get(ctx context.Context, entityID string, opts ...option.RequestOption) (res *KYCInfo, err error) {
+func (r *V2EntityKYCService) Get(ctx context.Context, entityID string, opts ...option.RequestOption) (res *KYCInfo, err error) {
 	opts = append(r.Options[:], opts...)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
@@ -57,12 +53,29 @@ func (r *APIV2EntityKYCService) Get(ctx context.Context, entityID string, opts .
 	return
 }
 
+// Create a Dinari-managed KYC Check and get a URL for your end customer to
+// interact with.
+//
+// The URL points to a web-based KYC interface that can be presented to the end
+// customer for KYC verification. Once the customer completes this KYC flow, the
+// KYC check will be created and available in the KYC API.
+func (r *V2EntityKYCService) NewManagedCheck(ctx context.Context, entityID string, opts ...option.RequestOption) (res *V2EntityKYCNewManagedCheckResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if entityID == "" {
+		err = errors.New("missing required entity_id parameter")
+		return
+	}
+	path := fmt.Sprintf("api/v2/entities/%s/kyc/url", entityID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	return
+}
+
 // Submit KYC data directly, for partners that are provisioned to provide their own
 // KYC data.
 //
 // This feature is available for everyone in sandbox mode, and for specifically
 // provisioned partners in production.
-func (r *APIV2EntityKYCService) Submit(ctx context.Context, entityID string, body APIV2EntityKYCSubmitParams, opts ...option.RequestOption) (res *KYCInfo, err error) {
+func (r *V2EntityKYCService) Submit(ctx context.Context, entityID string, body V2EntityKYCSubmitParams, opts ...option.RequestOption) (res *KYCInfo, err error) {
 	opts = append(r.Options[:], opts...)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
@@ -70,23 +83,6 @@ func (r *APIV2EntityKYCService) Submit(ctx context.Context, entityID string, bod
 	}
 	path := fmt.Sprintf("api/v2/entities/%s/kyc", entityID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
-}
-
-// Upload KYC-related documentation for partners that are provisioned to provide
-// their own KYC data.
-func (r *APIV2EntityKYCService) UploadDocument(ctx context.Context, kycID string, params APIV2EntityKYCUploadDocumentParams, opts ...option.RequestOption) (res *Apiv2EntityKYCUploadDocumentResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	if params.EntityID == "" {
-		err = errors.New("missing required entity_id parameter")
-		return
-	}
-	if kycID == "" {
-		err = errors.New("missing required kyc_id parameter")
-		return
-	}
-	path := fmt.Sprintf("api/v2/entities/%s/kyc/%s/document", params.EntityID, kycID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
 	return
 }
 
@@ -195,15 +191,6 @@ func (r *KYCDataParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type KYCDocumentType string
-
-const (
-	KYCDocumentTypeGovernmentID KYCDocumentType = "GOVERNMENT_ID"
-	KYCDocumentTypeSelfie       KYCDocumentType = "SELFIE"
-	KYCDocumentTypeResidency    KYCDocumentType = "RESIDENCY"
-	KYCDocumentTypeUnknown      KYCDocumentType = "UNKNOWN"
-)
-
 // KYC information for an `Entity`.
 type KYCInfo struct {
 	// ID of the KYC check.
@@ -243,36 +230,28 @@ const (
 	KYCInfoStatusIncomplete KYCInfoStatus = "INCOMPLETE"
 )
 
-// A document associated with KYC for an `Entity`.
-type Apiv2EntityKYCUploadDocumentResponse struct {
-	// ID of the document.
-	ID string `json:"id,required" format:"uuid"`
-	// Type of document.
-	//
-	// Any of "GOVERNMENT_ID", "SELFIE", "RESIDENCY", "UNKNOWN".
-	DocumentType KYCDocumentType `json:"document_type,required"`
-	// Filename of document.
-	Filename string `json:"filename,required"`
-	// Temporary URL to access the document. Expires in 1 hour.
-	URL string `json:"url,required"`
+// URL for a managed KYC flow for an `Entity`.
+type V2EntityKYCNewManagedCheckResponse struct {
+	// URL of a managed KYC flow interface for the `Entity`.
+	EmbedURL string `json:"embed_url,required"`
+	// Datetime at which the KYC request will expired. ISO 8601 timestamp.
+	ExpirationDt time.Time `json:"expiration_dt,required" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID           respjson.Field
-		DocumentType respjson.Field
-		Filename     respjson.Field
-		URL          respjson.Field
+		EmbedURL     respjson.Field
+		ExpirationDt respjson.Field
 		ExtraFields  map[string]respjson.Field
 		raw          string
 	} `json:"-"`
 }
 
 // Returns the unmodified JSON received from the API
-func (r Apiv2EntityKYCUploadDocumentResponse) RawJSON() string { return r.JSON.raw }
-func (r *Apiv2EntityKYCUploadDocumentResponse) UnmarshalJSON(data []byte) error {
+func (r V2EntityKYCNewManagedCheckResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2EntityKYCNewManagedCheckResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type APIV2EntityKYCSubmitParams struct {
+type V2EntityKYCSubmitParams struct {
 	// KYC data for an `Entity`.
 	Data KYCDataParam `json:"data,omitzero,required"`
 	// Name of the KYC provider that provided the KYC information.
@@ -280,46 +259,10 @@ type APIV2EntityKYCSubmitParams struct {
 	paramObj
 }
 
-func (r APIV2EntityKYCSubmitParams) MarshalJSON() (data []byte, err error) {
-	type shadow APIV2EntityKYCSubmitParams
+func (r V2EntityKYCSubmitParams) MarshalJSON() (data []byte, err error) {
+	type shadow V2EntityKYCSubmitParams
 	return param.MarshalObject(r, (*shadow)(&r))
 }
-func (r *APIV2EntityKYCSubmitParams) UnmarshalJSON(data []byte) error {
+func (r *V2EntityKYCSubmitParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
-}
-
-type APIV2EntityKYCUploadDocumentParams struct {
-	EntityID string `path:"entity_id,required" format:"uuid" json:"-"`
-	// Type of `KYCDocument` to be uploaded.
-	//
-	// Any of "GOVERNMENT_ID", "SELFIE", "RESIDENCY", "UNKNOWN".
-	DocumentType KYCDocumentType `query:"document_type,omitzero,required" json:"-"`
-	// File to be uploaded. Must be a valid image or PDF file (jpg, jpeg, png, pdf)
-	// less than 10MB in size.
-	File io.Reader `json:"file,omitzero,required" format:"binary"`
-	paramObj
-}
-
-func (r APIV2EntityKYCUploadDocumentParams) MarshalMultipart() (data []byte, contentType string, err error) {
-	buf := bytes.NewBuffer(nil)
-	writer := multipart.NewWriter(buf)
-	err = apiform.MarshalRoot(r, writer)
-	if err != nil {
-		writer.Close()
-		return nil, "", err
-	}
-	err = writer.Close()
-	if err != nil {
-		return nil, "", err
-	}
-	return buf.Bytes(), writer.FormDataContentType(), nil
-}
-
-// URLQuery serializes [APIV2EntityKYCUploadDocumentParams]'s query parameters as
-// `url.Values`.
-func (r APIV2EntityKYCUploadDocumentParams) URLQuery() (v url.Values, err error) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
 }

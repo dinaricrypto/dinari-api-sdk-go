@@ -13,7 +13,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
+	"github.com/stainless-sdks/dinari-go/packages/param"
 )
 
 var encoders sync.Map // map[encoderEntry]encoderFunc

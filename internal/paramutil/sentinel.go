@@ -1,7 +1,7 @@
 package paramutil
 
 import (
-	"github.com/dinaricrypto/dinari-api-sdk-go/internal/encoding/json/sentinel"
+	"github.com/stainless-sdks/dinari-go/internal/encoding/json/sentinel"
 )
 
 // NullPtr returns a pointer to the zero value of the type T.
