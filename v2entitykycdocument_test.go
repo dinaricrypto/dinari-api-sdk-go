@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari_test
+package dinariapisdkgo_test
 
 import (
 	"bytes"
@@ -24,7 +24,7 @@ func TestV2EntityKYCDocumentGet(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
@@ -32,12 +32,12 @@ func TestV2EntityKYCDocumentGet(t *testing.T) {
 	_, err := client.V2.Entities.KYC.Document.Get(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.V2EntityKYCDocumentGetParams{
+		dinariapisdkgo.V2EntityKYCDocumentGetParams{
 			EntityID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -54,7 +54,7 @@ func TestV2EntityKYCDocumentUpload(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
@@ -62,14 +62,14 @@ func TestV2EntityKYCDocumentUpload(t *testing.T) {
 	_, err := client.V2.Entities.KYC.Document.Upload(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.V2EntityKYCDocumentUploadParams{
+		dinariapisdkgo.V2EntityKYCDocumentUploadParams{
 			EntityID:     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-			DocumentType: dinari.KYCDocumentTypeGovernmentID,
+			DocumentType: dinariapisdkgo.KYCDocumentTypeGovernmentID,
 			File:         io.Reader(bytes.NewBuffer([]byte("some file contents"))),
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari_test
+package dinariapisdkgo_test
 
 import (
 	"context"
@@ -22,7 +22,7 @@ func TestV2AccountOrderGet(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
@@ -30,12 +30,12 @@ func TestV2AccountOrderGet(t *testing.T) {
 	_, err := client.V2.Accounts.Orders.Get(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.V2AccountOrderGetParams{
+		dinariapisdkgo.V2AccountOrderGetParams{
 			AccountID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -52,7 +52,7 @@ func TestV2AccountOrderListWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
@@ -60,13 +60,13 @@ func TestV2AccountOrderListWithOptionalParams(t *testing.T) {
 	_, err := client.V2.Accounts.Orders.List(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.V2AccountOrderListParams{
-			Page:     dinari.Int(1),
-			PageSize: dinari.Int(1),
+		dinariapisdkgo.V2AccountOrderListParams{
+			Page:     dinariapisdkgo.Int(1),
+			PageSize: dinariapisdkgo.Int(1),
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -83,7 +83,7 @@ func TestV2AccountOrderCancel(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
@@ -91,12 +91,12 @@ func TestV2AccountOrderCancel(t *testing.T) {
 	_, err := client.V2.Accounts.Orders.Cancel(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.V2AccountOrderCancelParams{
+		dinariapisdkgo.V2AccountOrderCancelParams{
 			AccountID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -113,7 +113,7 @@ func TestV2AccountOrderGetFeeQuoteWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
@@ -121,21 +121,21 @@ func TestV2AccountOrderGetFeeQuoteWithOptionalParams(t *testing.T) {
 	_, err := client.V2.Accounts.Orders.GetFeeQuote(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.V2AccountOrderGetFeeQuoteParams{
-			ChainID:              dinari.ChainEip155_1,
+		dinariapisdkgo.V2AccountOrderGetFeeQuoteParams{
+			ChainID:              dinariapisdkgo.ChainEip155_1,
 			ContractAddress:      "contract_address",
-			OrderSide:            dinari.OrderSideBuy,
-			OrderTif:             dinari.OrderTifDay,
-			OrderType:            dinari.OrderTypeMarket,
+			OrderSide:            dinariapisdkgo.OrderSideBuy,
+			OrderTif:             dinariapisdkgo.OrderTifDay,
+			OrderType:            dinariapisdkgo.OrderTypeMarket,
 			StockID:              "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-			AssetTokenQuantity:   dinari.Float(0),
-			LimitPrice:           dinari.Float(0),
-			PaymentToken:         dinari.String("payment_token"),
-			PaymentTokenQuantity: dinari.Float(0),
+			AssetTokenQuantity:   dinariapisdkgo.Float(0),
+			LimitPrice:           dinariapisdkgo.Float(0),
+			PaymentToken:         dinariapisdkgo.String("payment_token"),
+			PaymentTokenQuantity: dinariapisdkgo.Float(0),
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -152,7 +152,7 @@ func TestV2AccountOrderGetFulfillmentsWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
@@ -160,14 +160,14 @@ func TestV2AccountOrderGetFulfillmentsWithOptionalParams(t *testing.T) {
 	_, err := client.V2.Accounts.Orders.GetFulfillments(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.V2AccountOrderGetFulfillmentsParams{
+		dinariapisdkgo.V2AccountOrderGetFulfillmentsParams{
 			AccountID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-			Page:      dinari.Int(1),
-			PageSize:  dinari.Int(1),
+			Page:      dinariapisdkgo.Int(1),
+			PageSize:  dinariapisdkgo.Int(1),
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
