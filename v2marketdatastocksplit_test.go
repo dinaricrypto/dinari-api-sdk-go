@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari_test
+package dinariapisdkgo_test
 
 import (
 	"context"
@@ -22,17 +22,17 @@ func TestV2MarketDataStockSplitListWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
 	)
-	_, err := client.V2.MarketData.Stocks.Splits.List(context.TODO(), dinari.V2MarketDataStockSplitListParams{
-		Page:     dinari.Int(1),
-		PageSize: dinari.Int(1),
+	_, err := client.V2.MarketData.Stocks.Splits.List(context.TODO(), dinariapisdkgo.V2MarketDataStockSplitListParams{
+		Page:     dinariapisdkgo.Int(1),
+		PageSize: dinariapisdkgo.Int(1),
 	})
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -49,7 +49,7 @@ func TestV2MarketDataStockSplitListForStockWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
@@ -57,13 +57,13 @@ func TestV2MarketDataStockSplitListForStockWithOptionalParams(t *testing.T) {
 	_, err := client.V2.MarketData.Stocks.Splits.ListForStock(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.V2MarketDataStockSplitListForStockParams{
-			Page:     dinari.Int(1),
-			PageSize: dinari.Int(1),
+		dinariapisdkgo.V2MarketDataStockSplitListForStockParams{
+			Page:     dinariapisdkgo.Int(1),
+			PageSize: dinariapisdkgo.Int(1),
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

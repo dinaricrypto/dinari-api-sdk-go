@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari_test
+package dinariapisdkgo_test
 
 import (
 	"context"
@@ -22,7 +22,7 @@ func TestV2AccountWithdrawalRequestNew(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
@@ -30,13 +30,13 @@ func TestV2AccountWithdrawalRequestNew(t *testing.T) {
 	_, err := client.V2.Accounts.WithdrawalRequests.New(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.V2AccountWithdrawalRequestNewParams{
+		dinariapisdkgo.V2AccountWithdrawalRequestNewParams{
 			PaymentTokenQuantity: 0,
 			RecipientAccountID:   "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -53,7 +53,7 @@ func TestV2AccountWithdrawalRequestGet(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
@@ -61,12 +61,12 @@ func TestV2AccountWithdrawalRequestGet(t *testing.T) {
 	_, err := client.V2.Accounts.WithdrawalRequests.Get(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.V2AccountWithdrawalRequestGetParams{
+		dinariapisdkgo.V2AccountWithdrawalRequestGetParams{
 			AccountID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -83,7 +83,7 @@ func TestV2AccountWithdrawalRequestListWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
@@ -91,13 +91,13 @@ func TestV2AccountWithdrawalRequestListWithOptionalParams(t *testing.T) {
 	_, err := client.V2.Accounts.WithdrawalRequests.List(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.V2AccountWithdrawalRequestListParams{
-			Page:     dinari.Int(1),
-			PageSize: dinari.Int(1),
+		dinariapisdkgo.V2AccountWithdrawalRequestListParams{
+			Page:     dinariapisdkgo.Int(1),
+			PageSize: dinariapisdkgo.Int(1),
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

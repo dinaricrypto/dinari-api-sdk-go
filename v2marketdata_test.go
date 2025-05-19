@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari_test
+package dinariapisdkgo_test
 
 import (
 	"context"
@@ -22,14 +22,14 @@ func TestV2MarketDataGetMarketHours(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
 	)
 	_, err := client.V2.MarketData.GetMarketHours(context.TODO())
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

@@ -13,7 +13,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ```go
 import (
-	"github.com/dinaricrypto/dinari-api-sdk-go" // imported as dinari
+	"github.com/dinaricrypto/dinari-api-sdk-go" // imported as dinariapisdkgo
 )
 ```
 
@@ -49,12 +49,12 @@ import (
 )
 
 func main() {
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithAPIKeyID("My API Key ID"),         // defaults to os.LookupEnv("DINARI_API_KEY_ID")
 		option.WithAPISecretKey("My API Secret Key"), // defaults to os.LookupEnv("DINARI_API_SECRET_KEY")
 		option.WithEnvironmentSandbox(),              // defaults to option.WithEnvironmentProduction()
 	)
-	stocks, err := client.V2.MarketData.Stocks.List(context.TODO(), dinari.V2MarketDataStockListParams{})
+	stocks, err := client.V2.MarketData.Stocks.List(context.TODO(), dinariapisdkgo.V2MarketDataStockListParams{})
 	if err != nil {
 		panic(err.Error())
 	}
@@ -65,13 +65,13 @@ func main() {
 
 ### Request fields
 
-The dinari library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson)
+The dinariapisdkgo library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson)
 semantics from the Go 1.24+ `encoding/json` release for request fields.
 
 Required primitive fields (`int64`, `string`, etc.) feature the tag <code>\`json:"...,required"\`</code>. These
 fields are always serialized, even their zero values.
 
-Optional primitive types are wrapped in a `param.Opt[T]`. These fields can be set with the provided constructors, `dinari.String(string)`, `dinari.Int(int64)`, etc.
+Optional primitive types are wrapped in a `param.Opt[T]`. These fields can be set with the provided constructors, `dinariapisdkgo.String(string)`, `dinariapisdkgo.Int(int64)`, etc.
 
 Any `param.Opt[T]`, map, slice, struct or string enum uses the
 tag <code>\`json:"...,omitzero"\`</code>. Its zero value is considered omitted.
@@ -79,17 +79,17 @@ tag <code>\`json:"...,omitzero"\`</code>. Its zero value is considered omitted.
 The `param.IsOmitted(any)` function can confirm the presence of any `omitzero` field.
 
 ```go
-p := dinari.ExampleParams{
-	ID:   "id_xxx",             // required property
-	Name: dinari.String("..."), // optional property
+p := dinariapisdkgo.ExampleParams{
+	ID:   "id_xxx",                     // required property
+	Name: dinariapisdkgo.String("..."), // optional property
 
-	Point: dinari.Point{
-		X: 0,             // required field will serialize as 0
-		Y: dinari.Int(1), // optional field will serialize as 1
+	Point: dinariapisdkgo.Point{
+		X: 0,                     // required field will serialize as 0
+		Y: dinariapisdkgo.Int(1), // optional field will serialize as 1
 		// ... omitted non-required fields will not be serialized
 	},
 
-	Origin: dinari.Origin{}, // the zero value of [Origin] is considered omitted
+	Origin: dinariapisdkgo.Origin{}, // the zero value of [Origin] is considered omitted
 }
 ```
 
@@ -118,7 +118,7 @@ p.SetExtraFields(map[string]any{
 })
 
 // Send a number instead of an object
-custom := param.Override[dinari.FooParams](12)
+custom := param.Override[dinariapisdkgo.FooParams](12)
 ```
 
 ### Request unions
@@ -259,7 +259,7 @@ This library uses the functional options pattern. Functions defined in the
 requests. For example:
 
 ```go
-client := dinari.NewClient(
+client := dinariapisdkgo.NewClient(
 	// Adds a header to every request made by the client
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
@@ -286,16 +286,16 @@ with additional helper methods like `.GetNextPage()`, e.g.:
 ### Errors
 
 When the API returns a non-success status code, we return an error with type
-`*dinari.Error`. This contains the `StatusCode`, `*http.Request`, and
+`*dinariapisdkgo.Error`. This contains the `StatusCode`, `*http.Request`, and
 `*http.Response` values of the request, as well as the JSON of the error body
 (much like other response objects in the SDK).
 
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.V2.MarketData.Stocks.List(context.TODO(), dinari.V2MarketDataStockListParams{})
+_, err := client.V2.MarketData.Stocks.List(context.TODO(), dinariapisdkgo.V2MarketDataStockListParams{})
 if err != nil {
-	var apierr *dinari.Error
+	var apierr *dinariapisdkgo.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
@@ -320,7 +320,7 @@ ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
 client.V2.MarketData.Stocks.List(
 	ctx,
-	dinari.V2MarketDataStockListParams{},
+	dinariapisdkgo.V2MarketDataStockListParams{},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -336,30 +336,30 @@ The file name and content-type can be customized by implementing `Name() string`
 string` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a
 file returned by `os.Open` will be sent with the file name on disk.
 
-We also provide a helper `dinari.File(reader io.Reader, filename string, contentType string)`
+We also provide a helper `dinariapisdkgo.File(reader io.Reader, filename string, contentType string)`
 which can be used to wrap any `io.Reader` with the appropriate file name and content type.
 
 ```go
 // A file from the file system
 file, err := os.Open("/path/to/file")
-dinari.V2EntityKYCDocumentUploadParams{
+dinariapisdkgo.V2EntityKYCDocumentUploadParams{
 	EntityID:     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-	DocumentType: dinari.KYCDocumentTypeGovernmentID,
+	DocumentType: dinariapisdkgo.KYCDocumentTypeGovernmentID,
 	File:         file,
 }
 
 // A file from a string
-dinari.V2EntityKYCDocumentUploadParams{
+dinariapisdkgo.V2EntityKYCDocumentUploadParams{
 	EntityID:     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-	DocumentType: dinari.KYCDocumentTypeGovernmentID,
+	DocumentType: dinariapisdkgo.KYCDocumentTypeGovernmentID,
 	File:         strings.NewReader("my file contents"),
 }
 
 // With a custom filename and contentType
-dinari.V2EntityKYCDocumentUploadParams{
+dinariapisdkgo.V2EntityKYCDocumentUploadParams{
 	EntityID:     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-	DocumentType: dinari.KYCDocumentTypeGovernmentID,
-	File:         dinari.File(strings.NewReader(`{"hello": "foo"}`), "file.go", "application/json"),
+	DocumentType: dinariapisdkgo.KYCDocumentTypeGovernmentID,
+	File:         dinariapisdkgo.File(strings.NewReader(`{"hello": "foo"}`), "file.go", "application/json"),
 }
 ```
 
@@ -373,14 +373,14 @@ You can use the `WithMaxRetries` option to configure or disable this:
 
 ```go
 // Configure the default for all requests:
-client := dinari.NewClient(
+client := dinariapisdkgo.NewClient(
 	option.WithMaxRetries(0), // default is 2
 )
 
 // Override per-request:
 client.V2.MarketData.Stocks.List(
 	context.TODO(),
-	dinari.V2MarketDataStockListParams{},
+	dinariapisdkgo.V2MarketDataStockListParams{},
 	option.WithMaxRetries(5),
 )
 ```
@@ -395,7 +395,7 @@ you need to examine response headers, status codes, or other details.
 var response *http.Response
 stocks, err := client.V2.MarketData.Stocks.List(
 	context.TODO(),
-	dinari.V2MarketDataStockListParams{},
+	dinariapisdkgo.V2MarketDataStockListParams{},
 	option.WithResponseInto(&response),
 )
 if err != nil {
@@ -442,7 +442,7 @@ or the `option.WithJSONSet()` methods.
 params := FooNewParams{
     ID:   "id_xxxx",
     Data: FooNewParamsData{
-        FirstName: dinari.String("John"),
+        FirstName: dinariapisdkgo.String("John"),
     },
 }
 client.Foo.New(context.Background(), params, option.WithJSONSet("data.last_name", "Doe"))
@@ -477,7 +477,7 @@ func Logger(req *http.Request, next option.MiddlewareNext) (res *http.Response, 
     return res, err
 }
 
-client := dinari.NewClient(
+client := dinariapisdkgo.NewClient(
 	option.WithMiddleware(Logger),
 )
 ```

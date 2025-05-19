@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinari_test
+package dinariapisdkgo_test
 
 import (
 	"context"
@@ -23,14 +23,14 @@ func TestV2EntityKYCGet(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
 	)
 	_, err := client.V2.Entities.KYC.Get(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -47,14 +47,14 @@ func TestV2EntityKYCNewManagedCheck(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
 	)
 	_, err := client.V2.Entities.KYC.NewManagedCheck(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}
@@ -71,7 +71,7 @@ func TestV2EntityKYCSubmitWithOptionalParams(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinari.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
@@ -79,26 +79,26 @@ func TestV2EntityKYCSubmitWithOptionalParams(t *testing.T) {
 	_, err := client.V2.Entities.KYC.Submit(
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-		dinari.V2EntityKYCSubmitParams{
-			Data: dinari.KYCDataParam{
+		dinariapisdkgo.V2EntityKYCSubmitParams{
+			Data: dinariapisdkgo.KYCDataParam{
 				CountryCode:        "SG",
 				LastName:           "Doe",
-				AddressCity:        dinari.String("San Francisco"),
-				AddressPostalCode:  dinari.String("94111"),
-				AddressStreet1:     dinari.String("123 Main St."),
-				AddressStreet2:     dinari.String("Apt. 123"),
-				AddressSubdivision: dinari.String("California"),
-				BirthDate:          dinari.Time(time.Now()),
-				Email:              dinari.String("johndoe@website.com"),
-				FirstName:          dinari.String("John"),
-				MiddleName:         dinari.String("x"),
-				TaxIDNumber:        dinari.String("12-3456789"),
+				AddressCity:        dinariapisdkgo.String("San Francisco"),
+				AddressPostalCode:  dinariapisdkgo.String("94111"),
+				AddressStreet1:     dinariapisdkgo.String("123 Main St."),
+				AddressStreet2:     dinariapisdkgo.String("Apt. 123"),
+				AddressSubdivision: dinariapisdkgo.String("California"),
+				BirthDate:          dinariapisdkgo.Time(time.Now()),
+				Email:              dinariapisdkgo.String("johndoe@website.com"),
+				FirstName:          dinariapisdkgo.String("John"),
+				MiddleName:         dinariapisdkgo.String("x"),
+				TaxIDNumber:        dinariapisdkgo.String("12-3456789"),
 			},
 			ProviderName: "x",
 		},
 	)
 	if err != nil {
-		var apierr *dinari.Error
+		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
 			t.Log(string(apierr.DumpRequest(true)))
 		}

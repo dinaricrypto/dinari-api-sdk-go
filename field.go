@@ -1,4 +1,4 @@
-package dinari
+package dinariapisdkgo
 
 import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
