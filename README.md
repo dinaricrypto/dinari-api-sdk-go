@@ -13,7 +13,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 ```go
 import (
-	"github.com/dinaricrypto/dinari-api-sdk-go" // imported as dinariapisdk
+	"github.com/dinaricrypto/dinari-api-sdk-go" // imported as dinariapisdkgo
 )
 ```
 
@@ -24,7 +24,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/dinaricrypto/dinari-api-sdk-go@v0.1.0-alpha.1'
+go get -u 'github.com/dinaricrypto/dinari-api-sdk-go@v0.1.0-alpha.2'
 ```
 
 <!-- x-release-please-end -->
@@ -49,73 +49,77 @@ import (
 )
 
 func main() {
-	client := dinariapisdk.NewClient(
-		option.WithAPIKey("My API Key"), // defaults to os.LookupEnv("DINARI_API_KEY")
+	client := dinariapisdkgo.NewClient(
+		option.WithAPIKeyID("My API Key ID"),         // defaults to os.LookupEnv("DINARI_API_KEY_ID")
+		option.WithAPISecretKey("My API Secret Key"), // defaults to os.LookupEnv("DINARI_API_SECRET_KEY")
+		option.WithEnvironmentSandbox(),              // defaults to option.WithEnvironmentProduction()
 	)
-	response, err := client.API.V2.GetHealth(context.TODO())
+	stocks, err := client.V2.MarketData.Stocks.List(context.TODO(), dinariapisdkgo.V2MarketDataStockListParams{})
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", response.Status)
+	fmt.Printf("%+v\n", stocks)
 }
 
 ```
 
 ### Request fields
 
-The dinariapisdk library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson)
+The dinariapisdkgo library uses the [`omitzero`](https://tip.golang.org/doc/go1.24#encodingjsonpkgencodingjson)
 semantics from the Go 1.24+ `encoding/json` release for request fields.
 
 Required primitive fields (`int64`, `string`, etc.) feature the tag <code>\`json:"...,required"\`</code>. These
 fields are always serialized, even their zero values.
 
-Optional primitive types are wrapped in a `param.Opt[T]`. These fields can be set with the provided constructors, `dinariapisdk.String(string)`, `dinariapisdk.Int(int64)`, etc.
+Optional primitive types are wrapped in a `param.Opt[T]`. These fields can be set with the provided constructors, `dinariapisdkgo.String(string)`, `dinariapisdkgo.Int(int64)`, etc.
 
 Any `param.Opt[T]`, map, slice, struct or string enum uses the
 tag <code>\`json:"...,omitzero"\`</code>. Its zero value is considered omitted.
 
-```go
-params := dinariapisdk.ExampleParams{
-	ID:   "id_xxx",                   // required property
-	Name: dinariapisdk.String("..."), // optional property
+The `param.IsOmitted(any)` function can confirm the presence of any `omitzero` field.
 
-	Point: dinariapisdk.Point{
-		X: 0,                   // required field will serialize as 0
-		Y: dinariapisdk.Int(1), // optional field will serialize as 1
+```go
+p := dinariapisdkgo.ExampleParams{
+	ID:   "id_xxx",                     // required property
+	Name: dinariapisdkgo.String("..."), // optional property
+
+	Point: dinariapisdkgo.Point{
+		X: 0,                     // required field will serialize as 0
+		Y: dinariapisdkgo.Int(1), // optional field will serialize as 1
 		// ... omitted non-required fields will not be serialized
 	},
 
-	Origin: dinariapisdk.Origin{}, // the zero value of [Origin] is considered omitted
+	Origin: dinariapisdkgo.Origin{}, // the zero value of [Origin] is considered omitted
 }
 ```
 
-To send `null` instead of a `param.Opt[T]`, use `param.NullOpt[T]()`.
-To send `null` instead of a struct `T`, use `param.NullObj[T]()`.
+To send `null` instead of a `param.Opt[T]`, use `param.Null[T]()`.
+To send `null` instead of a struct `T`, use `param.NullStruct[T]()`.
 
 ```go
-params.Description = param.NullOpt[string]() // explicit null string property
-params.Point = param.NullObj[Point]()        // explicit null struct property
+p.Name = param.Null[string]()       // 'null' instead of string
+p.Point = param.NullStruct[Point]() // 'null' instead of struct
+
+param.IsNull(p.Name)  // true
+param.IsNull(p.Point) // true
 ```
 
-Request structs contain a `.WithExtraFields(map[string]any)` method which can send non-conforming
+Request structs contain a `.SetExtraFields(map[string]any)` method which can send non-conforming
 fields in the request body. Extra fields overwrite any struct fields with a matching
-key. For security reasons, only use `WithExtraFields` with trusted data.
+key. For security reasons, only use `SetExtraFields` with trusted data.
 
-To send a custom value instead of a struct, use `param.OverrideObj[T](value)`.
+To send a custom value instead of a struct, use `param.Override[T](value)`.
 
 ```go
 // In cases where the API specifies a given type,
-// but you want to send something else, use [WithExtraFields]:
-params.WithExtraFields(map[string]any{
+// but you want to send something else, use [SetExtraFields]:
+p.SetExtraFields(map[string]any{
 	"x": 0.01, // send "x" as a float instead of int
 })
 
 // Send a number instead of an object
-custom := param.OverrideObj[dinariapisdk.FooParams](12)
+custom := param.Override[dinariapisdkgo.FooParams](12)
 ```
-
-When available, use the `.IsPresent()` method to check if an optional parameter is not omitted or `null`.
-The `param.IsOmitted(any)` function can confirm the presence of any `omitzero` field.
 
 ### Request unions
 
@@ -159,17 +163,18 @@ type Animal struct {
 	Owners int    `json:"owners"`
 	Age    int    `json:"age"`
 	JSON   struct {
-		Name        resp.Field
-		Owner       resp.Field
-		Age         resp.Field
-		ExtraFields map[string]resp.Field
+		Name        respjson.Field
+		Owner       respjson.Field
+		Age         respjson.Field
+		ExtraFields map[string]respjson.Field
 	} `json:"-"`
 }
 ```
 
-To handle optional data, use the `IsPresent()` method on the JSON field.
-If a field is `null`, not present, or invalid, the corresponding field
-will simply be its zero value.
+To handle optional data, use the `.Valid()` method on the JSON field.
+`.Valid()` returns true if a field is not `null`, not present, or couldn't be marshaled.
+
+If `.Valid()` is false, the corresponding field will simply be its zero value.
 
 ```go
 raw := `{"owners": 1, "name": null}`
@@ -177,20 +182,25 @@ raw := `{"owners": 1, "name": null}`
 var res Animal
 json.Unmarshal([]byte(raw), &res)
 
-// Use the IsPresent() method to handle optional fields
-res.Owners                  // 1
-res.JSON.Owners.IsPresent() // true
-res.JSON.Owners.Raw()       // "1"
+// Accessing regular fields
 
-res.Age                  // 0
-res.JSON.Age.IsPresent() // false
-res.JSON.Age.Raw()       // ""
+res.Owners // 1
+res.Name   // ""
+res.Age    // 0
 
-// Use the IsExplicitNull() method to differentiate null and omitted
-res.Name                       // ""
-res.JSON.Name.IsPresent()      // false
-res.JSON.Name.Raw()            // "null"
-res.JSON.Name.IsExplicitNull() // true
+// Optional field checks
+
+res.JSON.Owners.Valid() // true
+res.JSON.Name.Valid()   // false
+res.JSON.Age.Valid()    // false
+
+// Raw JSON values
+
+res.JSON.Owners.Raw()                  // "1"
+res.JSON.Name.Raw() == "null"          // true
+res.JSON.Name.Raw() == respjson.Null   // true
+res.JSON.Age.Raw() == ""               // true
+res.JSON.Age.Raw() == respjson.Omitted // true
 ```
 
 These `.JSON` structs also include an `ExtraFields` map containing
@@ -220,8 +230,9 @@ type AnimalUnion struct {
 	// From variant [Cat]
 	CatBreed string `json:"cat_breed"`
 	// ...
+
 	JSON struct {
-		Owner resp.Field
+		Owner respjson.Field
 		// ...
 	} `json:"-"`
 }
@@ -248,12 +259,12 @@ This library uses the functional options pattern. Functions defined in the
 requests. For example:
 
 ```go
-client := dinariapisdk.NewClient(
+client := dinariapisdkgo.NewClient(
 	// Adds a header to every request made by the client
 	option.WithHeader("X-Some-Header", "custom_header_info"),
 )
 
-client.API.V2.GetHealth(context.TODO(), ...,
+client.V2.MarketData.Stocks.List(context.TODO(), ...,
 	// Override the header
 	option.WithHeader("X-Some-Header", "some_other_custom_header_info"),
 	// Add an undocumented field to the request body, using sjson syntax
@@ -275,21 +286,21 @@ with additional helper methods like `.GetNextPage()`, e.g.:
 ### Errors
 
 When the API returns a non-success status code, we return an error with type
-`*dinariapisdk.Error`. This contains the `StatusCode`, `*http.Request`, and
+`*dinariapisdkgo.Error`. This contains the `StatusCode`, `*http.Request`, and
 `*http.Response` values of the request, as well as the JSON of the error body
 (much like other response objects in the SDK).
 
 To handle errors, we recommend that you use the `errors.As` pattern:
 
 ```go
-_, err := client.API.V2.GetHealth(context.TODO())
+_, err := client.V2.MarketData.Stocks.List(context.TODO(), dinariapisdkgo.V2MarketDataStockListParams{})
 if err != nil {
-	var apierr *dinariapisdk.Error
+	var apierr *dinariapisdkgo.Error
 	if errors.As(err, &apierr) {
 		println(string(apierr.DumpRequest(true)))  // Prints the serialized HTTP request
 		println(string(apierr.DumpResponse(true))) // Prints the serialized HTTP response
 	}
-	panic(err.Error()) // GET "/api/v2/_health/": 400 Bad Request { ... }
+	panic(err.Error()) // GET "/api/v2/market_data/stocks/": 400 Bad Request { ... }
 }
 ```
 
@@ -307,8 +318,9 @@ To set a per-retry timeout, use `option.WithRequestTimeout()`.
 // This sets the timeout for the request, including all the retries.
 ctx, cancel := context.WithTimeout(context.Background(), 5*time.Minute)
 defer cancel()
-client.API.V2.GetHealth(
+client.V2.MarketData.Stocks.List(
 	ctx,
+	dinariapisdkgo.V2MarketDataStockListParams{},
 	// This sets the per-retry timeout
 	option.WithRequestTimeout(20*time.Second),
 )
@@ -324,8 +336,32 @@ The file name and content-type can be customized by implementing `Name() string`
 string` on the run-time type of `io.Reader`. Note that `os.File` implements `Name() string`, so a
 file returned by `os.Open` will be sent with the file name on disk.
 
-We also provide a helper `dinariapisdk.File(reader io.Reader, filename string, contentType string)`
+We also provide a helper `dinariapisdkgo.File(reader io.Reader, filename string, contentType string)`
 which can be used to wrap any `io.Reader` with the appropriate file name and content type.
+
+```go
+// A file from the file system
+file, err := os.Open("/path/to/file")
+dinariapisdkgo.V2EntityKYCDocumentUploadParams{
+	EntityID:     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+	DocumentType: dinariapisdkgo.KYCDocumentTypeGovernmentID,
+	File:         file,
+}
+
+// A file from a string
+dinariapisdkgo.V2EntityKYCDocumentUploadParams{
+	EntityID:     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+	DocumentType: dinariapisdkgo.KYCDocumentTypeGovernmentID,
+	File:         strings.NewReader("my file contents"),
+}
+
+// With a custom filename and contentType
+dinariapisdkgo.V2EntityKYCDocumentUploadParams{
+	EntityID:     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+	DocumentType: dinariapisdkgo.KYCDocumentTypeGovernmentID,
+	File:         dinariapisdkgo.File(strings.NewReader(`{"hello": "foo"}`), "file.go", "application/json"),
+}
+```
 
 ### Retries
 
@@ -337,12 +373,16 @@ You can use the `WithMaxRetries` option to configure or disable this:
 
 ```go
 // Configure the default for all requests:
-client := dinariapisdk.NewClient(
+client := dinariapisdkgo.NewClient(
 	option.WithMaxRetries(0), // default is 2
 )
 
 // Override per-request:
-client.API.V2.GetHealth(context.TODO(), option.WithMaxRetries(5))
+client.V2.MarketData.Stocks.List(
+	context.TODO(),
+	dinariapisdkgo.V2MarketDataStockListParams{},
+	option.WithMaxRetries(5),
+)
 ```
 
 ### Accessing raw response data (e.g. response headers)
@@ -353,11 +393,15 @@ you need to examine response headers, status codes, or other details.
 ```go
 // Create a variable to store the HTTP response
 var response *http.Response
-response, err := client.API.V2.GetHealth(context.TODO(), option.WithResponseInto(&response))
+stocks, err := client.V2.MarketData.Stocks.List(
+	context.TODO(),
+	dinariapisdkgo.V2MarketDataStockListParams{},
+	option.WithResponseInto(&response),
+)
 if err != nil {
 	// handle error
 }
-fmt.Printf("%+v\n", response)
+fmt.Printf("%+v\n", stocks)
 
 fmt.Printf("Status Code: %d\n", response.StatusCode)
 fmt.Printf("Headers: %+#v\n", response.Header)
@@ -398,7 +442,7 @@ or the `option.WithJSONSet()` methods.
 params := FooNewParams{
     ID:   "id_xxxx",
     Data: FooNewParamsData{
-        FirstName: dinariapisdk.String("John"),
+        FirstName: dinariapisdkgo.String("John"),
     },
 }
 client.Foo.New(context.Background(), params, option.WithJSONSet("data.last_name", "Doe"))
@@ -433,7 +477,7 @@ func Logger(req *http.Request, next option.MiddlewareNext) (res *http.Response, 
     return res, err
 }
 
-client := dinariapisdk.NewClient(
+client := dinariapisdkgo.NewClient(
 	option.WithMiddleware(Logger),
 )
 ```
