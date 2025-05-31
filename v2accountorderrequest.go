@@ -231,7 +231,7 @@ func (r V2AccountOrderRequestNewLimitBuyParams) MarshalJSON() (data []byte, err 
 	return json.Marshal(r.CreateLimitOrderInput)
 }
 func (r *V2AccountOrderRequestNewLimitBuyParams) UnmarshalJSON(data []byte) error {
-	return r.CreateLimitOrderInput.UnmarshalJSON(data)
+	return json.Unmarshal(data, &r.CreateLimitOrderInput)
 }
 
 type V2AccountOrderRequestNewLimitSellParams struct {
@@ -244,7 +244,7 @@ func (r V2AccountOrderRequestNewLimitSellParams) MarshalJSON() (data []byte, err
 	return json.Marshal(r.CreateLimitOrderInput)
 }
 func (r *V2AccountOrderRequestNewLimitSellParams) UnmarshalJSON(data []byte) error {
-	return r.CreateLimitOrderInput.UnmarshalJSON(data)
+	return json.Unmarshal(data, &r.CreateLimitOrderInput)
 }
 
 type V2AccountOrderRequestNewMarketBuyParams struct {
