@@ -114,6 +114,18 @@ func (r *V2AccountOrderRequestService) NewMarketSell(ctx context.Context, accoun
 	return
 }
 
+// Get fee quote data for an `Order Request`.
+func (r *V2AccountOrderRequestService) GetFeeQuote(ctx context.Context, accountID string, body V2AccountOrderRequestGetFeeQuoteParams, opts ...option.RequestOption) (res *V2AccountOrderRequestGetFeeQuoteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if accountID == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/fee_quote", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return
+}
+
 // Input parameters for creating a limit `OrderRequest`.
 //
 // The properties AssetQuantity, LimitPrice, StockID are required.
@@ -201,6 +213,24 @@ const (
 	OrderRequestStatusCancelled OrderRequestStatus = "CANCELLED"
 )
 
+// A preview of the fee that would be collected when placing an Order Request.
+type V2AccountOrderRequestGetFeeQuoteResponse struct {
+	// Cash amount in USD paid for fees for the Order Request.
+	Fee float64 `json:"fee,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Fee         respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountOrderRequestGetFeeQuoteResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountOrderRequestGetFeeQuoteResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type V2AccountOrderRequestGetParams struct {
 	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
 	paramObj
@@ -278,5 +308,35 @@ func (r V2AccountOrderRequestNewMarketSellParams) MarshalJSON() (data []byte, er
 	return param.MarshalObject(r, (*shadow)(&r))
 }
 func (r *V2AccountOrderRequestNewMarketSellParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2AccountOrderRequestGetFeeQuoteParams struct {
+	// Indicates whether `Order Request` is a buy or sell.
+	//
+	// Any of "BUY", "SELL".
+	OrderSide OrderSide `json:"order_side,omitzero,required"`
+	// Type of `Order Request`.
+	//
+	// Any of "MARKET", "LIMIT".
+	OrderType OrderType `json:"order_type,omitzero,required"`
+	// The Stock ID associated with the Order Request
+	StockID string `json:"stock_id,required" format:"uuid"`
+	// Amount of dShare asset tokens involved. Required for limit `Orders` and market
+	// sell `Order Requests`.
+	AssetTokenQuantity param.Opt[float64] `json:"asset_token_quantity,omitzero"`
+	// Price per asset in the asset's native currency. USD for US equities and ETFs.
+	// Required for limit `Order Requests`.
+	LimitPrice param.Opt[float64] `json:"limit_price,omitzero"`
+	// Amount of payment tokens involved. Required for market buy `Order Requests`.
+	PaymentTokenQuantity param.Opt[float64] `json:"payment_token_quantity,omitzero"`
+	paramObj
+}
+
+func (r V2AccountOrderRequestGetFeeQuoteParams) MarshalJSON() (data []byte, err error) {
+	type shadow V2AccountOrderRequestGetFeeQuoteParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *V2AccountOrderRequestGetFeeQuoteParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
