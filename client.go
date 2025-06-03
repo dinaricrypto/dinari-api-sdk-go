@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk
+package dinariapisdkgo
 
 import (
 	"context"
@@ -16,32 +16,36 @@ import (
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
 	Options []option.RequestOption
-	API     APIService
+	V2      V2Service
 }
 
-// DefaultClientOptions read from the environment (DINARI_API_KEY,
-// DINARI_BASE_URL). This should be used to initialize new clients.
+// DefaultClientOptions read from the environment (DINARI_API_SECRET_KEY,
+// DINARI_API_KEY_ID, DINARI_BASE_URL). This should be used to initialize new
+// clients.
 func DefaultClientOptions() []option.RequestOption {
 	defaults := []option.RequestOption{option.WithEnvironmentProduction()}
 	if o, ok := os.LookupEnv("DINARI_BASE_URL"); ok {
 		defaults = append(defaults, option.WithBaseURL(o))
 	}
-	if o, ok := os.LookupEnv("DINARI_API_KEY"); ok {
-		defaults = append(defaults, option.WithAPIKey(o))
+	if o, ok := os.LookupEnv("DINARI_API_KEY_ID"); ok {
+		defaults = append(defaults, option.WithAPIKeyID(o))
+	}
+	if o, ok := os.LookupEnv("DINARI_API_SECRET_KEY"); ok {
+		defaults = append(defaults, option.WithAPISecretKey(o))
 	}
 	return defaults
 }
 
 // NewClient generates a new client with the default option read from the
-// environment (DINARI_API_KEY, DINARI_BASE_URL). The option passed in as arguments
-// are applied after these default arguments, and all option will be passed down to
-// the services and requests that this client makes.
+// environment (DINARI_API_SECRET_KEY, DINARI_API_KEY_ID, DINARI_BASE_URL). The
+// option passed in as arguments are applied after these default arguments, and all
+// option will be passed down to the services and requests that this client makes.
 func NewClient(opts ...option.RequestOption) (r Client) {
 	opts = append(DefaultClientOptions(), opts...)
 
 	r = Client{Options: opts}
 
-	r.API = NewAPIService(opts...)
+	r.V2 = NewV2Service(opts...)
 
 	return
 }

@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless. See CONTRIBUTING.md for details.
 
-package dinariapisdk_test
+package dinariapisdkgo_test
 
 import (
 	"context"
@@ -20,13 +20,14 @@ func TestUsage(t *testing.T) {
 	if !testutil.CheckTestServer(t, baseURL) {
 		return
 	}
-	client := dinariapisdk.NewClient(
+	client := dinariapisdkgo.NewClient(
 		option.WithBaseURL(baseURL),
-		option.WithAPIKey("My API Key"),
+		option.WithAPIKeyID("My API Key ID"),
+		option.WithAPISecretKey("My API Secret Key"),
 	)
-	response, err := client.API.V2.GetHealth(context.TODO())
+	stocks, err := client.V2.MarketData.Stocks.List(context.TODO(), dinariapisdkgo.V2MarketDataStockListParams{})
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", response.Status)
+	t.Logf("%+v\n", stocks)
 }

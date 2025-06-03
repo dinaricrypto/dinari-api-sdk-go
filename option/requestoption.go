@@ -169,17 +169,25 @@ func WithQueryDel(key string) RequestOption {
 // [sjson format]: https://github.com/tidwall/sjson
 func WithJSONSet(key string, value any) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) (err error) {
-		if buffer, ok := r.Body.(*bytes.Buffer); ok {
-			b := buffer.Bytes()
+		var b []byte
+
+		if r.Body == nil {
+			b, err = sjson.SetBytes(nil, key, value)
+			if err != nil {
+				return err
+			}
+		} else if buffer, ok := r.Body.(*bytes.Buffer); ok {
+			b = buffer.Bytes()
 			b, err = sjson.SetBytes(b, key, value)
 			if err != nil {
 				return err
 			}
-			r.Body = bytes.NewBuffer(b)
-			return nil
+		} else {
+			return fmt.Errorf("cannot use WithJSONSet on a body that is not serialized as *bytes.Buffer")
 		}
 
-		return fmt.Errorf("cannot use WithJSONSet on a body that is not serialized as *bytes.Buffer")
+		r.Body = bytes.NewBuffer(b)
+		return nil
 	})
 }
 
@@ -254,13 +262,28 @@ func WithRequestTimeout(dur time.Duration) RequestOption {
 // environment to be the "production" environment. An environment specifies which base URL
 // to use by default.
 func WithEnvironmentProduction() RequestOption {
-	return WithBaseURL("https://api-enterprise.sbt.dinari.com/")
+	return requestconfig.WithDefaultBaseURL("https://api-enterprise.sbt.dinari.com/")
 }
 
-// WithAPIKey returns a RequestOption that sets the client setting "api_key".
-func WithAPIKey(value string) RequestOption {
+// WithEnvironmentSandbox returns a RequestOption that sets the current
+// environment to be the "sandbox" environment. An environment specifies which base URL
+// to use by default.
+func WithEnvironmentSandbox() RequestOption {
+	return requestconfig.WithDefaultBaseURL("https://api-enterprise.sandbox.dinari.com/")
+}
+
+// WithAPIKeyID returns a RequestOption that sets the client setting "api_key_id".
+func WithAPIKeyID(value string) RequestOption {
 	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
-		r.APIKey = value
-		return r.Apply(WithHeader("authorization", fmt.Sprintf("Bearer %s", r.APIKey)))
+		r.APIKeyID = value
+		return r.Apply(WithHeader("X-API-Key-Id", r.APIKeyID))
+	})
+}
+
+// WithAPISecretKey returns a RequestOption that sets the client setting "api_secret_key".
+func WithAPISecretKey(value string) RequestOption {
+	return requestconfig.RequestOptionFunc(func(r *requestconfig.RequestConfig) error {
+		r.APISecretKey = value
+		return r.Apply(WithHeader("X-API-Secret-Key", r.APISecretKey))
 	})
 }
