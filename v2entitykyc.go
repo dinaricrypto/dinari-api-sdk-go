@@ -4,6 +4,7 @@ package dinariapisdkgo
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -146,7 +147,7 @@ func (r *KYCData) UnmarshalJSON(data []byte) error {
 // be used at the last possible moment before sending a request. Test for this with
 // KYCDataParam.Overrides()
 func (r KYCData) ToParam() KYCDataParam {
-	return param.Override[KYCDataParam](r.RawJSON())
+	return param.Override[KYCDataParam](json.RawMessage(r.RawJSON()))
 }
 
 // KYC data for an `Entity`.
