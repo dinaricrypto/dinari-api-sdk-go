@@ -26,6 +26,7 @@ import (
 // the [NewV2AccountOrderService] method instead.
 type V2AccountOrderService struct {
 	Options []option.RequestOption
+	Stocks  V2AccountOrderStockService
 }
 
 // NewV2AccountOrderService generates a new service that applies the given options
@@ -34,6 +35,7 @@ type V2AccountOrderService struct {
 func NewV2AccountOrderService(opts ...option.RequestOption) (r V2AccountOrderService) {
 	r = V2AccountOrderService{}
 	r.Options = opts
+	r.Stocks = NewV2AccountOrderStockService(opts...)
 	return
 }
 
