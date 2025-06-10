@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.1.0 (2025-06-10)
+
+Full Changelog: [v0.1.0-alpha.2...v0.1.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.1.0-alpha.2...v0.1.0)
+
+### Features
+
+* **api:** api update ([b074b4e](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/b074b4e602837e286c9bc4b56800b854d11d6c60))
+* **api:** update routes ([3d26304](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/3d263042d1c26ee39a1c0f3657896c8e1c6dbe83))
+* **client:** allow overriding unions ([f22a9d1](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/f22a9d1103c3d2ed1ba741a3559f4639d4d3a286))
+
+
+### Bug Fixes
+
+* **client:** cast to raw message when converting to params ([b1f19f3](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/b1f19f3de2f05dc28f406e3f7e2fa6ab2369acce))
+
 ## 0.1.0-alpha.2 (2025-06-03)
 
 Full Changelog: [v0.1.0-alpha.1...v0.1.0-alpha.2](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.1.0-alpha.1...v0.1.0-alpha.2)
