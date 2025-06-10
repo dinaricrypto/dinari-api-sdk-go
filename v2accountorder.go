@@ -90,21 +90,6 @@ func (r *V2AccountOrderService) Cancel(ctx context.Context, orderID string, body
 	return
 }
 
-// Get fee quote data for an `Order`.
-//
-// The `order_fee_contract_object` property contains the fee quote structure to be
-// used verbatim when placing an `Order` directly through our Contracts.
-func (r *V2AccountOrderService) GetFeeQuote(ctx context.Context, accountID string, body V2AccountOrderGetFeeQuoteParams, opts ...option.RequestOption) (res *V2AccountOrderGetFeeQuoteResponse, err error) {
-	opts = append(r.Options[:], opts...)
-	if accountID == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	path := fmt.Sprintf("api/v2/accounts/%s/orders/fee_quote", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
-}
-
 // Get `OrderFulfillments` for a specific `Order`.
 func (r *V2AccountOrderService) GetFulfillments(ctx context.Context, orderID string, params V2AccountOrderGetFulfillmentsParams, opts ...option.RequestOption) (res *[]Fulfillment, err error) {
 	opts = append(r.Options[:], opts...)
@@ -241,122 +226,6 @@ const (
 	OrderTypeLimit  OrderType = "LIMIT"
 )
 
-type V2AccountOrderGetFeeQuoteResponse struct {
-	// CAIP-2 chain ID of the blockchain where the `Order` will be placed
-	//
-	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
-	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
-	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337".
-	ChainID Chain `json:"chain_id,required"`
-	// The total quantity of the fees paid via payment token.
-	Fee float64 `json:"fee,required"`
-	// Opaque fee quote object to pass into the contract when creating an `Order`
-	// directly through Dinari's smart contracts.
-	OrderFeeContractObject V2AccountOrderGetFeeQuoteResponseOrderFeeContractObject `json:"order_fee_contract_object,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ChainID                respjson.Field
-		Fee                    respjson.Field
-		OrderFeeContractObject respjson.Field
-		ExtraFields            map[string]respjson.Field
-		raw                    string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountOrderGetFeeQuoteResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountOrderGetFeeQuoteResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Opaque fee quote object to pass into the contract when creating an `Order`
-// directly through Dinari's smart contracts.
-type V2AccountOrderGetFeeQuoteResponseOrderFeeContractObject struct {
-	// EVM chain ID where the order is placed
-	ChainID int64 `json:"chain_id,required"`
-	// `FeeQuote` structure to pass into contracts.
-	FeeQuote V2AccountOrderGetFeeQuoteResponseOrderFeeContractObjectFeeQuote `json:"fee_quote,required"`
-	// Signed `FeeQuote` structure to pass into contracts.
-	FeeQuoteSignature string `json:"fee_quote_signature,required" format:"hex_string"`
-	// Breakdown of fees
-	Fees []V2AccountOrderGetFeeQuoteResponseOrderFeeContractObjectFee `json:"fees,required"`
-	// Address of payment token used for fees
-	PaymentToken string `json:"payment_token,required" format:"eth_address"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ChainID           respjson.Field
-		FeeQuote          respjson.Field
-		FeeQuoteSignature respjson.Field
-		Fees              respjson.Field
-		PaymentToken      respjson.Field
-		ExtraFields       map[string]respjson.Field
-		raw               string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountOrderGetFeeQuoteResponseOrderFeeContractObject) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountOrderGetFeeQuoteResponseOrderFeeContractObject) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// `FeeQuote` structure to pass into contracts.
-type V2AccountOrderGetFeeQuoteResponseOrderFeeContractObjectFeeQuote struct {
-	Deadline  int64  `json:"deadline,required"`
-	Fee       string `json:"fee,required" format:"bigint"`
-	OrderID   string `json:"orderId,required" format:"bigint"`
-	Requester string `json:"requester,required" format:"eth_address"`
-	Timestamp int64  `json:"timestamp,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Deadline    respjson.Field
-		Fee         respjson.Field
-		OrderID     respjson.Field
-		Requester   respjson.Field
-		Timestamp   respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountOrderGetFeeQuoteResponseOrderFeeContractObjectFeeQuote) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountOrderGetFeeQuoteResponseOrderFeeContractObjectFeeQuote) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2AccountOrderGetFeeQuoteResponseOrderFeeContractObjectFee struct {
-	// The quantity of the fee paid via payment token in
-	// [ETH](https://ethereum.org/en/developers/docs/intro-to-ether/#what-is-ether).
-	FeeInEth float64 `json:"fee_in_eth,required"`
-	// The quantity of the fee paid via payment token in
-	// [wei](https://ethereum.org/en/developers/docs/intro-to-ether/#denominations).
-	FeeInWei string `json:"fee_in_wei,required" format:"bigint"`
-	// Type of fee.
-	//
-	// Any of "SPONSORED_NETWORK", "NETWORK", "TRADING", "ORDER", "PARTNER_ORDER",
-	// "PARTNER_TRADING".
-	Type string `json:"type,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		FeeInEth    respjson.Field
-		FeeInWei    respjson.Field
-		Type        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountOrderGetFeeQuoteResponseOrderFeeContractObjectFee) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountOrderGetFeeQuoteResponseOrderFeeContractObjectFee) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type V2AccountOrderGetParams struct {
 	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
 	paramObj
@@ -380,50 +249,6 @@ func (r V2AccountOrderListParams) URLQuery() (v url.Values, err error) {
 type V2AccountOrderCancelParams struct {
 	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
 	paramObj
-}
-
-type V2AccountOrderGetFeeQuoteParams struct {
-	// CAIP-2 chain ID of the blockchain where the `Order` will be placed.
-	//
-	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
-	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
-	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337".
-	ChainID Chain `json:"chain_id,omitzero,required"`
-	// Address of the smart contract that will create the `Order`.
-	ContractAddress string `json:"contract_address,required" format:"eth_address"`
-	// Indicates whether `Order` is a buy or sell.
-	//
-	// Any of "BUY", "SELL".
-	OrderSide OrderSide `json:"order_side,omitzero,required"`
-	// Time in force. Indicates how long `Order` is valid for.
-	//
-	// Any of "DAY", "GTC", "IOC", "FOK".
-	OrderTif OrderTif `json:"order_tif,omitzero,required"`
-	// Type of `Order`.
-	//
-	// Any of "MARKET", "LIMIT".
-	OrderType OrderType `json:"order_type,omitzero,required"`
-	// The Stock ID associated with the Order
-	StockID string `json:"stock_id,required" format:"uuid"`
-	// Amount of dShare asset tokens involved. Required for limit `Orders` and market
-	// sell `Orders`.
-	AssetTokenQuantity param.Opt[float64] `json:"asset_token_quantity,omitzero"`
-	// Price per asset in the asset's native currency. USD for US equities and ETFs.
-	// Required for limit `Orders`.
-	LimitPrice param.Opt[float64] `json:"limit_price,omitzero"`
-	// Address of payment token.
-	PaymentToken param.Opt[string] `json:"payment_token,omitzero" format:"eth_address"`
-	// Amount of payment tokens involved. Required for market buy `Orders`.
-	PaymentTokenQuantity param.Opt[float64] `json:"payment_token_quantity,omitzero"`
-	paramObj
-}
-
-func (r V2AccountOrderGetFeeQuoteParams) MarshalJSON() (data []byte, err error) {
-	type shadow V2AccountOrderGetFeeQuoteParams
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *V2AccountOrderGetFeeQuoteParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
 }
 
 type V2AccountOrderGetFulfillmentsParams struct {
