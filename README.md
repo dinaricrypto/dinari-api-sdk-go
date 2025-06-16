@@ -272,6 +272,8 @@ client.V2.MarketData.Stocks.List(context.TODO(), ...,
 )
 ```
 
+The request option `option.WithDebugLog(nil)` may be helpful while debugging.
+
 See the [full list of request options](https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go/option).
 
 ### Pagination
