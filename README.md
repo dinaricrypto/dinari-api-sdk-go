@@ -2,7 +2,7 @@
 
 <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go"><img src="https://pkg.go.dev/badge/github.com/dinaricrypto/dinari-api-sdk-go.svg" alt="Go Reference"></a>
 
-The Dinari Go library provides convenient access to the Dinari REST API
+The Dinari Go library provides convenient access to the [Dinari REST API](https://docs.dinari.com/)
 from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).
