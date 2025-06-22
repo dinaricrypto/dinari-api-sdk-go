@@ -92,10 +92,7 @@ func (r *V2AccountOrderRequestService) NewLimitSell(ctx context.Context, account
 	return
 }
 
-// Create a managed `OrderRequest` to place a market buy `Order`. Fees for the
-// `Order` are included in the transaction. Refer to our
-// [Fee Quote API](https://docs.dinari.com/reference/createproxiedorderfeequote#/)
-// for fee estimation.
+// Create a managed `OrderRequest` to place a market buy `Order`.
 func (r *V2AccountOrderRequestService) NewMarketBuy(ctx context.Context, accountID string, body V2AccountOrderRequestNewMarketBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
@@ -284,8 +281,8 @@ func (r *V2AccountOrderRequestNewLimitSellParams) UnmarshalJSON(data []byte) err
 }
 
 type V2AccountOrderRequestNewMarketBuyParams struct {
-	// Amount of currency (USD for US equities and ETFs) to pay for the order. Must be
-	// a positive number with a precision of up to 2 decimal places.
+	// Amount of currency (USD for US equities and ETFs) to pay or receive for the
+	// order. Must be a positive number with a precision of up to 2 decimal places.
 	PaymentAmount float64 `json:"payment_amount,required"`
 	// ID of `Stock`.
 	StockID string `json:"stock_id,required" format:"uuid"`
