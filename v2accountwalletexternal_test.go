@@ -31,7 +31,7 @@ func TestV2AccountWalletExternalConnect(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountWalletExternalConnectParams{
-			ChainID:       dinariapisdkgo.ChainEip155_1,
+			ChainID:       dinariapisdkgo.V2AccountWalletExternalConnectParamsChainIDEip155_1,
 			Nonce:         "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			Signature:     "0xeaF12bD1DfFd",
 			WalletAddress: "wallet_address",
@@ -64,6 +64,7 @@ func TestV2AccountWalletExternalGetNonce(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountWalletExternalGetNonceParams{
+			ChainID:       dinariapisdkgo.V2AccountWalletExternalGetNonceParamsChainIDEip155_1,
 			WalletAddress: "wallet_address",
 		},
 	)

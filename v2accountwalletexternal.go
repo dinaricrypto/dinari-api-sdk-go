@@ -82,12 +82,12 @@ func (r *V2AccountWalletExternalGetNonceResponse) UnmarshalJSON(data []byte) err
 }
 
 type V2AccountWalletExternalConnectParams struct {
-	// CAIP-2 formatted chain ID of the blockchain the `Wallet` to link is on.
+	// CAIP-2 formatted chain ID of the blockchain the `Wallet` to link is on. eip155:0
+	// is used for EOA wallets
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
-	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
-	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337".
-	ChainID Chain `json:"chain_id,omitzero,required"`
+	// "eip155:98866", "eip155:0".
+	ChainID V2AccountWalletExternalConnectParamsChainID `json:"chain_id,omitzero,required"`
 	// Nonce contained within the connection message.
 	Nonce string `json:"nonce,required" format:"uuid"`
 	// Signature payload from signing the connection message with the `Wallet`.
@@ -105,7 +105,27 @@ func (r *V2AccountWalletExternalConnectParams) UnmarshalJSON(data []byte) error 
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// CAIP-2 formatted chain ID of the blockchain the `Wallet` to link is on. eip155:0
+// is used for EOA wallets
+type V2AccountWalletExternalConnectParamsChainID string
+
+const (
+	V2AccountWalletExternalConnectParamsChainIDEip155_1     V2AccountWalletExternalConnectParamsChainID = "eip155:1"
+	V2AccountWalletExternalConnectParamsChainIDEip155_42161 V2AccountWalletExternalConnectParamsChainID = "eip155:42161"
+	V2AccountWalletExternalConnectParamsChainIDEip155_8453  V2AccountWalletExternalConnectParamsChainID = "eip155:8453"
+	V2AccountWalletExternalConnectParamsChainIDEip155_81457 V2AccountWalletExternalConnectParamsChainID = "eip155:81457"
+	V2AccountWalletExternalConnectParamsChainIDEip155_7887  V2AccountWalletExternalConnectParamsChainID = "eip155:7887"
+	V2AccountWalletExternalConnectParamsChainIDEip155_98866 V2AccountWalletExternalConnectParamsChainID = "eip155:98866"
+	V2AccountWalletExternalConnectParamsChainIDEip155_0     V2AccountWalletExternalConnectParamsChainID = "eip155:0"
+)
+
 type V2AccountWalletExternalGetNonceParams struct {
+	// CAIP-2 formatted chain ID of the blockchain the `Wallet` is on. eip155:0 is used
+	// for EOA wallets
+	//
+	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
+	// "eip155:98866", "eip155:0".
+	ChainID V2AccountWalletExternalGetNonceParamsChainID `query:"chain_id,omitzero,required" json:"-"`
 	// Address of the `Wallet` to connect.
 	WalletAddress string `query:"wallet_address,required" format:"eth_address" json:"-"`
 	paramObj
@@ -119,3 +139,17 @@ func (r V2AccountWalletExternalGetNonceParams) URLQuery() (v url.Values, err err
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
+
+// CAIP-2 formatted chain ID of the blockchain the `Wallet` is on. eip155:0 is used
+// for EOA wallets
+type V2AccountWalletExternalGetNonceParamsChainID string
+
+const (
+	V2AccountWalletExternalGetNonceParamsChainIDEip155_1     V2AccountWalletExternalGetNonceParamsChainID = "eip155:1"
+	V2AccountWalletExternalGetNonceParamsChainIDEip155_42161 V2AccountWalletExternalGetNonceParamsChainID = "eip155:42161"
+	V2AccountWalletExternalGetNonceParamsChainIDEip155_8453  V2AccountWalletExternalGetNonceParamsChainID = "eip155:8453"
+	V2AccountWalletExternalGetNonceParamsChainIDEip155_81457 V2AccountWalletExternalGetNonceParamsChainID = "eip155:81457"
+	V2AccountWalletExternalGetNonceParamsChainIDEip155_7887  V2AccountWalletExternalGetNonceParamsChainID = "eip155:7887"
+	V2AccountWalletExternalGetNonceParamsChainIDEip155_98866 V2AccountWalletExternalGetNonceParamsChainID = "eip155:98866"
+	V2AccountWalletExternalGetNonceParamsChainIDEip155_0     V2AccountWalletExternalGetNonceParamsChainID = "eip155:0"
+)
