@@ -51,6 +51,12 @@ func (r *V2AccountWalletService) Get(ctx context.Context, accountID string, opts
 type Wallet struct {
 	// Address of the `Wallet`.
 	Address string `json:"address,required"`
+	// CAIP-2 formatted chain ID of the blockchain the `Wallet` is on. eip155:0 is used
+	// for EOA wallets
+	//
+	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
+	// "eip155:98866", "eip155:0".
+	ChainID WalletChainID `json:"chain_id,required"`
 	// Indicates whether the `Wallet` is flagged for AML violation.
 	IsAmlFlagged bool `json:"is_aml_flagged,required"`
 	// Indicates whether the `Wallet` is a Dinari-managed wallet.
@@ -58,6 +64,7 @@ type Wallet struct {
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Address         respjson.Field
+		ChainID         respjson.Field
 		IsAmlFlagged    respjson.Field
 		IsManagedWallet respjson.Field
 		ExtraFields     map[string]respjson.Field
@@ -70,3 +77,17 @@ func (r Wallet) RawJSON() string { return r.JSON.raw }
 func (r *Wallet) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// CAIP-2 formatted chain ID of the blockchain the `Wallet` is on. eip155:0 is used
+// for EOA wallets
+type WalletChainID string
+
+const (
+	WalletChainIDEip155_1     WalletChainID = "eip155:1"
+	WalletChainIDEip155_42161 WalletChainID = "eip155:42161"
+	WalletChainIDEip155_8453  WalletChainID = "eip155:8453"
+	WalletChainIDEip155_81457 WalletChainID = "eip155:81457"
+	WalletChainIDEip155_7887  WalletChainID = "eip155:7887"
+	WalletChainIDEip155_98866 WalletChainID = "eip155:98866"
+	WalletChainIDEip155_0     WalletChainID = "eip155:0"
+)

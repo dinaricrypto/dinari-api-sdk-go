@@ -101,7 +101,9 @@ func (r *V2AccountOrderStockEip155GetFeeQuoteResponse) UnmarshalJSON(data []byte
 // Opaque fee quote object to pass into the contract when creating an `Order`
 // directly through Dinari's smart contracts.
 type V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObject struct {
-	// EVM chain ID where the order is placed
+	// EVM chain ID of the blockchain where the `Order` will be placed.
+	//
+	// Any of 42161, 1, 8453, 81457, 7887, 98866.
 	ChainID int64 `json:"chain_id,required"`
 	// `FeeQuote` structure to pass into contracts.
 	FeeQuote V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObjectFeeQuote `json:"fee_quote,required"`
