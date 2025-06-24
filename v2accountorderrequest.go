@@ -92,7 +92,10 @@ func (r *V2AccountOrderRequestService) NewLimitSell(ctx context.Context, account
 	return
 }
 
-// Create a managed `OrderRequest` to place a market buy `Order`.
+// Create a managed `OrderRequest` to place a market buy `Order`. Fees for the
+// `Order` are included in the transaction. Refer to our
+// [Fee Quote API](https://docs.dinari.com/reference/createproxiedorderfeequote#/)
+// for fee estimation.
 func (r *V2AccountOrderRequestService) NewMarketBuy(ctx context.Context, accountID string, body V2AccountOrderRequestNewMarketBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
@@ -140,6 +143,8 @@ type CreateLimitOrderInputParam struct {
 	LimitPrice float64 `json:"limit_price,required"`
 	// ID of `Stock`.
 	StockID string `json:"stock_id,required" format:"uuid"`
+	// ID of `Account` to receive the `Order`.
+	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
 	paramObj
 }
 
@@ -185,18 +190,21 @@ type OrderRequest struct {
 	// ID of `Order` created from the `OrderRequest`. This is the primary identifier
 	// for the `/orders` routes.
 	OrderID string `json:"order_id" format:"uuid"`
+	// ID of recipient `Account`.
+	RecipientAccountID string `json:"recipient_account_id" format:"uuid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID          respjson.Field
-		AccountID   respjson.Field
-		CreatedDt   respjson.Field
-		OrderSide   respjson.Field
-		OrderTif    respjson.Field
-		OrderType   respjson.Field
-		Status      respjson.Field
-		OrderID     respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		ID                 respjson.Field
+		AccountID          respjson.Field
+		CreatedDt          respjson.Field
+		OrderSide          respjson.Field
+		OrderTif           respjson.Field
+		OrderType          respjson.Field
+		Status             respjson.Field
+		OrderID            respjson.Field
+		RecipientAccountID respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
 	} `json:"-"`
 }
 
@@ -281,11 +289,13 @@ func (r *V2AccountOrderRequestNewLimitSellParams) UnmarshalJSON(data []byte) err
 }
 
 type V2AccountOrderRequestNewMarketBuyParams struct {
-	// Amount of currency (USD for US equities and ETFs) to pay or receive for the
-	// order. Must be a positive number with a precision of up to 2 decimal places.
+	// Amount of currency (USD for US equities and ETFs) to pay for the order. Must be
+	// a positive number with a precision of up to 2 decimal places.
 	PaymentAmount float64 `json:"payment_amount,required"`
 	// ID of `Stock`.
 	StockID string `json:"stock_id,required" format:"uuid"`
+	// ID of `Account` to receive the `Order`.
+	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
 	paramObj
 }
 
@@ -303,6 +313,8 @@ type V2AccountOrderRequestNewMarketSellParams struct {
 	AssetQuantity float64 `json:"asset_quantity,required"`
 	// ID of `Stock`.
 	StockID string `json:"stock_id,required" format:"uuid"`
+	// ID of `Account` to receive the `Order`.
+	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
 	paramObj
 }
 

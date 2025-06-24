@@ -81,6 +81,7 @@ func TestV2EntityKYCSubmitWithOptionalParams(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2EntityKYCSubmitParams{
 			Data: dinariapisdkgo.KYCDataParam{
+				AddressCountryCode: "SG",
 				CountryCode:        "SG",
 				LastName:           "Doe",
 				AddressCity:        dinariapisdkgo.String("San Francisco"),

@@ -2,7 +2,7 @@
 
 <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go"><img src="https://pkg.go.dev/badge/github.com/dinaricrypto/dinari-api-sdk-go.svg" alt="Go Reference"></a>
 
-The Dinari Go library provides convenient access to the Dinari REST API
+The Dinari Go library provides convenient access to the [Dinari REST API](https://docs.dinari.com/)
 from applications written in Go.
 
 It is generated with [Stainless](https://www.stainless.com/).
@@ -24,7 +24,7 @@ Or to pin the version:
 <!-- x-release-please-start-version -->
 
 ```sh
-go get -u 'github.com/dinaricrypto/dinari-api-sdk-go@v0.1.0'
+go get -u 'github.com/dinaricrypto/dinari-api-sdk-go@v0.2.0'
 ```
 
 <!-- x-release-please-end -->
@@ -271,6 +271,8 @@ client.V2.MarketData.Stocks.List(context.TODO(), ...,
 	option.WithJSONSet("some.json.path", map[string]string{"my": "object"}),
 )
 ```
+
+The request option `option.WithDebugLog(nil)` may be helpful while debugging.
 
 See the [full list of request options](https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go/option).
 

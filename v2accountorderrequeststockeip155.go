@@ -62,6 +62,35 @@ func (r *V2AccountOrderRequestStockEip155Service) PrepareProxiedOrder(ctx contex
 	return
 }
 
+// [EIP-712](https://eips.ethereum.org/EIPS/eip-712) typed data to be signed with a
+// wallet.
+type EvmTypedData struct {
+	// Domain separator for the typed data.
+	Domain any `json:"domain,required"`
+	// Message to be signed. Contains the actual data that will be signed with the
+	// wallet.
+	Message any `json:"message,required"`
+	// Primary type of the typed data.
+	PrimaryType string `json:"primaryType,required"`
+	// Types used in the typed data.
+	Types any `json:"types,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Domain      respjson.Field
+		Message     respjson.Field
+		PrimaryType respjson.Field
+		Types       respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r EvmTypedData) RawJSON() string { return r.JSON.raw }
+func (r *EvmTypedData) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Prepared data for creating an `OrderRequest` through the EVM proxied order API
 // route.
 type V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse struct {
@@ -70,13 +99,13 @@ type V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse struct {
 	// Deadline for the prepared order to be placed.
 	Deadline time.Time `json:"deadline,required" format:"date-time"`
 	// Fees involved in the order. Provided here as a reference.
-	Fees []V2AccountOrderRequestStockEip155PrepareProxiedOrderResponseFee `json:"fees,required"`
+	Fees []OrderFeeAmount `json:"fees,required"`
 	// [EIP-712](https://eips.ethereum.org/EIPS/eip-712) typed data to be signed with a
 	// wallet.
-	OrderTypedData V2AccountOrderRequestStockEip155PrepareProxiedOrderResponseOrderTypedData `json:"order_typed_data,required"`
+	OrderTypedData EvmTypedData `json:"order_typed_data,required"`
 	// [EIP-712](https://eips.ethereum.org/EIPS/eip-712) typed data to be signed with a
 	// wallet.
-	PermitTypedData V2AccountOrderRequestStockEip155PrepareProxiedOrderResponsePermitTypedData `json:"permit_typed_data,required"`
+	PermitTypedData EvmTypedData `json:"permit_typed_data,required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID              respjson.Field
@@ -94,98 +123,6 @@ func (r V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse) RawJSON() s
 	return r.JSON.raw
 }
 func (r *V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2AccountOrderRequestStockEip155PrepareProxiedOrderResponseFee struct {
-	// The quantity of the fee paid via payment token in
-	// [ETH](https://ethereum.org/en/developers/docs/intro-to-ether/#what-is-ether).
-	FeeInEth float64 `json:"fee_in_eth,required"`
-	// The quantity of the fee paid via payment token in
-	// [wei](https://ethereum.org/en/developers/docs/intro-to-ether/#denominations).
-	FeeInWei string `json:"fee_in_wei,required" format:"bigint"`
-	// Type of fee.
-	//
-	// Any of "SPONSORED_NETWORK", "NETWORK", "TRADING", "ORDER", "PARTNER_ORDER",
-	// "PARTNER_TRADING".
-	Type string `json:"type,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		FeeInEth    respjson.Field
-		FeeInWei    respjson.Field
-		Type        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountOrderRequestStockEip155PrepareProxiedOrderResponseFee) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountOrderRequestStockEip155PrepareProxiedOrderResponseFee) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// [EIP-712](https://eips.ethereum.org/EIPS/eip-712) typed data to be signed with a
-// wallet.
-type V2AccountOrderRequestStockEip155PrepareProxiedOrderResponseOrderTypedData struct {
-	// Domain separator for the typed data.
-	Domain any `json:"domain,required"`
-	// Message to be signed. Contains the actual data that will be signed with the
-	// wallet.
-	Message any `json:"message,required"`
-	// Primary type of the typed data.
-	PrimaryType string `json:"primaryType,required"`
-	// Types used in the typed data.
-	Types any `json:"types,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Domain      respjson.Field
-		Message     respjson.Field
-		PrimaryType respjson.Field
-		Types       respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountOrderRequestStockEip155PrepareProxiedOrderResponseOrderTypedData) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountOrderRequestStockEip155PrepareProxiedOrderResponseOrderTypedData) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// [EIP-712](https://eips.ethereum.org/EIPS/eip-712) typed data to be signed with a
-// wallet.
-type V2AccountOrderRequestStockEip155PrepareProxiedOrderResponsePermitTypedData struct {
-	// Domain separator for the typed data.
-	Domain any `json:"domain,required"`
-	// Message to be signed. Contains the actual data that will be signed with the
-	// wallet.
-	Message any `json:"message,required"`
-	// Primary type of the typed data.
-	PrimaryType string `json:"primaryType,required"`
-	// Types used in the typed data.
-	Types any `json:"types,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Domain      respjson.Field
-		Message     respjson.Field
-		PrimaryType respjson.Field
-		Types       respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountOrderRequestStockEip155PrepareProxiedOrderResponsePermitTypedData) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountOrderRequestStockEip155PrepareProxiedOrderResponsePermitTypedData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

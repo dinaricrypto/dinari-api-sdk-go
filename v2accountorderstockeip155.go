@@ -70,6 +70,46 @@ func (r *V2AccountOrderStockEip155Service) PrepareOrder(ctx context.Context, acc
 	return
 }
 
+type OrderFeeAmount struct {
+	// The quantity of the fee paid via payment token in
+	// [ETH](https://ethereum.org/en/developers/docs/intro-to-ether/#what-is-ether).
+	FeeInEth float64 `json:"fee_in_eth,required"`
+	// The quantity of the fee paid via payment token in
+	// [wei](https://ethereum.org/en/developers/docs/intro-to-ether/#denominations).
+	FeeInWei string `json:"fee_in_wei,required" format:"bigint"`
+	// Type of fee.
+	//
+	// Any of "SPONSORED_NETWORK", "NETWORK", "TRADING", "ORDER", "PARTNER_ORDER",
+	// "PARTNER_TRADING".
+	Type OrderFeeAmountType `json:"type,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		FeeInEth    respjson.Field
+		FeeInWei    respjson.Field
+		Type        respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r OrderFeeAmount) RawJSON() string { return r.JSON.raw }
+func (r *OrderFeeAmount) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Type of fee.
+type OrderFeeAmountType string
+
+const (
+	OrderFeeAmountTypeSponsoredNetwork OrderFeeAmountType = "SPONSORED_NETWORK"
+	OrderFeeAmountTypeNetwork          OrderFeeAmountType = "NETWORK"
+	OrderFeeAmountTypeTrading          OrderFeeAmountType = "TRADING"
+	OrderFeeAmountTypeOrder            OrderFeeAmountType = "ORDER"
+	OrderFeeAmountTypePartnerOrder     OrderFeeAmountType = "PARTNER_ORDER"
+	OrderFeeAmountTypePartnerTrading   OrderFeeAmountType = "PARTNER_TRADING"
+)
+
 type V2AccountOrderStockEip155GetFeeQuoteResponse struct {
 	// CAIP-2 chain ID of the blockchain where the `Order` will be placed
 	//
@@ -101,14 +141,16 @@ func (r *V2AccountOrderStockEip155GetFeeQuoteResponse) UnmarshalJSON(data []byte
 // Opaque fee quote object to pass into the contract when creating an `Order`
 // directly through Dinari's smart contracts.
 type V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObject struct {
-	// EVM chain ID where the order is placed
+	// EVM chain ID of the blockchain where the `Order` will be placed.
+	//
+	// Any of 42161, 1, 8453, 81457, 7887, 98866.
 	ChainID int64 `json:"chain_id,required"`
 	// `FeeQuote` structure to pass into contracts.
 	FeeQuote V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObjectFeeQuote `json:"fee_quote,required"`
 	// Signed `FeeQuote` structure to pass into contracts.
 	FeeQuoteSignature string `json:"fee_quote_signature,required" format:"hex_string"`
 	// Breakdown of fees
-	Fees []V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObjectFee `json:"fees,required"`
+	Fees []OrderFeeAmount `json:"fees,required"`
 	// Address of payment token used for fees
 	PaymentToken string `json:"payment_token,required" format:"eth_address"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -158,40 +200,10 @@ func (r *V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObjectFeeQu
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObjectFee struct {
-	// The quantity of the fee paid via payment token in
-	// [ETH](https://ethereum.org/en/developers/docs/intro-to-ether/#what-is-ether).
-	FeeInEth float64 `json:"fee_in_eth,required"`
-	// The quantity of the fee paid via payment token in
-	// [wei](https://ethereum.org/en/developers/docs/intro-to-ether/#denominations).
-	FeeInWei string `json:"fee_in_wei,required" format:"bigint"`
-	// Type of fee.
-	//
-	// Any of "SPONSORED_NETWORK", "NETWORK", "TRADING", "ORDER", "PARTNER_ORDER",
-	// "PARTNER_TRADING".
-	Type string `json:"type,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		FeeInEth    respjson.Field
-		FeeInWei    respjson.Field
-		Type        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObjectFee) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObjectFee) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Prepared transactions to place an order on an EIP-155 (EVM) chain.
 type V2AccountOrderStockEip155PrepareOrderResponse struct {
 	// Fees included in the order transaction. Provided here as a reference.
-	Fees []V2AccountOrderStockEip155PrepareOrderResponseFee `json:"fees,required"`
+	Fees []OrderFeeAmount `json:"fees,required"`
 	// List of contract addresses and call data for building transactions to be signed
 	// and submitted on chain. Transactions should be submitted on chain in the order
 	// provided in this property.
@@ -208,34 +220,6 @@ type V2AccountOrderStockEip155PrepareOrderResponse struct {
 // Returns the unmodified JSON received from the API
 func (r V2AccountOrderStockEip155PrepareOrderResponse) RawJSON() string { return r.JSON.raw }
 func (r *V2AccountOrderStockEip155PrepareOrderResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2AccountOrderStockEip155PrepareOrderResponseFee struct {
-	// The quantity of the fee paid via payment token in
-	// [ETH](https://ethereum.org/en/developers/docs/intro-to-ether/#what-is-ether).
-	FeeInEth float64 `json:"fee_in_eth,required"`
-	// The quantity of the fee paid via payment token in
-	// [wei](https://ethereum.org/en/developers/docs/intro-to-ether/#denominations).
-	FeeInWei string `json:"fee_in_wei,required" format:"bigint"`
-	// Type of fee.
-	//
-	// Any of "SPONSORED_NETWORK", "NETWORK", "TRADING", "ORDER", "PARTNER_ORDER",
-	// "PARTNER_TRADING".
-	Type string `json:"type,required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		FeeInEth    respjson.Field
-		FeeInWei    respjson.Field
-		Type        respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountOrderStockEip155PrepareOrderResponseFee) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountOrderStockEip155PrepareOrderResponseFee) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

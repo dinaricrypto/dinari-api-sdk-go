@@ -113,6 +113,8 @@ type V2MarketDataStockListResponse struct {
 	Name string `json:"name,required"`
 	// Ticker symbol
 	Symbol string `json:"symbol,required"`
+	// List of CAIP-10 formatted token addresses.
+	Tokens []string `json:"tokens,required"`
 	// SEC Central Index Key. Refer to
 	// [this link](https://www.sec.gov/submit-filings/filer-support-resources/how-do-i-guides/understand-utilize-edgar-ciks-passphrases-access-codes)
 	// for more information.
@@ -137,6 +139,7 @@ type V2MarketDataStockListResponse struct {
 		IsTradable     respjson.Field
 		Name           respjson.Field
 		Symbol         respjson.Field
+		Tokens         respjson.Field
 		Cik            respjson.Field
 		CompositeFigi  respjson.Field
 		Cusip          respjson.Field
@@ -280,6 +283,8 @@ type V2MarketDataStockGetQuoteResponse struct {
 	Price float64 `json:"price,required"`
 	// ID of the `Stock`
 	StockID string `json:"stock_id,required" format:"uuid"`
+	// When the Stock Quote was generated.
+	Timestamp time.Time `json:"timestamp,required" format:"date-time"`
 	// The change in price from the previous close.
 	Change float64 `json:"change"`
 	// The percentage change in price from the previous close.
@@ -305,6 +310,7 @@ type V2MarketDataStockGetQuoteResponse struct {
 	JSON struct {
 		Price                     respjson.Field
 		StockID                   respjson.Field
+		Timestamp                 respjson.Field
 		Change                    respjson.Field
 		ChangePercent             respjson.Field
 		Close                     respjson.Field

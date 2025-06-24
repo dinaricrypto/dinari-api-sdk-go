@@ -48,7 +48,8 @@ Response Types:
 Methods:
 
 - <code title="post /api/v2/entities/">client.V2.Entities.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2EntityService.New">New</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, body <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2EntityNewParams">V2EntityNewParams</a>) (<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#Entity">Entity</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="get /api/v2/entities/">client.V2.Entities.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2EntityService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) ([]<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#Entity">Entity</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="patch /api/v2/entities/{entity_id}">client.V2.Entities.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2EntityService.Update">Update</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, entityID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2EntityUpdateParams">V2EntityUpdateParams</a>) (<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#Entity">Entity</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
+- <code title="get /api/v2/entities/">client.V2.Entities.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2EntityService.List">List</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, query <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2EntityListParams">V2EntityListParams</a>) ([]<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#Entity">Entity</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /api/v2/entities/{entity_id}">client.V2.Entities.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2EntityService.GetByID">GetByID</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, entityID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#Entity">Entity</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /api/v2/entities/me">client.V2.Entities.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2EntityService.GetCurrent">GetCurrent</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>) (<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#Entity">Entity</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
@@ -129,12 +130,18 @@ Response Types:
 
 Methods:
 
+- <code title="post /api/v2/accounts/{account_id}/wallet/internal">client.V2.Accounts.Wallet.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountWalletService.ConnectInternal">ConnectInternal</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountWalletConnectInternalParams">V2AccountWalletConnectInternalParams</a>) (<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#Wallet">Wallet</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 - <code title="get /api/v2/accounts/{account_id}/wallet">client.V2.Accounts.Wallet.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountWalletService.Get">Get</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>) (<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#Wallet">Wallet</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 #### External
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#WalletChainID">WalletChainID</a>
+
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#WalletChainID">WalletChainID</a>
 - <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountWalletExternalGetNonceResponse">V2AccountWalletExternalGetNonceResponse</a>
 
 Methods:
@@ -171,6 +178,7 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#OrderFeeAmount">OrderFeeAmount</a>
 - <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderStockEip155GetFeeQuoteResponse">V2AccountOrderStockEip155GetFeeQuoteResponse</a>
 - <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderStockEip155PrepareOrderResponse">V2AccountOrderStockEip155PrepareOrderResponse</a>
 
@@ -217,6 +225,7 @@ Methods:
 
 Response Types:
 
+- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#EvmTypedData">EvmTypedData</a>
 - <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse">V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse</a>
 
 Methods:

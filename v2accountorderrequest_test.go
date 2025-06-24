@@ -74,7 +74,7 @@ func TestV2AccountOrderRequestListWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestV2AccountOrderRequestNewLimitBuy(t *testing.T) {
+func TestV2AccountOrderRequestNewLimitBuyWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -93,9 +93,10 @@ func TestV2AccountOrderRequestNewLimitBuy(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestNewLimitBuyParams{
 			CreateLimitOrderInput: dinariapisdkgo.CreateLimitOrderInputParam{
-				AssetQuantity: 0,
-				LimitPrice:    0,
-				StockID:       "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+				AssetQuantity:      0,
+				LimitPrice:         0,
+				StockID:            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+				RecipientAccountID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			},
 		},
 	)
@@ -108,7 +109,7 @@ func TestV2AccountOrderRequestNewLimitBuy(t *testing.T) {
 	}
 }
 
-func TestV2AccountOrderRequestNewLimitSell(t *testing.T) {
+func TestV2AccountOrderRequestNewLimitSellWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -127,9 +128,10 @@ func TestV2AccountOrderRequestNewLimitSell(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestNewLimitSellParams{
 			CreateLimitOrderInput: dinariapisdkgo.CreateLimitOrderInputParam{
-				AssetQuantity: 0,
-				LimitPrice:    0,
-				StockID:       "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+				AssetQuantity:      0,
+				LimitPrice:         0,
+				StockID:            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+				RecipientAccountID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			},
 		},
 	)
@@ -142,7 +144,7 @@ func TestV2AccountOrderRequestNewLimitSell(t *testing.T) {
 	}
 }
 
-func TestV2AccountOrderRequestNewMarketBuy(t *testing.T) {
+func TestV2AccountOrderRequestNewMarketBuyWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -160,8 +162,9 @@ func TestV2AccountOrderRequestNewMarketBuy(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestNewMarketBuyParams{
-			PaymentAmount: 0,
-			StockID:       "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+			PaymentAmount:      0,
+			StockID:            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+			RecipientAccountID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		},
 	)
 	if err != nil {
@@ -173,7 +176,7 @@ func TestV2AccountOrderRequestNewMarketBuy(t *testing.T) {
 	}
 }
 
-func TestV2AccountOrderRequestNewMarketSell(t *testing.T) {
+func TestV2AccountOrderRequestNewMarketSellWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -191,8 +194,9 @@ func TestV2AccountOrderRequestNewMarketSell(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestNewMarketSellParams{
-			AssetQuantity: 0,
-			StockID:       "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+			AssetQuantity:      0,
+			StockID:            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+			RecipientAccountID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		},
 	)
 	if err != nil {
