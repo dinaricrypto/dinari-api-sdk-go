@@ -7,8 +7,10 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"net/url"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
+	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
@@ -47,12 +49,12 @@ func (r *V2EntityService) New(ctx context.Context, body V2EntityNewParams, opts 
 	return
 }
 
-// Get a list of all direct `Entities` your organization manages. These `Entities`
+// Get a list of direct `Entities` your organization manages. These `Entities`
 // represent individual customers of your organization.
-func (r *V2EntityService) List(ctx context.Context, opts ...option.RequestOption) (res *[]Entity, err error) {
+func (r *V2EntityService) List(ctx context.Context, query V2EntityListParams, opts ...option.RequestOption) (res *[]Entity, err error) {
 	opts = append(r.Options[:], opts...)
 	path := "api/v2/entities/"
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -92,6 +94,9 @@ type Entity struct {
 	Name string `json:"name"`
 	// Nationality or home country of the `Entity`.
 	Nationality string `json:"nationality"`
+	// Case sensitive unique reference ID that you can set for the `Entity`. We
+	// recommend setting this to the unique ID of the `Entity` in your system.
+	ReferenceID string `json:"reference_id"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID            respjson.Field
@@ -99,6 +104,7 @@ type Entity struct {
 		IsKYCComplete respjson.Field
 		Name          respjson.Field
 		Nationality   respjson.Field
+		ReferenceID   respjson.Field
 		ExtraFields   map[string]respjson.Field
 		raw           string
 	} `json:"-"`
@@ -122,6 +128,9 @@ const (
 type V2EntityNewParams struct {
 	// Name of the `Entity`.
 	Name string `json:"name,required"`
+	// Case sensitive unique reference ID for the `Entity`. We recommend setting this
+	// to the unique ID of the `Entity` in your system.
+	ReferenceID param.Opt[string] `json:"reference_id,omitzero"`
 	paramObj
 }
 
@@ -131,4 +140,20 @@ func (r V2EntityNewParams) MarshalJSON() (data []byte, err error) {
 }
 func (r *V2EntityNewParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2EntityListParams struct {
+	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
+	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	// Case sensitive unique reference ID for the `Entity`.
+	ReferenceID param.Opt[string] `query:"reference_id,omitzero" json:"-"`
+	paramObj
+}
+
+// URLQuery serializes [V2EntityListParams]'s query parameters as `url.Values`.
+func (r V2EntityListParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
 }

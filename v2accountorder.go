@@ -55,7 +55,8 @@ func (r *V2AccountOrderService) Get(ctx context.Context, orderID string, query V
 	return
 }
 
-// Get a list of all `Orders` under the `Account`.
+// Get a list of all `Orders` under the `Account`. Optionally `Orders` can be
+// filtered by chain ID or transaction hash.
 func (r *V2AccountOrderService) List(ctx context.Context, accountID string, query V2AccountOrderListParams, opts ...option.RequestOption) (res *[]Order, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
@@ -234,8 +235,16 @@ type V2AccountOrderGetParams struct {
 }
 
 type V2AccountOrderListParams struct {
-	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	// Transaction hash of the `Order`.
+	OrderTransactionHash param.Opt[string] `query:"order_transaction_hash,omitzero" json:"-"`
+	Page                 param.Opt[int64]  `query:"page,omitzero" json:"-"`
+	PageSize             param.Opt[int64]  `query:"page_size,omitzero" json:"-"`
+	// CAIP-2 formatted chain ID of the blockchain the `Order` was made on.
+	//
+	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
+	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
+	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337".
+	ChainID Chain `query:"chain_id,omitzero" json:"-"`
 	paramObj
 }
 
