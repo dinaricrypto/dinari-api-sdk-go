@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.2.0 (2025-06-24)
+
+Full Changelog: [v0.1.0...v0.2.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.1.0...v0.2.0)
+
+### Features
+
+* **api:** 20250624 new updates ([cc4f77b](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/cc4f77b740f9225ed4b1646e10754f2774eaa1ae))
+* **api:** Add link to docs ([25b3c06](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/25b3c06476e1a8e65825864dcacf9ecef11f0f10))
+* **api:** api update ([9d3a919](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/9d3a919a4cb2c9774f6409f631b50ad34b50660a))
+* **api:** api update ([341c8d8](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/341c8d8e20e8d4193f115d388085d9e20f9ae6f5))
+* **api:** api update ([23b16f4](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/23b16f4a5f6e52ca82f59149ae2f06ae2cbcce07))
+* **api:** api update ([f8c80c8](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/f8c80c875fcb0d89d33af49ceb6d695592696278))
+* **client:** add debug log helper ([08d1699](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/08d16996f15377e88a1b68ff07f6c90073fa49eb))
+* **client:** add escape hatch for null slice & maps ([a50563e](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/a50563eaac3261c9cbd794c407a89fcd170917b1))
+
+
+### Chores
+
+* **ci:** enable for pull requests ([4c1197b](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/4c1197b9ca41481fdda0b4d957a072a5ea68506a))
+* fix documentation of null map ([d561882](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/d5618820d5b954f2e2b61cee2205eb567b144665))
+
 ## 0.1.0 (2025-06-10)
 
 Full Changelog: [v0.1.0-alpha.2...v0.1.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.1.0-alpha.2...v0.1.0)
