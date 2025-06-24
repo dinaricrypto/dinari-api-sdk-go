@@ -49,6 +49,18 @@ func (r *V2EntityService) New(ctx context.Context, body V2EntityNewParams, opts 
 	return
 }
 
+// Update a specific customer `Entity` of your organization.
+func (r *V2EntityService) Update(ctx context.Context, entityID string, body V2EntityUpdateParams, opts ...option.RequestOption) (res *Entity, err error) {
+	opts = append(r.Options[:], opts...)
+	if entityID == "" {
+		err = errors.New("missing required entity_id parameter")
+		return
+	}
+	path := fmt.Sprintf("api/v2/entities/%s", entityID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
+	return
+}
+
 // Get a list of direct `Entities` your organization manages. These `Entities`
 // represent individual customers of your organization.
 func (r *V2EntityService) List(ctx context.Context, query V2EntityListParams, opts ...option.RequestOption) (res *[]Entity, err error) {
@@ -139,6 +151,21 @@ func (r V2EntityNewParams) MarshalJSON() (data []byte, err error) {
 	return param.MarshalObject(r, (*shadow)(&r))
 }
 func (r *V2EntityNewParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2EntityUpdateParams struct {
+	// Case sensitive unique reference ID for the `Entity`. We recommend setting this
+	// to the unique ID of the `Entity` in your system.
+	ReferenceID param.Opt[string] `json:"reference_id,omitzero"`
+	paramObj
+}
+
+func (r V2EntityUpdateParams) MarshalJSON() (data []byte, err error) {
+	type shadow V2EntityUpdateParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *V2EntityUpdateParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
