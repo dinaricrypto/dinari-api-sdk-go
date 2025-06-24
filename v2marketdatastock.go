@@ -283,6 +283,8 @@ type V2MarketDataStockGetQuoteResponse struct {
 	Price float64 `json:"price,required"`
 	// ID of the `Stock`
 	StockID string `json:"stock_id,required" format:"uuid"`
+	// When the Stock Quote was generated.
+	Timestamp time.Time `json:"timestamp,required" format:"date-time"`
 	// The change in price from the previous close.
 	Change float64 `json:"change"`
 	// The percentage change in price from the previous close.
@@ -308,6 +310,7 @@ type V2MarketDataStockGetQuoteResponse struct {
 	JSON struct {
 		Price                     respjson.Field
 		StockID                   respjson.Field
+		Timestamp                 respjson.Field
 		Change                    respjson.Field
 		ChangePercent             respjson.Field
 		Close                     respjson.Field

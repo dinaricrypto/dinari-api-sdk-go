@@ -13,7 +13,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 )
 
-func TestV2EntityNew(t *testing.T) {
+func TestV2EntityNewWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -28,7 +28,8 @@ func TestV2EntityNew(t *testing.T) {
 		option.WithAPISecretKey("My API Secret Key"),
 	)
 	_, err := client.V2.Entities.New(context.TODO(), dinariapisdkgo.V2EntityNewParams{
-		Name: "x",
+		Name:        "x",
+		ReferenceID: dinariapisdkgo.String("x"),
 	})
 	if err != nil {
 		var apierr *dinariapisdkgo.Error
@@ -39,7 +40,7 @@ func TestV2EntityNew(t *testing.T) {
 	}
 }
 
-func TestV2EntityList(t *testing.T) {
+func TestV2EntityListWithOptionalParams(t *testing.T) {
 	t.Skip("skipped: tests are disabled for the time being")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -53,7 +54,11 @@ func TestV2EntityList(t *testing.T) {
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
 	)
-	_, err := client.V2.Entities.List(context.TODO())
+	_, err := client.V2.Entities.List(context.TODO(), dinariapisdkgo.V2EntityListParams{
+		Page:        dinariapisdkgo.Int(1),
+		PageSize:    dinariapisdkgo.Int(1),
+		ReferenceID: dinariapisdkgo.String("x"),
+	})
 	if err != nil {
 		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {

@@ -89,6 +89,8 @@ func (r *V2EntityKYCService) Submit(ctx context.Context, entityID string, body V
 
 // KYC data for an `Entity`.
 type KYCData struct {
+	// Country of residence. ISO 3166-1 alpha 2 country code.
+	AddressCountryCode string `json:"address_country_code,required"`
 	// Country of citizenship or home country of the organization. ISO 3166-1 alpha 2
 	// country code.
 	CountryCode string `json:"country_code,required"`
@@ -118,6 +120,7 @@ type KYCData struct {
 	TaxIDNumber string `json:"tax_id_number"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
+		AddressCountryCode respjson.Field
 		CountryCode        respjson.Field
 		LastName           respjson.Field
 		AddressCity        respjson.Field
@@ -152,8 +155,10 @@ func (r KYCData) ToParam() KYCDataParam {
 
 // KYC data for an `Entity`.
 //
-// The properties CountryCode, LastName are required.
+// The properties AddressCountryCode, CountryCode, LastName are required.
 type KYCDataParam struct {
+	// Country of residence. ISO 3166-1 alpha 2 country code.
+	AddressCountryCode string `json:"address_country_code,required"`
 	// Country of citizenship or home country of the organization. ISO 3166-1 alpha 2
 	// country code.
 	CountryCode string `json:"country_code,required"`

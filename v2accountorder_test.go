@@ -61,8 +61,10 @@ func TestV2AccountOrderListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderListParams{
-			Page:     dinariapisdkgo.Int(1),
-			PageSize: dinariapisdkgo.Int(1),
+			ChainID:              dinariapisdkgo.ChainEip155_1,
+			OrderTransactionHash: dinariapisdkgo.String("order_transaction_hash"),
+			Page:                 dinariapisdkgo.Int(1),
+			PageSize:             dinariapisdkgo.Int(1),
 		},
 	)
 	if err != nil {
