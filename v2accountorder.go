@@ -172,6 +172,8 @@ type Order struct {
 	// For limit `Orders`, the price per asset, specified in the `Stock`'s native
 	// currency (USD for US equities and ETFs).
 	LimitPrice float64 `json:"limit_price"`
+	// Order Request ID for the `Order`
+	OrderRequestID string `json:"order_request_id" format:"uuid"`
 	// The payment token (stablecoin) address.
 	PaymentToken string `json:"payment_token" format:"eth_address"`
 	// Total amount of payment involved.
@@ -193,6 +195,7 @@ type Order struct {
 		CancelTransactionHash respjson.Field
 		Fee                   respjson.Field
 		LimitPrice            respjson.Field
+		OrderRequestID        respjson.Field
 		PaymentToken          respjson.Field
 		PaymentTokenQuantity  respjson.Field
 		ExtraFields           map[string]respjson.Field
