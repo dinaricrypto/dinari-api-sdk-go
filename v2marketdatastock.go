@@ -47,6 +47,30 @@ func (r *V2MarketDataStockService) List(ctx context.Context, query V2MarketDataS
 	return
 }
 
+// Get current price for a specified `Stock`.
+func (r *V2MarketDataStockService) GetCurrentPrice(ctx context.Context, stockID string, opts ...option.RequestOption) (res *V2MarketDataStockGetCurrentPriceResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if stockID == "" {
+		err = errors.New("missing required stock_id parameter")
+		return
+	}
+	path := fmt.Sprintf("api/v2/market_data/stocks/%s/current_price", stockID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
+// Get quote for a specified `Stock`.
+func (r *V2MarketDataStockService) GetCurrentQuote(ctx context.Context, stockID string, opts ...option.RequestOption) (res *V2MarketDataStockGetCurrentQuoteResponse, err error) {
+	opts = append(r.Options[:], opts...)
+	if stockID == "" {
+		err = errors.New("missing required stock_id parameter")
+		return
+	}
+	path := fmt.Sprintf("api/v2/market_data/stocks/%s/current_quote", stockID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	return
+}
+
 // Get a list of announced stock dividend details for a specified `Stock`.
 //
 // Note that this data applies only to actual stocks. Yield received for holding
@@ -142,6 +166,92 @@ type V2MarketDataStockListResponse struct {
 // Returns the unmodified JSON received from the API
 func (r V2MarketDataStockListResponse) RawJSON() string { return r.JSON.raw }
 func (r *V2MarketDataStockListResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2MarketDataStockGetCurrentPriceResponse struct {
+	// The ask price.
+	Price float64 `json:"price,required"`
+	// ID of the `Stock`
+	StockID string `json:"stock_id,required" format:"uuid"`
+	// When the Stock Quote was generated.
+	Timestamp time.Time `json:"timestamp,required" format:"date-time"`
+	// The change in price from the previous close.
+	Change float64 `json:"change"`
+	// The percentage change in price from the previous close.
+	ChangePercent float64 `json:"change_percent"`
+	// The close price from the given time period.
+	Close float64 `json:"close"`
+	// The highest price from the given time period
+	High float64 `json:"high"`
+	// The lowest price from the given time period.
+	Low float64 `json:"low"`
+	// The most recent close price of the ticker multiplied by weighted outstanding
+	// shares.
+	MarketCap int64 `json:"market_cap"`
+	// The open price from the given time period.
+	Open float64 `json:"open"`
+	// The close price for the `Stock` from the previous trading session.
+	PreviousClose float64 `json:"previous_close"`
+	// The trading volume from the given time period.
+	Volume float64 `json:"volume"`
+	// The number of shares outstanding in the given time period.
+	WeightedSharesOutstanding int64 `json:"weighted_shares_outstanding"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Price                     respjson.Field
+		StockID                   respjson.Field
+		Timestamp                 respjson.Field
+		Change                    respjson.Field
+		ChangePercent             respjson.Field
+		Close                     respjson.Field
+		High                      respjson.Field
+		Low                       respjson.Field
+		MarketCap                 respjson.Field
+		Open                      respjson.Field
+		PreviousClose             respjson.Field
+		Volume                    respjson.Field
+		WeightedSharesOutstanding respjson.Field
+		ExtraFields               map[string]respjson.Field
+		raw                       string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2MarketDataStockGetCurrentPriceResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockGetCurrentPriceResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2MarketDataStockGetCurrentQuoteResponse struct {
+	// The ask price.
+	AskPrice float64 `json:"ask_price,required"`
+	// The ask size.
+	AskSize float64 `json:"ask_size,required"`
+	// The bid price.
+	BidPrice float64 `json:"bid_price,required"`
+	// The bid size.
+	BidSize float64 `json:"bid_size,required"`
+	// ID of the `Stock`
+	StockID string `json:"stock_id,required" format:"uuid"`
+	// When the Stock Quote was generated.
+	Timestamp time.Time `json:"timestamp,required" format:"date-time"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		AskPrice    respjson.Field
+		AskSize     respjson.Field
+		BidPrice    respjson.Field
+		BidSize     respjson.Field
+		StockID     respjson.Field
+		Timestamp   respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2MarketDataStockGetCurrentQuoteResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockGetCurrentQuoteResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
