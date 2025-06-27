@@ -30,6 +30,7 @@ func TestV2ListOrdersWithOptionalParams(t *testing.T) {
 	_, err := client.V2.ListOrders(context.TODO(), dinariapisdkgo.V2ListOrdersParams{
 		ChainID:                         dinariapisdkgo.ChainEip155_1,
 		OrderFulfillmentTransactionHash: dinariapisdkgo.String("order_fulfillment_transaction_hash"),
+		OrderRequestID:                  dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		OrderTransactionHash:            dinariapisdkgo.String("order_transaction_hash"),
 		Page:                            dinariapisdkgo.Int(1),
 		PageSize:                        dinariapisdkgo.Int(1),
