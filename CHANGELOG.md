@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.3.0 (2025-06-27)
+
+Full Changelog: [v0.2.0...v0.3.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.2.0...v0.3.0)
+
+### Features
+
+* **api:** api update ([2225bce](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/2225bced5626e4cd834fc1245c806eacdc37ef9d))
+* **api:** api update ([71bae00](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/71bae000c777fb878dd2bd5d3f5bfcc82e70dd0b))
+* **api:** api update ([fe64a2a](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/fe64a2a588dbdaaa54176d1a2a3c4830ed75bc05))
+* **api:** api update ([f63812f](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/f63812f7e3ea7f54e472f20a1b9fa937ed30a964))
+* **api:** remove quote api ([93b68cd](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/93b68cd54227ac39c438608cecbfaf15c7951442))
+
+
+### Bug Fixes
+
+* don't try to deserialize as json when ResponseBodyInto is []byte ([1211cf4](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/1211cf4b054df77f03e35b505298d6efafae82d2))
+
 ## 0.2.0 (2025-06-24)
 
 Full Changelog: [v0.1.0...v0.2.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.1.0...v0.2.0)

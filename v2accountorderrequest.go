@@ -136,8 +136,9 @@ func (r *V2AccountOrderRequestService) GetFeeQuote(ctx context.Context, accountI
 //
 // The properties AssetQuantity, LimitPrice, StockID are required.
 type CreateLimitOrderInputParam struct {
-	// Quantity of shares to trade. Must be a positive integer.
-	AssetQuantity int64 `json:"asset_quantity,required"`
+	// Amount of dShare asset involved. Required for limit `Orders` and market sell
+	// `Orders`.
+	AssetQuantity float64 `json:"asset_quantity,required"`
 	// Price at which to execute the order. Must be a positive number with a precision
 	// of up to 2 decimal places.
 	LimitPrice float64 `json:"limit_price,required"`
