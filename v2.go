@@ -101,6 +101,8 @@ type V2ListOrdersResponse struct {
 	// For limit `Orders`, the price per asset, specified in the `Stock`'s native
 	// currency (USD for US equities and ETFs).
 	LimitPrice float64 `json:"limit_price"`
+	// Order Request ID for the `Order`
+	OrderRequestID string `json:"order_request_id" format:"uuid"`
 	// The payment token (stablecoin) address.
 	PaymentToken string `json:"payment_token" format:"eth_address"`
 	// Total amount of payment involved.
@@ -124,6 +126,7 @@ type V2ListOrdersResponse struct {
 		EntityID              respjson.Field
 		Fee                   respjson.Field
 		LimitPrice            respjson.Field
+		OrderRequestID        respjson.Field
 		PaymentToken          respjson.Field
 		PaymentTokenQuantity  respjson.Field
 		ExtraFields           map[string]respjson.Field
@@ -138,18 +141,20 @@ func (r *V2ListOrdersResponse) UnmarshalJSON(data []byte) error {
 }
 
 type V2ListOrdersParams struct {
+	// Fulfillment transaction hash of the `Order`.
+	OrderFulfillmentTransactionHash param.Opt[string] `query:"order_fulfillment_transaction_hash,omitzero" json:"-"`
+	// Order Request ID for the `Order`
+	OrderRequestID param.Opt[string] `query:"order_request_id,omitzero" format:"uuid" json:"-"`
+	// Transaction hash of the `Order`.
+	OrderTransactionHash param.Opt[string] `query:"order_transaction_hash,omitzero" json:"-"`
+	Page                 param.Opt[int64]  `query:"page,omitzero" json:"-"`
+	PageSize             param.Opt[int64]  `query:"page_size,omitzero" json:"-"`
 	// CAIP-2 formatted chain ID of the blockchain the `Order` was made on.
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337".
-	ChainID Chain `query:"chain_id,omitzero,required" json:"-"`
-	// Fulfillment transaction hash of the `Order`.
-	OrderFulfillmentTransactionHash param.Opt[string] `query:"order_fulfillment_transaction_hash,omitzero" json:"-"`
-	// Transaction hash of the `Order`.
-	OrderTransactionHash param.Opt[string] `query:"order_transaction_hash,omitzero" json:"-"`
-	Page                 param.Opt[int64]  `query:"page,omitzero" json:"-"`
-	PageSize             param.Opt[int64]  `query:"page_size,omitzero" json:"-"`
+	ChainID Chain `query:"chain_id,omitzero" json:"-"`
 	paramObj
 }
 
