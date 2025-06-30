@@ -210,10 +210,6 @@ Methods:
 
 ### OrderRequests
 
-Params Types:
-
-- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#CreateLimitOrderInputParam">CreateLimitOrderInputParam</a>
-
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#OrderRequest">OrderRequest</a>

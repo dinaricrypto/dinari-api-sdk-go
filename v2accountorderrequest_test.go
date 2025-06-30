@@ -92,12 +92,10 @@ func TestV2AccountOrderRequestNewLimitBuyWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestNewLimitBuyParams{
-			CreateLimitOrderInput: dinariapisdkgo.CreateLimitOrderInputParam{
-				AssetQuantity:      0,
-				LimitPrice:         0,
-				StockID:            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-				RecipientAccountID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-			},
+			AssetQuantity:      0,
+			LimitPrice:         0,
+			StockID:            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+			RecipientAccountID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		},
 	)
 	if err != nil {
@@ -127,12 +125,11 @@ func TestV2AccountOrderRequestNewLimitSellWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestNewLimitSellParams{
-			CreateLimitOrderInput: dinariapisdkgo.CreateLimitOrderInputParam{
-				AssetQuantity:      0,
-				LimitPrice:         0,
-				StockID:            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-				RecipientAccountID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-			},
+			AssetQuantity:       0,
+			LimitPrice:          0,
+			StockID:             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+			PaymentTokenAddress: dinariapisdkgo.String("payment_token_address"),
+			RecipientAccountID:  dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		},
 	)
 	if err != nil {
@@ -194,9 +191,10 @@ func TestV2AccountOrderRequestNewMarketSellWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestNewMarketSellParams{
-			AssetQuantity:      0,
-			StockID:            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-			RecipientAccountID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+			AssetQuantity:       0,
+			StockID:             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+			PaymentTokenAddress: dinariapisdkgo.String("payment_token_address"),
+			RecipientAccountID:  dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		},
 	)
 	if err != nil {
@@ -231,6 +229,7 @@ func TestV2AccountOrderRequestGetFeeQuoteWithOptionalParams(t *testing.T) {
 			StockID:              "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			AssetTokenQuantity:   dinariapisdkgo.Float(0),
 			LimitPrice:           dinariapisdkgo.Float(0),
+			PaymentTokenAddress:  dinariapisdkgo.String("payment_token_address"),
 			PaymentTokenQuantity: dinariapisdkgo.Float(0),
 		},
 	)
