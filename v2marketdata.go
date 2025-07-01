@@ -50,21 +50,39 @@ type V2MarketDataGetMarketHoursResponse struct {
 	NextSessionCloseDt time.Time `json:"next_session_close_dt,required" format:"date-time"`
 	// Datetime at which the next session opens. ISO 8601 timestamp.
 	NextSessionOpenDt time.Time `json:"next_session_open_dt,required" format:"date-time"`
+	// Time at which the current session after-hours end.
+	CurrentSessionAfterHoursCloseTimeDt time.Time `json:"current_session_after_hours_close_time_dt" format:"date-time"`
 	// Datetime at which the current session closes. `null` if the market is currently
 	// closed. ISO 8601 timestamp.
 	CurrentSessionCloseDt time.Time `json:"current_session_close_dt" format:"date-time"`
 	// Datetime at which the current session opened. `null` if the market is currently
 	// closed. ISO 8601 timestamp.
 	CurrentSessionOpenDt time.Time `json:"current_session_open_dt" format:"date-time"`
+	// Time at which the current session overnight starts.
+	CurrentSessionOvernightOpenTimeDt time.Time `json:"current_session_overnight_open_time_dt" format:"date-time"`
+	// Time at which the current session pre-market hours start.
+	CurrentSessionPreMarketOpenTimeDt time.Time `json:"current_session_pre_market_open_time_dt" format:"date-time"`
+	// Time at which the next session after-hours end.
+	NextSessionAfterHoursCloseTimeDt time.Time `json:"next_session_after_hours_close_time_dt" format:"date-time"`
+	// Time at which the next session overnight starts.
+	NextSessionOvernightOpenTimeDt time.Time `json:"next_session_overnight_open_time_dt" format:"date-time"`
+	// Time at which the next session pre-market hours start.
+	NextSessionPreMarketOpenTimeDt time.Time `json:"next_session_pre_market_open_time_dt" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		IsMarketOpen          respjson.Field
-		NextSessionCloseDt    respjson.Field
-		NextSessionOpenDt     respjson.Field
-		CurrentSessionCloseDt respjson.Field
-		CurrentSessionOpenDt  respjson.Field
-		ExtraFields           map[string]respjson.Field
-		raw                   string
+		IsMarketOpen                        respjson.Field
+		NextSessionCloseDt                  respjson.Field
+		NextSessionOpenDt                   respjson.Field
+		CurrentSessionAfterHoursCloseTimeDt respjson.Field
+		CurrentSessionCloseDt               respjson.Field
+		CurrentSessionOpenDt                respjson.Field
+		CurrentSessionOvernightOpenTimeDt   respjson.Field
+		CurrentSessionPreMarketOpenTimeDt   respjson.Field
+		NextSessionAfterHoursCloseTimeDt    respjson.Field
+		NextSessionOvernightOpenTimeDt      respjson.Field
+		NextSessionPreMarketOpenTimeDt      respjson.Field
+		ExtraFields                         map[string]respjson.Field
+		raw                                 string
 	} `json:"-"`
 }
 
