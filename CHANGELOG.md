@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.4.0 (2025-07-15)
+
+Full Changelog: [v0.3.0...v0.4.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.3.0...v0.4.0)
+
+### Features
+
+* **api:** api update ([9069221](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/906922130b6bbaba652ac94f8d6ba1b36bf0381b))
+* **api:** api update ([7e330a2](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/7e330a21da5d216d6bfc7726da450447a07fe036))
+* **api:** api update ([42f4e74](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/42f4e74f5820dc9690fadc791265af897e6a6aca))
+* **api:** manual updates ([e1365e8](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/e1365e8ca31cc7316989634199039f1c121a9570))
+
+
+### Chores
+
+* **ci:** only run for pushes and fork pull requests ([8a7cb33](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/8a7cb33eb06e709001d278fa7e543c0c765b7cc2))
+* **internal:** fix lint script for tests ([7ea8765](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/7ea8765d85c0772fdb3beb68112edb91b3757ef7))
+* lint tests ([933d1e2](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/933d1e23811f7560a19501631ec51056b673a69c))
+* lint tests in subpackages ([db4c246](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/db4c246f937cf66128f32775d4baa4b57c95e560))
+
 ## 0.3.0 (2025-06-27)
 
 Full Changelog: [v0.2.0...v0.3.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.2.0...v0.3.0)
