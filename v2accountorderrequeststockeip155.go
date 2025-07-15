@@ -165,6 +165,8 @@ type V2AccountOrderRequestStockEip155PrepareProxiedOrderParams struct {
 	//
 	// Any of "MARKET", "LIMIT".
 	OrderType OrderType `json:"order_type,omitzero,required"`
+	// Address of payment token.
+	PaymentToken string `json:"payment_token,required" format:"eth_address"`
 	// The ID of the `Stock` for which the `Order` is being placed.
 	StockID string `json:"stock_id,required" format:"uuid"`
 	// Amount of dShare asset tokens involved. Required for limit `Orders` and market
@@ -173,8 +175,6 @@ type V2AccountOrderRequestStockEip155PrepareProxiedOrderParams struct {
 	// Price per asset in the asset's native currency. USD for US equities and ETFs.
 	// Required for limit `Orders`.
 	LimitPrice param.Opt[float64] `json:"limit_price,omitzero"`
-	// Address of payment token.
-	PaymentToken param.Opt[string] `json:"payment_token,omitzero" format:"eth_address"`
 	// Amount of payment tokens involved. Required for market buy `Orders`.
 	PaymentTokenQuantity param.Opt[float64] `json:"payment_token_quantity,omitzero"`
 	paramObj
