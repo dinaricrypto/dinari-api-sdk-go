@@ -228,6 +228,7 @@ func TestV2AccountOrderRequestGetFeeQuoteWithOptionalParams(t *testing.T) {
 			OrderType:            dinariapisdkgo.OrderTypeMarket,
 			StockID:              "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			AssetTokenQuantity:   dinariapisdkgo.Float(0),
+			ChainID:              dinariapisdkgo.ChainEip155_1,
 			LimitPrice:           dinariapisdkgo.Float(0),
 			PaymentTokenAddress:  dinariapisdkgo.String("payment_token_address"),
 			PaymentTokenQuantity: dinariapisdkgo.Float(0),

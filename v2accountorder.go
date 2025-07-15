@@ -153,6 +153,8 @@ type Order struct {
 	//
 	// Any of "MARKET", "LIMIT".
 	OrderType OrderType `json:"order_type,required"`
+	// The payment token (stablecoin) address.
+	PaymentToken string `json:"payment_token,required" format:"eth_address"`
 	// Status of the `Order`.
 	//
 	// Any of "PENDING_SUBMIT", "PENDING_CANCEL", "PENDING_ESCROW", "PENDING_FILL",
@@ -174,8 +176,6 @@ type Order struct {
 	LimitPrice float64 `json:"limit_price"`
 	// Order Request ID for the `Order`
 	OrderRequestID string `json:"order_request_id" format:"uuid"`
-	// The payment token (stablecoin) address.
-	PaymentToken string `json:"payment_token" format:"eth_address"`
 	// Total amount of payment involved.
 	PaymentTokenQuantity float64 `json:"payment_token_quantity"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -188,6 +188,7 @@ type Order struct {
 		OrderTif              respjson.Field
 		OrderTransactionHash  respjson.Field
 		OrderType             respjson.Field
+		PaymentToken          respjson.Field
 		Status                respjson.Field
 		StockID               respjson.Field
 		AssetToken            respjson.Field
@@ -196,7 +197,6 @@ type Order struct {
 		Fee                   respjson.Field
 		LimitPrice            respjson.Field
 		OrderRequestID        respjson.Field
-		PaymentToken          respjson.Field
 		PaymentTokenQuantity  respjson.Field
 		ExtraFields           map[string]respjson.Field
 		raw                   string
