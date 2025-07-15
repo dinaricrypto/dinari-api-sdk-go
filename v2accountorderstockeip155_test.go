@@ -35,10 +35,10 @@ func TestV2AccountOrderStockEip155GetFeeQuoteWithOptionalParams(t *testing.T) {
 			OrderSide:            dinariapisdkgo.OrderSideBuy,
 			OrderTif:             dinariapisdkgo.OrderTifDay,
 			OrderType:            dinariapisdkgo.OrderTypeMarket,
+			PaymentToken:         "payment_token",
 			StockID:              "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			AssetTokenQuantity:   dinariapisdkgo.Float(0),
 			LimitPrice:           dinariapisdkgo.Float(0),
-			PaymentToken:         dinariapisdkgo.String("payment_token"),
 			PaymentTokenQuantity: dinariapisdkgo.Float(0),
 		},
 	)
@@ -73,10 +73,10 @@ func TestV2AccountOrderStockEip155PrepareOrderWithOptionalParams(t *testing.T) {
 			OrderSide:            dinariapisdkgo.OrderSideBuy,
 			OrderTif:             dinariapisdkgo.OrderTifDay,
 			OrderType:            dinariapisdkgo.OrderTypeMarket,
+			PaymentToken:         "payment_token",
 			StockID:              "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			AssetTokenQuantity:   dinariapisdkgo.Float(0),
 			LimitPrice:           dinariapisdkgo.Float(0),
-			PaymentToken:         dinariapisdkgo.String("payment_token"),
 			PaymentTokenQuantity: dinariapisdkgo.Float(0),
 		},
 	)

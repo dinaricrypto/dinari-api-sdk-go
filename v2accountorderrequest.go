@@ -349,6 +349,13 @@ type V2AccountOrderRequestGetFeeQuoteParams struct {
 	PaymentTokenAddress param.Opt[string] `json:"payment_token_address,omitzero" format:"eth_address"`
 	// Amount of payment tokens involved. Required for market buy `Order Requests`.
 	PaymentTokenQuantity param.Opt[float64] `json:"payment_token_quantity,omitzero"`
+	// CAIP-2 chain ID of the blockchain where the `Order Request` will be placed. If
+	// not provided, the default chain ID (eip155:42161) will be used.
+	//
+	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
+	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
+	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337".
+	ChainID Chain `json:"chain_id,omitzero"`
 	paramObj
 }
 
