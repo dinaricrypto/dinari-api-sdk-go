@@ -4,6 +4,7 @@ package dinariapisdkgo
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -131,6 +132,108 @@ func (r *V2AccountOrderRequestService) GetFeeQuote(ctx context.Context, accountI
 	return
 }
 
+// Input parameters for creating a limit buy `OrderRequest`.
+//
+// The properties AssetQuantity, LimitPrice, StockID are required.
+type CreateLimitBuyOrderInputParam struct {
+	// Amount of dShare asset involved. Required for limit `Orders` and market sell
+	// `Orders`.
+	AssetQuantity float64 `json:"asset_quantity,required"`
+	// Price at which to execute the order. Must be a positive number with a precision
+	// of up to 2 decimal places.
+	LimitPrice float64 `json:"limit_price,required"`
+	// ID of `Stock`.
+	StockID string `json:"stock_id,required" format:"uuid"`
+	// ID of `Account` to receive the `Order`.
+	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
+	paramObj
+}
+
+func (r CreateLimitBuyOrderInputParam) MarshalJSON() (data []byte, err error) {
+	type shadow CreateLimitBuyOrderInputParam
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *CreateLimitBuyOrderInputParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Input parameters for creating a limit sell `OrderRequest`.
+//
+// The properties AssetQuantity, LimitPrice, StockID are required.
+type CreateLimitSellOrderInputParam struct {
+	// Amount of dShare asset involved. Required for limit `Orders` and market sell
+	// `Orders`.
+	AssetQuantity float64 `json:"asset_quantity,required"`
+	// Price at which to execute the order. Must be a positive number with a precision
+	// of up to 2 decimal places.
+	LimitPrice float64 `json:"limit_price,required"`
+	// ID of `Stock`.
+	StockID string `json:"stock_id,required" format:"uuid"`
+	// Address of the payment token to be used for the sell order. If not provided, the
+	// default payment token (USD+) will be used. Should only be specified if
+	// `recipient_account_id` for a non-managed wallet account is also provided.
+	PaymentTokenAddress param.Opt[string] `json:"payment_token_address,omitzero" format:"eth_address"`
+	// ID of `Account` to receive the `Order`.
+	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
+	paramObj
+}
+
+func (r CreateLimitSellOrderInputParam) MarshalJSON() (data []byte, err error) {
+	type shadow CreateLimitSellOrderInputParam
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *CreateLimitSellOrderInputParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Input parameters for creating a market buy `OrderRequest`.
+//
+// The properties PaymentAmount, StockID are required.
+type CreateMarketBuyOrderInputParam struct {
+	// Amount of currency (USD for US equities and ETFs) to pay for the order. Must be
+	// a positive number with a precision of up to 2 decimal places.
+	PaymentAmount float64 `json:"payment_amount,required"`
+	// ID of `Stock`.
+	StockID string `json:"stock_id,required" format:"uuid"`
+	// ID of `Account` to receive the `Order`.
+	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
+	paramObj
+}
+
+func (r CreateMarketBuyOrderInputParam) MarshalJSON() (data []byte, err error) {
+	type shadow CreateMarketBuyOrderInputParam
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *CreateMarketBuyOrderInputParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Input parameters for creating a market sell `OrderRequest`.
+//
+// The properties AssetQuantity, StockID are required.
+type CreateMarketSellOrderInputParam struct {
+	// Quantity of shares to trade. Must be a positive number with a precision of up to
+	// 9 decimal places.
+	AssetQuantity float64 `json:"asset_quantity,required"`
+	// ID of `Stock`.
+	StockID string `json:"stock_id,required" format:"uuid"`
+	// Address of the payment token to be used for the sell order. If not provided, the
+	// default payment token (USD+) will be used. Should only be specified if
+	// `recipient_account_id` for a non-managed wallet account is also provided.
+	PaymentTokenAddress param.Opt[string] `json:"payment_token_address,omitzero" format:"eth_address"`
+	// ID of `Account` to receive the `Order`.
+	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
+	paramObj
+}
+
+func (r CreateMarketSellOrderInputParam) MarshalJSON() (data []byte, err error) {
+	type shadow CreateMarketSellOrderInputParam
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *CreateMarketSellOrderInputParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // A request to create an `Order`.
 //
 // An `OrderRequest` is created when a user places an order through the Dinari API.
@@ -238,93 +341,55 @@ func (r V2AccountOrderRequestListParams) URLQuery() (v url.Values, err error) {
 }
 
 type V2AccountOrderRequestNewLimitBuyParams struct {
-	// Amount of dShare asset involved. Required for limit `Orders` and market sell
-	// `Orders`.
-	AssetQuantity float64 `json:"asset_quantity,required"`
-	// Price at which to execute the order. Must be a positive number with a precision
-	// of up to 2 decimal places.
-	LimitPrice float64 `json:"limit_price,required"`
-	// ID of `Stock`.
-	StockID string `json:"stock_id,required" format:"uuid"`
-	// ID of `Account` to receive the `Order`.
-	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
+	// Input parameters for creating a limit buy `OrderRequest`.
+	CreateLimitBuyOrderInput CreateLimitBuyOrderInputParam
 	paramObj
 }
 
 func (r V2AccountOrderRequestNewLimitBuyParams) MarshalJSON() (data []byte, err error) {
-	type shadow V2AccountOrderRequestNewLimitBuyParams
-	return param.MarshalObject(r, (*shadow)(&r))
+	return json.Marshal(r.CreateLimitBuyOrderInput)
 }
 func (r *V2AccountOrderRequestNewLimitBuyParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
+	return json.Unmarshal(data, &r.CreateLimitBuyOrderInput)
 }
 
 type V2AccountOrderRequestNewLimitSellParams struct {
-	// Amount of dShare asset involved. Required for limit `Orders` and market sell
-	// `Orders`.
-	AssetQuantity float64 `json:"asset_quantity,required"`
-	// Price at which to execute the order. Must be a positive number with a precision
-	// of up to 2 decimal places.
-	LimitPrice float64 `json:"limit_price,required"`
-	// ID of `Stock`.
-	StockID string `json:"stock_id,required" format:"uuid"`
-	// Address of the payment token to be used for the sell order. If not provided, the
-	// default payment token (USD+) will be used. Should only be specified if
-	// `recipient_account_id` for a non-managed wallet account is also provided.
-	PaymentTokenAddress param.Opt[string] `json:"payment_token_address,omitzero" format:"eth_address"`
-	// ID of `Account` to receive the `Order`.
-	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
+	// Input parameters for creating a limit sell `OrderRequest`.
+	CreateLimitSellOrderInput CreateLimitSellOrderInputParam
 	paramObj
 }
 
 func (r V2AccountOrderRequestNewLimitSellParams) MarshalJSON() (data []byte, err error) {
-	type shadow V2AccountOrderRequestNewLimitSellParams
-	return param.MarshalObject(r, (*shadow)(&r))
+	return json.Marshal(r.CreateLimitSellOrderInput)
 }
 func (r *V2AccountOrderRequestNewLimitSellParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
+	return json.Unmarshal(data, &r.CreateLimitSellOrderInput)
 }
 
 type V2AccountOrderRequestNewMarketBuyParams struct {
-	// Amount of currency (USD for US equities and ETFs) to pay for the order. Must be
-	// a positive number with a precision of up to 2 decimal places.
-	PaymentAmount float64 `json:"payment_amount,required"`
-	// ID of `Stock`.
-	StockID string `json:"stock_id,required" format:"uuid"`
-	// ID of `Account` to receive the `Order`.
-	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
+	// Input parameters for creating a market buy `OrderRequest`.
+	CreateMarketBuyOrderInput CreateMarketBuyOrderInputParam
 	paramObj
 }
 
 func (r V2AccountOrderRequestNewMarketBuyParams) MarshalJSON() (data []byte, err error) {
-	type shadow V2AccountOrderRequestNewMarketBuyParams
-	return param.MarshalObject(r, (*shadow)(&r))
+	return json.Marshal(r.CreateMarketBuyOrderInput)
 }
 func (r *V2AccountOrderRequestNewMarketBuyParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
+	return json.Unmarshal(data, &r.CreateMarketBuyOrderInput)
 }
 
 type V2AccountOrderRequestNewMarketSellParams struct {
-	// Quantity of shares to trade. Must be a positive number with a precision of up to
-	// 9 decimal places.
-	AssetQuantity float64 `json:"asset_quantity,required"`
-	// ID of `Stock`.
-	StockID string `json:"stock_id,required" format:"uuid"`
-	// Address of the payment token to be used for the sell order. If not provided, the
-	// default payment token (USD+) will be used. Should only be specified if
-	// `recipient_account_id` for a non-managed wallet account is also provided.
-	PaymentTokenAddress param.Opt[string] `json:"payment_token_address,omitzero" format:"eth_address"`
-	// ID of `Account` to receive the `Order`.
-	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
+	// Input parameters for creating a market sell `OrderRequest`.
+	CreateMarketSellOrderInput CreateMarketSellOrderInputParam
 	paramObj
 }
 
 func (r V2AccountOrderRequestNewMarketSellParams) MarshalJSON() (data []byte, err error) {
-	type shadow V2AccountOrderRequestNewMarketSellParams
-	return param.MarshalObject(r, (*shadow)(&r))
+	return json.Marshal(r.CreateMarketSellOrderInput)
 }
 func (r *V2AccountOrderRequestNewMarketSellParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
+	return json.Unmarshal(data, &r.CreateMarketSellOrderInput)
 }
 
 type V2AccountOrderRequestGetFeeQuoteParams struct {

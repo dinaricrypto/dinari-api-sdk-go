@@ -210,6 +210,13 @@ Methods:
 
 ### OrderRequests
 
+Params Types:
+
+- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#CreateLimitBuyOrderInputParam">CreateLimitBuyOrderInputParam</a>
+- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#CreateLimitSellOrderInputParam">CreateLimitSellOrderInputParam</a>
+- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#CreateMarketBuyOrderInputParam">CreateMarketBuyOrderInputParam</a>
+- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#CreateMarketSellOrderInputParam">CreateMarketSellOrderInputParam</a>
+
 Response Types:
 
 - <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#OrderRequest">OrderRequest</a>
