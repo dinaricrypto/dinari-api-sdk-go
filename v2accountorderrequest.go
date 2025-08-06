@@ -13,6 +13,7 @@ import (
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
+	shimjson "github.com/dinaricrypto/dinari-api-sdk-go/internal/encoding/json"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
@@ -347,7 +348,7 @@ type V2AccountOrderRequestNewLimitBuyParams struct {
 }
 
 func (r V2AccountOrderRequestNewLimitBuyParams) MarshalJSON() (data []byte, err error) {
-	return json.Marshal(r.CreateLimitBuyOrderInput)
+	return shimjson.Marshal(r.CreateLimitBuyOrderInput)
 }
 func (r *V2AccountOrderRequestNewLimitBuyParams) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &r.CreateLimitBuyOrderInput)
@@ -360,7 +361,7 @@ type V2AccountOrderRequestNewLimitSellParams struct {
 }
 
 func (r V2AccountOrderRequestNewLimitSellParams) MarshalJSON() (data []byte, err error) {
-	return json.Marshal(r.CreateLimitSellOrderInput)
+	return shimjson.Marshal(r.CreateLimitSellOrderInput)
 }
 func (r *V2AccountOrderRequestNewLimitSellParams) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &r.CreateLimitSellOrderInput)
@@ -373,7 +374,7 @@ type V2AccountOrderRequestNewMarketBuyParams struct {
 }
 
 func (r V2AccountOrderRequestNewMarketBuyParams) MarshalJSON() (data []byte, err error) {
-	return json.Marshal(r.CreateMarketBuyOrderInput)
+	return shimjson.Marshal(r.CreateMarketBuyOrderInput)
 }
 func (r *V2AccountOrderRequestNewMarketBuyParams) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &r.CreateMarketBuyOrderInput)
@@ -386,7 +387,7 @@ type V2AccountOrderRequestNewMarketSellParams struct {
 }
 
 func (r V2AccountOrderRequestNewMarketSellParams) MarshalJSON() (data []byte, err error) {
-	return json.Marshal(r.CreateMarketSellOrderInput)
+	return shimjson.Marshal(r.CreateMarketSellOrderInput)
 }
 func (r *V2AccountOrderRequestNewMarketSellParams) UnmarshalJSON(data []byte) error {
 	return json.Unmarshal(data, &r.CreateMarketSellOrderInput)
