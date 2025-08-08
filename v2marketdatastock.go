@@ -261,27 +261,15 @@ type V2MarketDataStockGetDividendsResponse struct {
 	CashAmount float64 `json:"cash_amount"`
 	// Currency in which the dividend is paid.
 	Currency string `json:"currency"`
-	// Date on which the dividend was announced. In ISO 8601 format, YYYY-MM-DD.
-	DeclarationDate time.Time `json:"declaration_date" format:"date"`
 	// Type of dividend. Dividends that have been paid and/or are expected to be paid
 	// on consistent schedules are denoted as `CD`. Special Cash dividends that have
 	// been paid that are infrequent or unusual, and/or can not be expected to occur in
-	// the future are denoted as `SC`. Long-term and short-term capital gain
-	// distributions are denoted as `LT` and `ST`, respectively.
+	// the future are denoted as `SC`.
 	DividendType string `json:"dividend_type"`
 	// Date on or after which a `Stock` is traded without the right to receive the next
 	// dividend payment. If you purchase a `Stock` on or after the ex-dividend date,
 	// you will not receive the upcoming dividend. In ISO 8601 format, YYYY-MM-DD.
 	ExDividendDate time.Time `json:"ex_dividend_date" format:"date"`
-	// Frequency of the dividend. The following values are possible:
-	//
-	// - `1` - Annual
-	// - `2` - Semi-Annual
-	// - `4` - Quarterly
-	// - `12` - Monthly
-	// - `52` - Weekly
-	// - `365` - Daily
-	Frequency int64 `json:"frequency"`
 	// Date on which the dividend is paid out. In ISO 8601 format, YYYY-MM-DD.
 	PayDate time.Time `json:"pay_date" format:"date"`
 	// Date that the shares must be held to receive the dividend; set by the company.
@@ -291,17 +279,15 @@ type V2MarketDataStockGetDividendsResponse struct {
 	Ticker string `json:"ticker"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		CashAmount      respjson.Field
-		Currency        respjson.Field
-		DeclarationDate respjson.Field
-		DividendType    respjson.Field
-		ExDividendDate  respjson.Field
-		Frequency       respjson.Field
-		PayDate         respjson.Field
-		RecordDate      respjson.Field
-		Ticker          respjson.Field
-		ExtraFields     map[string]respjson.Field
-		raw             string
+		CashAmount     respjson.Field
+		Currency       respjson.Field
+		DividendType   respjson.Field
+		ExDividendDate respjson.Field
+		PayDate        respjson.Field
+		RecordDate     respjson.Field
+		Ticker         respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
 	} `json:"-"`
 }
 
