@@ -14,7 +14,7 @@ import (
 )
 
 func TestV2AccountOrderRequestGet(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -44,7 +44,7 @@ func TestV2AccountOrderRequestGet(t *testing.T) {
 }
 
 func TestV2AccountOrderRequestListWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -75,7 +75,7 @@ func TestV2AccountOrderRequestListWithOptionalParams(t *testing.T) {
 }
 
 func TestV2AccountOrderRequestNewLimitBuyWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -110,7 +110,7 @@ func TestV2AccountOrderRequestNewLimitBuyWithOptionalParams(t *testing.T) {
 }
 
 func TestV2AccountOrderRequestNewLimitSellWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -146,7 +146,7 @@ func TestV2AccountOrderRequestNewLimitSellWithOptionalParams(t *testing.T) {
 }
 
 func TestV2AccountOrderRequestNewMarketBuyWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -180,7 +180,7 @@ func TestV2AccountOrderRequestNewMarketBuyWithOptionalParams(t *testing.T) {
 }
 
 func TestV2AccountOrderRequestNewMarketSellWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -215,7 +215,7 @@ func TestV2AccountOrderRequestNewMarketSellWithOptionalParams(t *testing.T) {
 }
 
 func TestV2AccountOrderRequestGetFeeQuoteWithOptionalParams(t *testing.T) {
-	t.Skip("skipped: tests are disabled for the time being")
+	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
