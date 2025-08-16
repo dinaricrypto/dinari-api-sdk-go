@@ -159,6 +159,9 @@ const (
 	ChainEip155_98867     Chain = "eip155:98867"
 	ChainEip155_31337     Chain = "eip155:31337"
 	ChainEip155_1337      Chain = "eip155:1337"
+	ChainEip155_202110    Chain = "eip155:202110"
+	ChainEip155_179205    Chain = "eip155:179205"
+	ChainEip155_179202    Chain = "eip155:179202"
 )
 
 // Balance of a payment token in an `Account`.
@@ -169,7 +172,8 @@ type V2AccountGetCashBalancesResponse struct {
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
-	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337".
+	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337",
+	// "eip155:202110", "eip155:179205", "eip155:179202".
 	ChainID Chain `json:"chain_id,required"`
 	// Symbol of the payment token.
 	Symbol string `json:"symbol,required"`
@@ -269,7 +273,8 @@ type V2AccountGetPortfolioResponseAsset struct {
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
-	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337".
+	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337",
+	// "eip155:202110", "eip155:179205", "eip155:179202".
 	ChainID Chain `json:"chain_id,required"`
 	// ID of the underlying `Stock` represented by the dShare asset token.
 	StockID string `json:"stock_id,required" format:"uuid"`
@@ -342,7 +347,8 @@ type V2AccountMintSandboxTokensParams struct {
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
-	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337".
+	// "eip155:168587773", "eip155:98867", "eip155:31337", "eip155:1337",
+	// "eip155:202110", "eip155:179205", "eip155:179202".
 	ChainID Chain `json:"chain_id,omitzero"`
 	paramObj
 }
