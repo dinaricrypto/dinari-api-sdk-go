@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.5.0 (2025-08-20)
+
+Full Changelog: [v0.4.0...v0.5.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.4.0...v0.5.0)
+
+### Features
+
+* **api:** api update ([bbe0d2e](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/bbe0d2e9d8483c8c766efd5a3d16cb42342a6ef4))
+* **api:** api update ([2e3b1bd](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/2e3b1bdd2d64f9973f9dda818eeaa7a32c8c6dc7))
+* **api:** manual updates ([cbd9a4f](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/cbd9a4f4943c221d25586cb2502cf3ce8e1b362f))
+* **client:** support optional json html escaping ([ee0a82a](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/ee0a82a6948d8a5eab8af8b89e166463a6c4d6c2))
+
+
+### Bug Fixes
+
+* **client:** process custom base url ahead of time ([29e51da](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/29e51dafd42e05b782e33e11c312356c1eae2bca))
+
+
+### Chores
+
+* **internal:** update comment in script ([f9e5c6c](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/f9e5c6cd83d91896478b79f46c025af4b56becef))
+* **internal:** update test skipping reason ([2e22de3](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/2e22de3268f2c5b4b3aeac614266beacd516c150))
+* update @stainless-api/prism-cli to v5.15.0 ([bff825e](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/bff825efaaa9bc4c863240bc3c432b3ce80bcdae))
+
 ## 0.4.0 (2025-07-15)
 
 Full Changelog: [v0.3.0...v0.4.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.3.0...v0.4.0)
