@@ -75,8 +75,6 @@ const (
 	WalletChainIDEip155_84532     WalletChainID = "eip155:84532"
 	WalletChainIDEip155_168587773 WalletChainID = "eip155:168587773"
 	WalletChainIDEip155_98867     WalletChainID = "eip155:98867"
-	WalletChainIDEip155_31337     WalletChainID = "eip155:31337"
-	WalletChainIDEip155_1337      WalletChainID = "eip155:1337"
 	WalletChainIDEip155_202110    WalletChainID = "eip155:202110"
 	WalletChainIDEip155_179205    WalletChainID = "eip155:179205"
 	WalletChainIDEip155_179202    WalletChainID = "eip155:179202"
@@ -109,8 +107,8 @@ type V2AccountWalletExternalConnectParams struct {
 	//
 	// Any of "eip155:0", "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
 	// "eip155:7887", "eip155:98866", "eip155:11155111", "eip155:421614",
-	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:31337",
-	// "eip155:1337", "eip155:202110", "eip155:179205", "eip155:179202".
+	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:202110",
+	// "eip155:179205", "eip155:179202".
 	ChainID WalletChainID `json:"chain_id,omitzero,required"`
 	// Nonce contained within the connection message.
 	Nonce string `json:"nonce,required" format:"uuid"`
@@ -135,8 +133,8 @@ type V2AccountWalletExternalGetNonceParams struct {
 	//
 	// Any of "eip155:0", "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
 	// "eip155:7887", "eip155:98866", "eip155:11155111", "eip155:421614",
-	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:31337",
-	// "eip155:1337", "eip155:202110", "eip155:179205", "eip155:179202".
+	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:202110",
+	// "eip155:179205", "eip155:179202".
 	ChainID WalletChainID `query:"chain_id,omitzero,required" json:"-"`
 	// Address of the `Wallet` to connect.
 	WalletAddress string `query:"wallet_address,required" format:"eth_address" json:"-"`
