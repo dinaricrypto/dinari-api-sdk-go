@@ -69,8 +69,8 @@ type Wallet struct {
 	//
 	// Any of "eip155:0", "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
 	// "eip155:7887", "eip155:98866", "eip155:11155111", "eip155:421614",
-	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:31337",
-	// "eip155:1337", "eip155:202110", "eip155:179205", "eip155:179202".
+	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:202110",
+	// "eip155:179205", "eip155:179202".
 	ChainID WalletChainID `json:"chain_id,required"`
 	// Indicates whether the `Wallet` is flagged for AML violation.
 	IsAmlFlagged bool `json:"is_aml_flagged,required"`
@@ -99,8 +99,8 @@ type V2AccountWalletConnectInternalParams struct {
 	//
 	// Any of "eip155:0", "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
 	// "eip155:7887", "eip155:98866", "eip155:11155111", "eip155:421614",
-	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:31337",
-	// "eip155:1337", "eip155:202110", "eip155:179205", "eip155:179202".
+	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:202110",
+	// "eip155:179205", "eip155:179202".
 	ChainID WalletChainID `json:"chain_id,omitzero,required"`
 	// Address of the `Wallet`.
 	WalletAddress string `json:"wallet_address,required" format:"eth_address"`
