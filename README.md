@@ -1,6 +1,10 @@
 # Dinari Go API Library
 
+<!-- x-release-please-start-version -->
+
 <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go"><img src="https://pkg.go.dev/badge/github.com/dinaricrypto/dinari-api-sdk-go.svg" alt="Go Reference"></a>
+
+<!-- x-release-please-end -->
 
 The Dinari Go library provides convenient access to the [Dinari REST API](https://docs.dinari.com/)
 from applications written in Go.
