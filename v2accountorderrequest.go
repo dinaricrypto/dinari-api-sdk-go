@@ -122,6 +122,10 @@ func (r *V2AccountOrderRequestService) NewMarketSell(ctx context.Context, accoun
 
 // Get fee quote data for an `Order Request`. This is provided primarily for
 // informational purposes.
+//
+// For market buy orders, the notional amount of the order includes the fees. For
+// market and limit sell orders, fees are deducted from the proceeds of the sale.
+// For limit buy orders, the fees are added to the total cost of the order.
 func (r *V2AccountOrderRequestService) GetFeeQuote(ctx context.Context, accountID string, body V2AccountOrderRequestGetFeeQuoteParams, opts ...option.RequestOption) (res *V2AccountOrderRequestGetFeeQuoteResponse, err error) {
 	opts = append(r.Options[:], opts...)
 	if accountID == "" {
@@ -264,7 +268,7 @@ type OrderRequest struct {
 	OrderType OrderType `json:"order_type,required"`
 	// Status of `OrderRequest`.
 	//
-	// Any of "PENDING", "SUBMITTED", "ERROR", "CANCELLED".
+	// Any of "QUOTED", "PENDING", "PENDING_BRIDGE", "SUBMITTED", "ERROR", "CANCELLED".
 	Status OrderRequestStatus `json:"status,required"`
 	// ID of `Order` created from the `OrderRequest`. This is the primary identifier
 	// for the `/orders` routes.
@@ -297,10 +301,12 @@ func (r *OrderRequest) UnmarshalJSON(data []byte) error {
 type OrderRequestStatus string
 
 const (
-	OrderRequestStatusPending   OrderRequestStatus = "PENDING"
-	OrderRequestStatusSubmitted OrderRequestStatus = "SUBMITTED"
-	OrderRequestStatusError     OrderRequestStatus = "ERROR"
-	OrderRequestStatusCancelled OrderRequestStatus = "CANCELLED"
+	OrderRequestStatusQuoted        OrderRequestStatus = "QUOTED"
+	OrderRequestStatusPending       OrderRequestStatus = "PENDING"
+	OrderRequestStatusPendingBridge OrderRequestStatus = "PENDING_BRIDGE"
+	OrderRequestStatusSubmitted     OrderRequestStatus = "SUBMITTED"
+	OrderRequestStatusError         OrderRequestStatus = "ERROR"
+	OrderRequestStatusCancelled     OrderRequestStatus = "CANCELLED"
 )
 
 // A preview of the fee that would be collected when placing an Order Request.
