@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -48,7 +49,7 @@ func NewV2MarketDataStockSplitService(opts ...option.RequestOption) (r V2MarketD
 // into 10 shares, and the split becomes `COMPLETE` as trading resumes on the
 // `ex_date` with new split-adjusted prices.
 func (r *V2MarketDataStockSplitService) List(ctx context.Context, query V2MarketDataStockSplitListParams, opts ...option.RequestOption) (res *[]StockSplit, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/market_data/stocks/splits"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
@@ -64,7 +65,7 @@ func (r *V2MarketDataStockSplitService) List(ctx context.Context, query V2Market
 // into 10 shares, and the split becomes `COMPLETE` as trading resumes on the
 // `ex_date` with new split-adjusted prices.
 func (r *V2MarketDataStockSplitService) ListForStock(ctx context.Context, stockID string, query V2MarketDataStockSplitListForStockParams, opts ...option.RequestOption) (res *[]StockSplit, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
 		return

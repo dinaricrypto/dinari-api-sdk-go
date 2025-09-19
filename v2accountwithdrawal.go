@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -39,7 +40,7 @@ func NewV2AccountWithdrawalService(opts ...option.RequestOption) (r V2AccountWit
 
 // Get a specific `Withdrawal` by its ID.
 func (r *V2AccountWithdrawalService) Get(ctx context.Context, withdrawalID string, query V2AccountWithdrawalGetParams, opts ...option.RequestOption) (res *Withdrawal, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,7 +56,7 @@ func (r *V2AccountWithdrawalService) Get(ctx context.Context, withdrawalID strin
 
 // Get a list of all `Withdrawals` under the `Account`, sorted by most recent.
 func (r *V2AccountWithdrawalService) List(ctx context.Context, accountID string, query V2AccountWithdrawalListParams, opts ...option.RequestOption) (res *[]Withdrawal, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return

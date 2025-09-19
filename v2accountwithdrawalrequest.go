@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -43,7 +44,7 @@ func NewV2AccountWithdrawalRequestService(opts ...option.RequestOption) (r V2Acc
 // The recipient `Account` must belong to the same `Entity` as the managed
 // `Account`.
 func (r *V2AccountWithdrawalRequestService) New(ctx context.Context, accountID string, body V2AccountWithdrawalRequestNewParams, opts ...option.RequestOption) (res *WithdrawalRequest, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,7 +56,7 @@ func (r *V2AccountWithdrawalRequestService) New(ctx context.Context, accountID s
 
 // Get a specific `WithdrawalRequest` by its ID.
 func (r *V2AccountWithdrawalRequestService) Get(ctx context.Context, withdrawalRequestID string, query V2AccountWithdrawalRequestGetParams, opts ...option.RequestOption) (res *WithdrawalRequest, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -71,7 +72,7 @@ func (r *V2AccountWithdrawalRequestService) Get(ctx context.Context, withdrawalR
 
 // List `WithdrawalRequests` under the `Account`, sorted by most recent.
 func (r *V2AccountWithdrawalRequestService) List(ctx context.Context, accountID string, query V2AccountWithdrawalRequestListParams, opts ...option.RequestOption) (res *[]WithdrawalRequest, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return

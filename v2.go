@@ -6,6 +6,7 @@ import (
 	"context"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -44,7 +45,7 @@ func NewV2Service(opts ...option.RequestOption) (r V2Service) {
 // Get a list of all `Orders` under the `Entity`. Optionally `Orders` can be
 // transaction hash or fulfillment transaction hash.
 func (r *V2Service) ListOrders(ctx context.Context, query V2ListOrdersParams, opts ...option.RequestOption) (res *[]V2ListOrdersResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/orders/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return

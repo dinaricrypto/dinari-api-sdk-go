@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -41,7 +42,7 @@ func NewV2AccountOrderService(opts ...option.RequestOption) (r V2AccountOrderSer
 
 // Get a specific `Order` by its ID.
 func (r *V2AccountOrderService) Get(ctx context.Context, orderID string, query V2AccountOrderGetParams, opts ...option.RequestOption) (res *Order, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *V2AccountOrderService) Get(ctx context.Context, orderID string, query V
 // Get a list of all `Orders` under the `Account`. Optionally `Orders` can be
 // filtered by chain ID or transaction hash.
 func (r *V2AccountOrderService) List(ctx context.Context, accountID string, query V2AccountOrderListParams, opts ...option.RequestOption) (res *[]Order, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,7 +80,7 @@ func (r *V2AccountOrderService) List(ctx context.Context, accountID string, quer
 // Check the status using the "Get Order by ID" endpoint to confirm whether the
 // `Order` has been cancelled.
 func (r *V2AccountOrderService) Cancel(ctx context.Context, orderID string, body V2AccountOrderCancelParams, opts ...option.RequestOption) (res *Order, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if body.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -95,7 +96,7 @@ func (r *V2AccountOrderService) Cancel(ctx context.Context, orderID string, body
 
 // Get `OrderFulfillments` for a specific `Order`.
 func (r *V2AccountOrderService) GetFulfillments(ctx context.Context, orderID string, params V2AccountOrderGetFulfillmentsParams, opts ...option.RequestOption) (res *[]Fulfillment, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return

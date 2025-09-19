@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
@@ -43,7 +44,7 @@ func NewV2EntityService(opts ...option.RequestOption) (r V2EntityService) {
 // Create a new `Entity` to be managed by your organization. This `Entity`
 // represents an individual customer of your organization.
 func (r *V2EntityService) New(ctx context.Context, body V2EntityNewParams, opts ...option.RequestOption) (res *Entity, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/entities/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
@@ -51,7 +52,7 @@ func (r *V2EntityService) New(ctx context.Context, body V2EntityNewParams, opts 
 
 // Update a specific customer `Entity` of your organization.
 func (r *V2EntityService) Update(ctx context.Context, entityID string, body V2EntityUpdateParams, opts ...option.RequestOption) (res *Entity, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return
@@ -64,7 +65,7 @@ func (r *V2EntityService) Update(ctx context.Context, entityID string, body V2En
 // Get a list of direct `Entities` your organization manages. These `Entities`
 // represent individual customers of your organization.
 func (r *V2EntityService) List(ctx context.Context, query V2EntityListParams, opts ...option.RequestOption) (res *[]Entity, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/entities/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
@@ -72,7 +73,7 @@ func (r *V2EntityService) List(ctx context.Context, query V2EntityListParams, op
 
 // Get a specific customer `Entity` of your organization by their ID.
 func (r *V2EntityService) GetByID(ctx context.Context, entityID string, opts ...option.RequestOption) (res *Entity, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return
@@ -84,7 +85,7 @@ func (r *V2EntityService) GetByID(ctx context.Context, entityID string, opts ...
 
 // Get the current authenticated `Entity`, which represents your organization.
 func (r *V2EntityService) GetCurrent(ctx context.Context, opts ...option.RequestOption) (res *Entity, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/entities/me"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return

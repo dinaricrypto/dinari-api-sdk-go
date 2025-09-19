@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
@@ -42,7 +43,7 @@ func NewV2AccountOrderStockEip155Service(opts ...option.RequestOption) (r V2Acco
 // The `order_fee_contract_object` property contains the opaque fee quote structure
 // to be used.
 func (r *V2AccountOrderStockEip155Service) GetFeeQuote(ctx context.Context, accountID string, body V2AccountOrderStockEip155GetFeeQuoteParams, opts ...option.RequestOption) (res *V2AccountOrderStockEip155GetFeeQuoteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -60,7 +61,7 @@ func (r *V2AccountOrderStockEip155Service) GetFeeQuote(ctx context.Context, acco
 // sent to the EVM network to create the order. Note that the fee quote is already
 // included in the transactions, so no additional fee quote lookup is needed.
 func (r *V2AccountOrderStockEip155Service) PrepareOrder(ctx context.Context, accountID string, body V2AccountOrderStockEip155PrepareOrderParams, opts ...option.RequestOption) (res *V2AccountOrderStockEip155PrepareOrderResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return

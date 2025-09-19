@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -53,7 +54,7 @@ func NewV2AccountService(opts ...option.RequestOption) (r V2AccountService) {
 
 // Get a specific `Account` by its ID.
 func (r *V2AccountService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *Account, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -65,7 +66,7 @@ func (r *V2AccountService) Get(ctx context.Context, accountID string, opts ...op
 
 // Set the `Account` to be inactive. Inactive accounts cannot be used for trading.
 func (r *V2AccountService) Deactivate(ctx context.Context, accountID string, opts ...option.RequestOption) (res *Account, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -78,7 +79,7 @@ func (r *V2AccountService) Deactivate(ctx context.Context, accountID string, opt
 // Get the cash balances of the `Account`, including stablecoins and other cash
 // equivalents.
 func (r *V2AccountService) GetCashBalances(ctx context.Context, accountID string, opts ...option.RequestOption) (res *[]V2AccountGetCashBalancesResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -91,7 +92,7 @@ func (r *V2AccountService) GetCashBalances(ctx context.Context, accountID string
 // Get dividend payments made to the `Account` from dividend-bearing stock
 // holdings.
 func (r *V2AccountService) GetDividendPayments(ctx context.Context, accountID string, query V2AccountGetDividendPaymentsParams, opts ...option.RequestOption) (res *[]V2AccountGetDividendPaymentsResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -106,7 +107,7 @@ func (r *V2AccountService) GetDividendPayments(ctx context.Context, accountID st
 // Currently, the only yield-bearing stablecoin accepted by Dinari is
 // [USD+](https://usd.dinari.com/).
 func (r *V2AccountService) GetInterestPayments(ctx context.Context, accountID string, query V2AccountGetInterestPaymentsParams, opts ...option.RequestOption) (res *[]V2AccountGetInterestPaymentsResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -119,7 +120,7 @@ func (r *V2AccountService) GetInterestPayments(ctx context.Context, accountID st
 // Get the portfolio of the `Account`, excluding cash equivalents such as
 // stablecoins.
 func (r *V2AccountService) GetPortfolio(ctx context.Context, accountID string, opts ...option.RequestOption) (res *V2AccountGetPortfolioResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -134,7 +135,7 @@ func (r *V2AccountService) GetPortfolio(ctx context.Context, accountID string, o
 //
 // This feature is only supported in sandbox mode.
 func (r *V2AccountService) MintSandboxTokens(ctx context.Context, accountID string, body V2AccountMintSandboxTokensParams, opts ...option.RequestOption) (err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
