@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
@@ -38,7 +39,7 @@ func NewV2AccountWalletService(opts ...option.RequestOption) (r V2AccountWalletS
 
 // Connect an internal `Wallet` to the `Account`.
 func (r *V2AccountWalletService) ConnectInternal(ctx context.Context, accountID string, body V2AccountWalletConnectInternalParams, opts ...option.RequestOption) (res *Wallet, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -50,7 +51,7 @@ func (r *V2AccountWalletService) ConnectInternal(ctx context.Context, accountID 
 
 // Get the wallet connected to the `Account`.
 func (r *V2AccountWalletService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *Wallet, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -38,7 +39,7 @@ func NewV2AccountOrderRequestStockEip155Service(opts ...option.RequestOption) (r
 // Create a proxied order on EVM from a prepared proxied order. An `OrderRequest`
 // representing the proxied order is returned.
 func (r *V2AccountOrderRequestStockEip155Service) NewProxiedOrder(ctx context.Context, accountID string, body V2AccountOrderRequestStockEip155NewProxiedOrderParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -52,7 +53,7 @@ func (r *V2AccountOrderRequestStockEip155Service) NewProxiedOrder(ctx context.Co
 // necessary data to create an `OrderRequest` with a `Wallet` that is not
 // Dinari-managed.
 func (r *V2AccountOrderRequestStockEip155Service) PrepareProxiedOrder(ctx context.Context, accountID string, body V2AccountOrderRequestStockEip155PrepareProxiedOrderParams, opts ...option.RequestOption) (res *V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return

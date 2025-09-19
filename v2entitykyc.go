@@ -8,6 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -44,7 +45,7 @@ func NewV2EntityKYCService(opts ...option.RequestOption) (r V2EntityKYCService) 
 // returned. If there are no completed KYC checks, the most recent KYC check
 // information, regardless of status, will be returned.
 func (r *V2EntityKYCService) Get(ctx context.Context, entityID string, opts ...option.RequestOption) (res *KYCInfo, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return
@@ -61,7 +62,7 @@ func (r *V2EntityKYCService) Get(ctx context.Context, entityID string, opts ...o
 // customer for KYC verification. Once the customer completes this KYC flow, the
 // KYC check will be created and available in the KYC API.
 func (r *V2EntityKYCService) NewManagedCheck(ctx context.Context, entityID string, opts ...option.RequestOption) (res *V2EntityKYCNewManagedCheckResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return
@@ -77,7 +78,7 @@ func (r *V2EntityKYCService) NewManagedCheck(ctx context.Context, entityID strin
 // This feature is available for everyone in sandbox mode, and for specifically
 // provisioned partners in production.
 func (r *V2EntityKYCService) Submit(ctx context.Context, entityID string, body V2EntityKYCSubmitParams, opts ...option.RequestOption) (res *KYCInfo, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return

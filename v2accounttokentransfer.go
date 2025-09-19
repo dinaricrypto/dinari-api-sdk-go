@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -43,7 +44,7 @@ func NewV2AccountTokenTransferService(opts ...option.RequestOption) (r V2Account
 // from one `Account` to another. As such, only `Account`s that are connected to
 // Dinari-managed `Wallet`s can initiate `TokenTransfer`s.
 func (r *V2AccountTokenTransferService) New(ctx context.Context, accountID string, body V2AccountTokenTransferNewParams, opts ...option.RequestOption) (res *TokenTransfer, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,7 +60,7 @@ func (r *V2AccountTokenTransferService) New(ctx context.Context, accountID strin
 // from one `Account` to another. As such, only `Account`s that are connected to
 // Dinari-managed `Wallet`s can initiate `TokenTransfer`s.
 func (r *V2AccountTokenTransferService) Get(ctx context.Context, transferID string, query V2AccountTokenTransferGetParams, opts ...option.RequestOption) (res *TokenTransfer, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -79,7 +80,7 @@ func (r *V2AccountTokenTransferService) Get(ctx context.Context, transferID stri
 // from one `Account` to another. As such, only `Account`s that are connected to
 // Dinari-managed `Wallet`s can initiate `TokenTransfer`s.
 func (r *V2AccountTokenTransferService) List(ctx context.Context, accountID string, query V2AccountTokenTransferListParams, opts ...option.RequestOption) (res *[]TokenTransfer, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return

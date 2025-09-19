@@ -5,6 +5,7 @@ package dinariapisdkgo
 import (
 	"context"
 	"net/http"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -37,7 +38,7 @@ func NewV2MarketDataService(opts ...option.RequestOption) (r V2MarketDataService
 // Get the market hours for the current trading session and next open trading
 // session.
 func (r *V2MarketDataService) GetMarketHours(ctx context.Context, opts ...option.RequestOption) (res *V2MarketDataGetMarketHoursResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/market_data/market_hours/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return
