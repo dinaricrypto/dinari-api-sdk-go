@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -43,7 +44,7 @@ func NewV2AccountOrderRequestService(opts ...option.RequestOption) (r V2AccountO
 
 // Get a specific `OrderRequest` by its ID.
 func (r *V2AccountOrderRequestService) Get(ctx context.Context, orderRequestID string, query V2AccountOrderRequestGetParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -59,7 +60,7 @@ func (r *V2AccountOrderRequestService) Get(ctx context.Context, orderRequestID s
 
 // Lists `OrderRequests`.
 func (r *V2AccountOrderRequestService) List(ctx context.Context, accountID string, query V2AccountOrderRequestListParams, opts ...option.RequestOption) (res *[]OrderRequest, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -71,7 +72,7 @@ func (r *V2AccountOrderRequestService) List(ctx context.Context, accountID strin
 
 // Create a managed `OrderRequest` to place a limit buy `Order`.
 func (r *V2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accountID string, body V2AccountOrderRequestNewLimitBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -83,7 +84,7 @@ func (r *V2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accountI
 
 // Create a managed `OrderRequest` to place a limit sell `Order`.
 func (r *V2AccountOrderRequestService) NewLimitSell(ctx context.Context, accountID string, body V2AccountOrderRequestNewLimitSellParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -98,7 +99,7 @@ func (r *V2AccountOrderRequestService) NewLimitSell(ctx context.Context, account
 // [Fee Quote API](https://docs.dinari.com/reference/createproxiedorderfeequote#/)
 // for fee estimation.
 func (r *V2AccountOrderRequestService) NewMarketBuy(ctx context.Context, accountID string, body V2AccountOrderRequestNewMarketBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -110,7 +111,7 @@ func (r *V2AccountOrderRequestService) NewMarketBuy(ctx context.Context, account
 
 // Create a managed `OrderRequest` to place a market sell `Order`.
 func (r *V2AccountOrderRequestService) NewMarketSell(ctx context.Context, accountID string, body V2AccountOrderRequestNewMarketSellParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -127,7 +128,7 @@ func (r *V2AccountOrderRequestService) NewMarketSell(ctx context.Context, accoun
 // market and limit sell orders, fees are deducted from the proceeds of the sale.
 // For limit buy orders, the fees are added to the total cost of the order.
 func (r *V2AccountOrderRequestService) GetFeeQuote(ctx context.Context, accountID string, body V2AccountOrderRequestGetFeeQuoteParams, opts ...option.RequestOption) (res *V2AccountOrderRequestGetFeeQuoteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return

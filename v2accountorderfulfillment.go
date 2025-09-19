@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -39,7 +40,7 @@ func NewV2AccountOrderFulfillmentService(opts ...option.RequestOption) (r V2Acco
 
 // Get a specific `OrderFulfillment` by its ID.
 func (r *V2AccountOrderFulfillmentService) Get(ctx context.Context, orderFulfillmentID string, query V2AccountOrderFulfillmentGetParams, opts ...option.RequestOption) (res *Fulfillment, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -55,7 +56,7 @@ func (r *V2AccountOrderFulfillmentService) Get(ctx context.Context, orderFulfill
 
 // Query `OrderFulfillments` under the `Account`.
 func (r *V2AccountOrderFulfillmentService) Query(ctx context.Context, accountID string, query V2AccountOrderFulfillmentQueryParams, opts ...option.RequestOption) (res *[]Fulfillment, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return

@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiquery"
@@ -38,7 +39,7 @@ func NewV2AccountWalletExternalService(opts ...option.RequestOption) (r V2Accoun
 
 // Connect a `Wallet` to the `Account` after verifying the signature.
 func (r *V2AccountWalletExternalService) Connect(ctx context.Context, accountID string, body V2AccountWalletExternalConnectParams, opts ...option.RequestOption) (res *Wallet, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
@@ -50,7 +51,7 @@ func (r *V2AccountWalletExternalService) Connect(ctx context.Context, accountID 
 
 // Get a nonce and message to be signed in order to verify `Wallet` ownership.
 func (r *V2AccountWalletExternalService) GetNonce(ctx context.Context, accountID string, query V2AccountWalletExternalGetNonceParams, opts ...option.RequestOption) (res *V2AccountWalletExternalGetNonceResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return

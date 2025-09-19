@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -41,7 +42,7 @@ func NewV2MarketDataStockService(opts ...option.RequestOption) (r V2MarketDataSt
 
 // Get a list of `Stocks`.
 func (r *V2MarketDataStockService) List(ctx context.Context, query V2MarketDataStockListParams, opts ...option.RequestOption) (res *[]V2MarketDataStockListResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/market_data/stocks/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
@@ -49,7 +50,7 @@ func (r *V2MarketDataStockService) List(ctx context.Context, query V2MarketDataS
 
 // Get current price for a specified `Stock`.
 func (r *V2MarketDataStockService) GetCurrentPrice(ctx context.Context, stockID string, opts ...option.RequestOption) (res *V2MarketDataStockGetCurrentPriceResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
 		return
@@ -61,7 +62,7 @@ func (r *V2MarketDataStockService) GetCurrentPrice(ctx context.Context, stockID 
 
 // Get quote for a specified `Stock`.
 func (r *V2MarketDataStockService) GetCurrentQuote(ctx context.Context, stockID string, opts ...option.RequestOption) (res *V2MarketDataStockGetCurrentQuoteResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
 		return
@@ -76,7 +77,7 @@ func (r *V2MarketDataStockService) GetCurrentQuote(ctx context.Context, stockID 
 // Note that this data applies only to actual stocks. Yield received for holding
 // tokenized shares may differ from this.
 func (r *V2MarketDataStockService) GetDividends(ctx context.Context, stockID string, opts ...option.RequestOption) (res *[]V2MarketDataStockGetDividendsResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
 		return
@@ -89,7 +90,7 @@ func (r *V2MarketDataStockService) GetDividends(ctx context.Context, stockID str
 // Get historical price data for a specified `Stock`. Each index in the array
 // represents a single tick in a price chart.
 func (r *V2MarketDataStockService) GetHistoricalPrices(ctx context.Context, stockID string, query V2MarketDataStockGetHistoricalPricesParams, opts ...option.RequestOption) (res *[]V2MarketDataStockGetHistoricalPricesResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
 		return
@@ -102,7 +103,7 @@ func (r *V2MarketDataStockService) GetHistoricalPrices(ctx context.Context, stoc
 // Get the most recent news articles relating to a `Stock`, including a summary of
 // the article and a link to the original source.
 func (r *V2MarketDataStockService) GetNews(ctx context.Context, stockID string, query V2MarketDataStockGetNewsParams, opts ...option.RequestOption) (res *[]V2MarketDataStockGetNewsResponse, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
 		return

@@ -11,6 +11,7 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
+	"slices"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apiform"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -41,7 +42,7 @@ func NewV2EntityKYCDocumentService(opts ...option.RequestOption) (r V2EntityKYCD
 
 // Get uploaded documents for a KYC check
 func (r *V2EntityKYCDocumentService) Get(ctx context.Context, kycID string, query V2EntityKYCDocumentGetParams, opts ...option.RequestOption) (res *[]KYCDocument, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if query.EntityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return
@@ -58,7 +59,7 @@ func (r *V2EntityKYCDocumentService) Get(ctx context.Context, kycID string, quer
 // Upload KYC-related documentation for partners that are provisioned to provide
 // their own KYC data.
 func (r *V2EntityKYCDocumentService) Upload(ctx context.Context, kycID string, params V2EntityKYCDocumentUploadParams, opts ...option.RequestOption) (res *KYCDocument, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if params.EntityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return

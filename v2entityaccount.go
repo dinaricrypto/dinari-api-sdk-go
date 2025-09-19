@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
+	"slices"
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
@@ -40,7 +41,7 @@ func NewV2EntityAccountService(opts ...option.RequestOption) (r V2EntityAccountS
 // Create a new `Account` for a specific `Entity`. This `Entity` represents your
 // organization itself, or an individual customer of your organization.
 func (r *V2EntityAccountService) New(ctx context.Context, entityID string, opts ...option.RequestOption) (res *Account, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return
@@ -54,7 +55,7 @@ func (r *V2EntityAccountService) New(ctx context.Context, entityID string, opts 
 // represents your organization itself, or an individual customer of your
 // organization.
 func (r *V2EntityAccountService) List(ctx context.Context, entityID string, query V2EntityAccountListParams, opts ...option.RequestOption) (res *[]Account, err error) {
-	opts = append(r.Options[:], opts...)
+	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return
