@@ -114,10 +114,10 @@ const (
 type V2AccountOrderStockEip155GetFeeQuoteResponse struct {
 	// CAIP-2 chain ID of the blockchain where the `Order` will be placed
 	//
-	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
+	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
-	// "eip155:179202", "eip155:98865".
+	// "eip155:179202", "eip155:98865", "eip155:7887".
 	ChainID Chain `json:"chain_id,required"`
 	// The total quantity of the fees paid via payment token.
 	Fee float64 `json:"fee,required"`
@@ -145,7 +145,7 @@ func (r *V2AccountOrderStockEip155GetFeeQuoteResponse) UnmarshalJSON(data []byte
 type V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObject struct {
 	// EVM chain ID of the blockchain where the `Order` will be placed.
 	//
-	// Any of 42161, 1, 8453, 81457, 7887, 98866.
+	// Any of 42161, 1, 8453, 81457, 98866.
 	ChainID int64 `json:"chain_id,required"`
 	// `FeeQuote` structure to pass into contracts.
 	FeeQuote V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObjectFeeQuote `json:"fee_quote,required"`
@@ -266,10 +266,10 @@ func (r *V2AccountOrderStockEip155PrepareOrderResponseTransactionData) Unmarshal
 type V2AccountOrderStockEip155GetFeeQuoteParams struct {
 	// CAIP-2 chain ID of the blockchain where the `Order` will be placed.
 	//
-	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
+	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
-	// "eip155:179202", "eip155:98865".
+	// "eip155:179202", "eip155:98865", "eip155:7887".
 	ChainID Chain `json:"chain_id,omitzero,required"`
 	// Indicates whether `Order` is a buy or sell.
 	//
@@ -309,10 +309,10 @@ func (r *V2AccountOrderStockEip155GetFeeQuoteParams) UnmarshalJSON(data []byte) 
 type V2AccountOrderStockEip155PrepareOrderParams struct {
 	// CAIP-2 chain ID of the blockchain where the `Order` will be placed.
 	//
-	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
+	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
-	// "eip155:179202", "eip155:98865".
+	// "eip155:179202", "eip155:98865", "eip155:7887".
 	ChainID Chain `json:"chain_id,omitzero,required"`
 	// Indicates whether `Order` is a buy or sell.
 	//
