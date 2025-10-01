@@ -75,10 +75,10 @@ type Withdrawal struct {
 	AccountID string `json:"account_id,required" format:"uuid"`
 	// CAIP-2 chain ID of the blockchain where the `Withdrawal` is made.
 	//
-	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457", "eip155:7887",
+	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
-	// "eip155:179202", "eip155:98865".
+	// "eip155:179202", "eip155:98865", "eip155:7887".
 	ChainID Chain `json:"chain_id,required"`
 	// Address of USDC payment token that the `Withdrawal` will be received in.
 	PaymentTokenAddress string `json:"payment_token_address,required" format:"eth_address"`

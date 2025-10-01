@@ -69,7 +69,6 @@ const (
 	WalletChainIDEip155_42161     WalletChainID = "eip155:42161"
 	WalletChainIDEip155_8453      WalletChainID = "eip155:8453"
 	WalletChainIDEip155_81457     WalletChainID = "eip155:81457"
-	WalletChainIDEip155_7887      WalletChainID = "eip155:7887"
 	WalletChainIDEip155_98866     WalletChainID = "eip155:98866"
 	WalletChainIDEip155_11155111  WalletChainID = "eip155:11155111"
 	WalletChainIDEip155_421614    WalletChainID = "eip155:421614"
@@ -80,6 +79,7 @@ const (
 	WalletChainIDEip155_179205    WalletChainID = "eip155:179205"
 	WalletChainIDEip155_179202    WalletChainID = "eip155:179202"
 	WalletChainIDEip155_98865     WalletChainID = "eip155:98865"
+	WalletChainIDEip155_7887      WalletChainID = "eip155:7887"
 )
 
 // Connection message to sign to prove ownership of the `Wallet`.
@@ -108,9 +108,9 @@ type V2AccountWalletExternalConnectParams struct {
 	// is used for EOA wallets
 	//
 	// Any of "eip155:0", "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
-	// "eip155:7887", "eip155:98866", "eip155:11155111", "eip155:421614",
-	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:202110",
-	// "eip155:179205", "eip155:179202", "eip155:98865".
+	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
+	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
+	// "eip155:179202", "eip155:98865", "eip155:7887".
 	ChainID WalletChainID `json:"chain_id,omitzero,required"`
 	// Nonce contained within the connection message.
 	Nonce string `json:"nonce,required" format:"uuid"`
@@ -134,9 +134,9 @@ type V2AccountWalletExternalGetNonceParams struct {
 	// for EOA wallets
 	//
 	// Any of "eip155:0", "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
-	// "eip155:7887", "eip155:98866", "eip155:11155111", "eip155:421614",
-	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:202110",
-	// "eip155:179205", "eip155:179202", "eip155:98865".
+	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
+	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
+	// "eip155:179202", "eip155:98865", "eip155:7887".
 	ChainID WalletChainID `query:"chain_id,omitzero,required" json:"-"`
 	// Address of the `Wallet` to connect.
 	WalletAddress string `query:"wallet_address,required" format:"eth_address" json:"-"`
