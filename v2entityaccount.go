@@ -75,14 +75,17 @@ type Account struct {
 	EntityID string `json:"entity_id,required" format:"uuid"`
 	// Indicates whether the `Account` is active.
 	IsActive bool `json:"is_active,required"`
+	// ID of the brokerage account associated with the `Account`.
+	BrokerageAccountID string `json:"brokerage_account_id,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		ID          respjson.Field
-		CreatedDt   respjson.Field
-		EntityID    respjson.Field
-		IsActive    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		ID                 respjson.Field
+		CreatedDt          respjson.Field
+		EntityID           respjson.Field
+		IsActive           respjson.Field
+		BrokerageAccountID respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
 	} `json:"-"`
 }
 
