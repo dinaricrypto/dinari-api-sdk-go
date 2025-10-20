@@ -145,7 +145,7 @@ func (r *V2AccountOrderStockEip155GetFeeQuoteResponse) UnmarshalJSON(data []byte
 type V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObject struct {
 	// EVM chain ID of the blockchain where the `Order` will be placed.
 	//
-	// Any of 42161, 1, 8453, 81457, 98866.
+	// Any of 42161, 1, 8453, 81457, 98866, 202110.
 	ChainID int64 `json:"chain_id,required"`
 	// `FeeQuote` structure to pass into contracts.
 	FeeQuote V2AccountOrderStockEip155GetFeeQuoteResponseOrderFeeContractObjectFeeQuote `json:"fee_quote,required"`
