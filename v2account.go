@@ -119,14 +119,14 @@ func (r *V2AccountService) GetInterestPayments(ctx context.Context, accountID st
 
 // Get the portfolio of the `Account`, excluding cash equivalents such as
 // stablecoins.
-func (r *V2AccountService) GetPortfolio(ctx context.Context, accountID string, opts ...option.RequestOption) (res *V2AccountGetPortfolioResponse, err error) {
+func (r *V2AccountService) GetPortfolio(ctx context.Context, accountID string, query V2AccountGetPortfolioParams, opts ...option.RequestOption) (res *V2AccountGetPortfolioResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/portfolio", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return
 }
 
@@ -336,6 +336,23 @@ type V2AccountGetInterestPaymentsParams struct {
 // URLQuery serializes [V2AccountGetInterestPaymentsParams]'s query parameters as
 // `url.Values`.
 func (r V2AccountGetInterestPaymentsParams) URLQuery() (v url.Values, err error) {
+	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
+		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		NestedFormat: apiquery.NestedQueryFormatBrackets,
+	})
+}
+
+type V2AccountGetPortfolioParams struct {
+	// The page number.
+	Page param.Opt[int64] `query:"page,omitzero" json:"-"`
+	// The number of stocks to return per page, maximum number is 200.
+	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	paramObj
+}
+
+// URLQuery serializes [V2AccountGetPortfolioParams]'s query parameters as
+// `url.Values`.
+func (r V2AccountGetPortfolioParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,

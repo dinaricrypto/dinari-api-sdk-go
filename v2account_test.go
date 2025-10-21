@@ -153,7 +153,7 @@ func TestV2AccountGetInterestPaymentsWithOptionalParams(t *testing.T) {
 	}
 }
 
-func TestV2AccountGetPortfolio(t *testing.T) {
+func TestV2AccountGetPortfolioWithOptionalParams(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -167,7 +167,14 @@ func TestV2AccountGetPortfolio(t *testing.T) {
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
 	)
-	_, err := client.V2.Accounts.GetPortfolio(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+	_, err := client.V2.Accounts.GetPortfolio(
+		context.TODO(),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		dinariapisdkgo.V2AccountGetPortfolioParams{
+			Page:     dinariapisdkgo.Int(1),
+			PageSize: dinariapisdkgo.Int(1),
+		},
+	)
 	if err != nil {
 		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
