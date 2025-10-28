@@ -269,13 +269,14 @@ type OrderRequest struct {
 	OrderType OrderType `json:"order_type,required"`
 	// Status of `OrderRequest`.
 	//
-	// Any of "QUOTED", "PENDING", "PENDING_BRIDGE", "SUBMITTED", "ERROR", "CANCELLED".
+	// Any of "QUOTED", "PENDING", "PENDING_BRIDGE", "SUBMITTED", "ERROR", "CANCELLED",
+	// "EXPIRED".
 	Status OrderRequestStatus `json:"status,required"`
 	// ID of `Order` created from the `OrderRequest`. This is the primary identifier
 	// for the `/orders` routes.
-	OrderID string `json:"order_id" format:"uuid"`
+	OrderID string `json:"order_id,nullable" format:"uuid"`
 	// ID of recipient `Account`.
-	RecipientAccountID string `json:"recipient_account_id" format:"uuid"`
+	RecipientAccountID string `json:"recipient_account_id,nullable" format:"uuid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                 respjson.Field
@@ -308,6 +309,7 @@ const (
 	OrderRequestStatusSubmitted     OrderRequestStatus = "SUBMITTED"
 	OrderRequestStatusError         OrderRequestStatus = "ERROR"
 	OrderRequestStatusCancelled     OrderRequestStatus = "CANCELLED"
+	OrderRequestStatusExpired       OrderRequestStatus = "EXPIRED"
 )
 
 // A preview of the fee that would be collected when placing an Order Request.

@@ -104,12 +104,12 @@ type Entity struct {
 	// Indicates if `Entity` completed KYC.
 	IsKYCComplete bool `json:"is_kyc_complete,required"`
 	// Name of `Entity`.
-	Name string `json:"name"`
+	Name string `json:"name,nullable"`
 	// Nationality or home country of the `Entity`.
-	Nationality string `json:"nationality"`
+	Nationality string `json:"nationality,nullable"`
 	// Case sensitive unique reference ID that you can set for the `Entity`. We
 	// recommend setting this to the unique ID of the `Entity` in your system.
-	ReferenceID string `json:"reference_id"`
+	ReferenceID string `json:"reference_id,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID            respjson.Field
@@ -171,10 +171,10 @@ func (r *V2EntityUpdateParams) UnmarshalJSON(data []byte) error {
 }
 
 type V2EntityListParams struct {
-	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	// Case sensitive unique reference ID for the `Entity`.
 	ReferenceID param.Opt[string] `query:"reference_id,omitzero" json:"-"`
+	Page        param.Opt[int64]  `query:"page,omitzero" json:"-"`
+	PageSize    param.Opt[int64]  `query:"page_size,omitzero" json:"-"`
 	paramObj
 }
 
