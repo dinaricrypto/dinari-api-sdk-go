@@ -98,27 +98,27 @@ type KYCData struct {
 	// Last name of the person.
 	LastName string `json:"last_name,required"`
 	// City of address. Not all international addresses use this attribute.
-	AddressCity string `json:"address_city"`
+	AddressCity string `json:"address_city,nullable"`
 	// Postal code of residence address. Not all international addresses use this
 	// attribute.
-	AddressPostalCode string `json:"address_postal_code"`
+	AddressPostalCode string `json:"address_postal_code,nullable"`
 	// Street address of address.
-	AddressStreet1 string `json:"address_street_1"`
+	AddressStreet1 string `json:"address_street_1,nullable"`
 	// Extension of address, usually apartment or suite number.
-	AddressStreet2 string `json:"address_street_2"`
+	AddressStreet2 string `json:"address_street_2,nullable"`
 	// State or subdivision of address. In the US, this should be the unabbreviated
 	// name of the state. Not all international addresses use this attribute.
-	AddressSubdivision string `json:"address_subdivision"`
+	AddressSubdivision string `json:"address_subdivision,nullable"`
 	// Birth date of the individual. In ISO 8601 format, YYYY-MM-DD.
-	BirthDate time.Time `json:"birth_date" format:"date"`
+	BirthDate time.Time `json:"birth_date,nullable" format:"date"`
 	// Email address.
-	Email string `json:"email"`
+	Email string `json:"email,nullable"`
 	// First name of the person.
-	FirstName string `json:"first_name"`
+	FirstName string `json:"first_name,nullable"`
 	// Middle name of the user
-	MiddleName string `json:"middle_name"`
+	MiddleName string `json:"middle_name,nullable"`
 	// ID number of the official tax document of the country the entity belongs to.
-	TaxIDNumber string `json:"tax_id_number"`
+	TaxIDNumber string `json:"tax_id_number,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AddressCountryCode respjson.Field
@@ -207,9 +207,9 @@ type KYCInfo struct {
 	// Any of "PASS", "FAIL", "PENDING", "INCOMPLETE".
 	Status KYCInfoStatus `json:"status,required"`
 	// Datetime when the KYC was last checked. ISO 8601 timestamp.
-	CheckedDt time.Time `json:"checked_dt" format:"date-time"`
+	CheckedDt time.Time `json:"checked_dt,nullable" format:"date-time"`
 	// KYC data for an `Entity`.
-	Data KYCData `json:"data"`
+	Data KYCData `json:"data,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID          respjson.Field

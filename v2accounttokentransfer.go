@@ -119,7 +119,7 @@ type TokenTransfer struct {
 	UpdatedDt time.Time `json:"updated_dt,required" format:"date-time"`
 	// Transaction hash of the transfer on the blockchain, if applicable. This is only
 	// present if the transfer has been executed on-chain.
-	TransactionHash string `json:"transaction_hash" format:"hex_string"`
+	TransactionHash string `json:"transaction_hash,nullable" format:"hex_string"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                 respjson.Field

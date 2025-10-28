@@ -306,11 +306,11 @@ type V2AccountGetDividendPaymentsParams struct {
 	// End date, exclusive, in US Eastern time zone. ISO 8601 format, YYYY-MM-DD.
 	EndDate time.Time `query:"end_date,required" format:"date" json:"-"`
 	// Start date, inclusive, in US Eastern time zone. ISO 8601 format, YYYY-MM-DD.
-	StartDate time.Time        `query:"start_date,required" format:"date" json:"-"`
-	Page      param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize  param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	StartDate time.Time `query:"start_date,required" format:"date" json:"-"`
 	// Optional ID of the `Stock` to filter by
-	StockID param.Opt[string] `query:"stock_id,omitzero" format:"uuid" json:"-"`
+	StockID  param.Opt[string] `query:"stock_id,omitzero" format:"uuid" json:"-"`
+	Page     param.Opt[int64]  `query:"page,omitzero" json:"-"`
+	PageSize param.Opt[int64]  `query:"page_size,omitzero" json:"-"`
 	paramObj
 }
 

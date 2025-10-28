@@ -178,26 +178,26 @@ type V2MarketDataStockGetCurrentPriceResponse struct {
 	// When the Stock Quote was generated.
 	Timestamp time.Time `json:"timestamp,required" format:"date-time"`
 	// The change in price from the previous close.
-	Change float64 `json:"change"`
+	Change float64 `json:"change,nullable"`
 	// The percentage change in price from the previous close.
-	ChangePercent float64 `json:"change_percent"`
+	ChangePercent float64 `json:"change_percent,nullable"`
 	// The close price from the given time period.
-	Close float64 `json:"close"`
+	Close float64 `json:"close,nullable"`
 	// The highest price from the given time period
-	High float64 `json:"high"`
+	High float64 `json:"high,nullable"`
 	// The lowest price from the given time period.
-	Low float64 `json:"low"`
+	Low float64 `json:"low,nullable"`
 	// The most recent close price of the ticker multiplied by weighted outstanding
 	// shares.
-	MarketCap int64 `json:"market_cap"`
+	MarketCap int64 `json:"market_cap,nullable"`
 	// The open price from the given time period.
-	Open float64 `json:"open"`
+	Open float64 `json:"open,nullable"`
 	// The close price for the `Stock` from the previous trading session.
-	PreviousClose float64 `json:"previous_close"`
+	PreviousClose float64 `json:"previous_close,nullable"`
 	// The trading volume from the given time period.
-	Volume float64 `json:"volume"`
+	Volume float64 `json:"volume,nullable"`
 	// The number of shares outstanding in the given time period.
-	WeightedSharesOutstanding int64 `json:"weighted_shares_outstanding"`
+	WeightedSharesOutstanding int64 `json:"weighted_shares_outstanding,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Price                     respjson.Field
@@ -259,25 +259,25 @@ func (r *V2MarketDataStockGetCurrentQuoteResponse) UnmarshalJSON(data []byte) er
 // Information about a dividend announcement for a `Stock`.
 type V2MarketDataStockGetDividendsResponse struct {
 	// Cash amount of the dividend per share owned.
-	CashAmount float64 `json:"cash_amount"`
+	CashAmount float64 `json:"cash_amount,nullable"`
 	// Currency in which the dividend is paid.
-	Currency string `json:"currency"`
+	Currency string `json:"currency,nullable"`
 	// Type of dividend. Dividends that have been paid and/or are expected to be paid
 	// on consistent schedules are denoted as `CD`. Special Cash dividends that have
 	// been paid that are infrequent or unusual, and/or can not be expected to occur in
 	// the future are denoted as `SC`.
-	DividendType string `json:"dividend_type"`
+	DividendType string `json:"dividend_type,nullable"`
 	// Date on or after which a `Stock` is traded without the right to receive the next
 	// dividend payment. If you purchase a `Stock` on or after the ex-dividend date,
 	// you will not receive the upcoming dividend. In ISO 8601 format, YYYY-MM-DD.
-	ExDividendDate time.Time `json:"ex_dividend_date" format:"date"`
+	ExDividendDate time.Time `json:"ex_dividend_date,nullable" format:"date"`
 	// Date on which the dividend is paid out. In ISO 8601 format, YYYY-MM-DD.
-	PayDate time.Time `json:"pay_date" format:"date"`
+	PayDate time.Time `json:"pay_date,nullable" format:"date"`
 	// Date that the shares must be held to receive the dividend; set by the company.
 	// In ISO 8601 format, YYYY-MM-DD.
-	RecordDate time.Time `json:"record_date" format:"date"`
+	RecordDate time.Time `json:"record_date,nullable" format:"date"`
 	// Ticker symbol of the `Stock`.
-	Ticker string `json:"ticker"`
+	Ticker string `json:"ticker,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CashAmount     respjson.Field
@@ -343,7 +343,7 @@ type V2MarketDataStockGetNewsResponse struct {
 	Publisher string `json:"publisher,required"`
 	// Mobile-friendly Accelerated Mobile Page (AMP) URL of the news article, if
 	// available
-	AmpURL string `json:"amp_url"`
+	AmpURL string `json:"amp_url,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ArticleURL  respjson.Field

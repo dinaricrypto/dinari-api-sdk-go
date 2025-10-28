@@ -91,24 +91,24 @@ type V2ListOrdersResponse struct {
 	// The `Stock` ID associated with the `Order`
 	StockID string `json:"stock_id,required" format:"uuid"`
 	// Account ID the order was made for.
-	AccountID string `json:"account_id" format:"uuid"`
+	AccountID string `json:"account_id,nullable" format:"uuid"`
 	// The dShare asset token address.
-	AssetToken string `json:"asset_token" format:"eth_address"`
+	AssetToken string `json:"asset_token,nullable" format:"eth_address"`
 	// Total amount of assets involved.
-	AssetTokenQuantity float64 `json:"asset_token_quantity"`
+	AssetTokenQuantity float64 `json:"asset_token_quantity,nullable"`
 	// Transaction hash for cancellation of `Order`, if the `Order` was cancelled.
-	CancelTransactionHash string `json:"cancel_transaction_hash" format:"hex_string"`
+	CancelTransactionHash string `json:"cancel_transaction_hash,nullable" format:"hex_string"`
 	// Entity ID of the Order
-	EntityID string `json:"entity_id" format:"uuid"`
+	EntityID string `json:"entity_id,nullable" format:"uuid"`
 	// Fee amount associated with `Order`.
-	Fee float64 `json:"fee"`
+	Fee float64 `json:"fee,nullable"`
 	// For limit `Orders`, the price per asset, specified in the `Stock`'s native
 	// currency (USD for US equities and ETFs).
-	LimitPrice float64 `json:"limit_price"`
+	LimitPrice float64 `json:"limit_price,nullable"`
 	// Order Request ID for the `Order`
-	OrderRequestID string `json:"order_request_id" format:"uuid"`
+	OrderRequestID string `json:"order_request_id,nullable" format:"uuid"`
 	// Total amount of payment involved.
-	PaymentTokenQuantity float64 `json:"payment_token_quantity"`
+	PaymentTokenQuantity float64 `json:"payment_token_quantity,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                    respjson.Field

@@ -93,7 +93,7 @@ type Fulfillment struct {
 	// Transaction hash for this fulfillment.
 	TransactionHash string `json:"transaction_hash,required" format:"hex_string"`
 	// Fee amount, in payment tokens.
-	PaymentTokenFee float64 `json:"payment_token_fee"`
+	PaymentTokenFee float64 `json:"payment_token_fee,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                 respjson.Field
