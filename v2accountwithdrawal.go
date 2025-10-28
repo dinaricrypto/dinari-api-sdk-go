@@ -129,10 +129,10 @@ type V2AccountWithdrawalGetParams struct {
 }
 
 type V2AccountWithdrawalListParams struct {
-	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	// ID of the `WithdrawalRequest` to find `Withdrawals` for.
 	WithdrawalRequestID param.Opt[string] `query:"withdrawal_request_id,omitzero" format:"uuid" json:"-"`
+	Page                param.Opt[int64]  `query:"page,omitzero" json:"-"`
+	PageSize            param.Opt[int64]  `query:"page_size,omitzero" json:"-"`
 	paramObj
 }
 
