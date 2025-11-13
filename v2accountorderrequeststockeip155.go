@@ -36,22 +36,13 @@ func NewV2AccountOrderRequestStockEip155Service(opts ...option.RequestOption) (r
 	return
 }
 
-// Create a proxied order on EVM from a prepared proxied order. An `OrderRequest`
-// representing the proxied order is returned.
-func (r *V2AccountOrderRequestStockEip155Service) NewProxiedOrder(ctx context.Context, accountID string, body V2AccountOrderRequestStockEip155NewProxiedOrderParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
-	opts = slices.Concat(r.Options, opts)
-	if accountID == "" {
-		err = errors.New("missing required account_id parameter")
-		return
-	}
-	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/stocks/eip155", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
-}
-
 // Prepare a proxied order to be placed on EVM. The returned structure contains the
 // necessary data to create an `OrderRequest` with a `Wallet` that is not
 // Dinari-managed.
+//
+// **⚠️ This endpoint will be deprecated on 2025-12-15.**
+//
+// Deprecated: deprecated
 func (r *V2AccountOrderRequestStockEip155Service) PrepareProxiedOrder(ctx context.Context, accountID string, body V2AccountOrderRequestStockEip155PrepareProxiedOrderParams, opts ...option.RequestOption) (res *V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -127,26 +118,6 @@ func (r *V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse) UnmarshalJ
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type V2AccountOrderRequestStockEip155NewProxiedOrderParams struct {
-	// Signature of the order typed data, allowing Dinari to place the proxied order on
-	// behalf of the `Wallet`.
-	OrderSignature string `json:"order_signature,required" format:"hex_string"`
-	// Signature of the permit typed data, allowing Dinari to spend the payment token
-	// or dShare asset token on behalf of the owner.
-	PermitSignature string `json:"permit_signature,required" format:"hex_string"`
-	// ID of the prepared proxied order to be submitted as a proxied order.
-	PreparedProxiedOrderID string `json:"prepared_proxied_order_id,required" format:"uuid"`
-	paramObj
-}
-
-func (r V2AccountOrderRequestStockEip155NewProxiedOrderParams) MarshalJSON() (data []byte, err error) {
-	type shadow V2AccountOrderRequestStockEip155NewProxiedOrderParams
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *V2AccountOrderRequestStockEip155NewProxiedOrderParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type V2AccountOrderRequestStockEip155PrepareProxiedOrderParams struct {
 	// CAIP-2 chain ID of the blockchain where the `Order` will be placed.
 	//
@@ -169,16 +140,21 @@ type V2AccountOrderRequestStockEip155PrepareProxiedOrderParams struct {
 	OrderType OrderType `json:"order_type,omitzero,required"`
 	// Address of payment token.
 	PaymentToken string `json:"payment_token,required" format:"eth_address"`
-	// The ID of the `Stock` for which the `Order` is being placed.
-	StockID string `json:"stock_id,required" format:"uuid"`
 	// Amount of dShare asset tokens involved. Required for limit `Orders` and market
 	// sell `Orders`.
 	AssetTokenQuantity param.Opt[float64] `json:"asset_token_quantity,omitzero"`
+	// Customer-supplied unique identifier to map this `Order` to an order in the
+	// customer's systems.
+	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
 	// Price per asset in the asset's native currency. USD for US equities and ETFs.
 	// Required for limit `Orders`.
 	LimitPrice param.Opt[float64] `json:"limit_price,omitzero"`
 	// Amount of payment tokens involved. Required for market buy `Orders`.
 	PaymentTokenQuantity param.Opt[float64] `json:"payment_token_quantity,omitzero"`
+	// The ID of the `Stock` for which the `Order` is being placed.
+	StockID param.Opt[string] `json:"stock_id,omitzero" format:"uuid"`
+	// The ID of the `Token` for which the `Order` is being placed.
+	TokenID param.Opt[string] `json:"token_id,omitzero" format:"uuid"`
 	paramObj
 }
 

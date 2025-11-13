@@ -57,7 +57,7 @@ func (r *V2AccountOrderService) Get(ctx context.Context, orderID string, query V
 }
 
 // Get a list of all `Orders` under the `Account`. Optionally `Orders` can be
-// filtered by chain ID or transaction hash.
+// filtered by chain ID, transaction hash, or client order ID.
 func (r *V2AccountOrderService) List(ctx context.Context, accountID string, query V2AccountOrderListParams, opts ...option.RequestOption) (res *[]Order, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -171,6 +171,9 @@ type Order struct {
 	AssetTokenQuantity float64 `json:"asset_token_quantity,nullable"`
 	// Transaction hash for cancellation of `Order`, if the `Order` was cancelled.
 	CancelTransactionHash string `json:"cancel_transaction_hash,nullable" format:"hex_string"`
+	// Customer-supplied unique identifier to map this `Order` to an order in the
+	// customer's systems.
+	ClientOrderID string `json:"client_order_id,nullable"`
 	// Fee amount associated with `Order`.
 	Fee float64 `json:"fee,nullable"`
 	// For limit `Orders`, the price per asset, specified in the `Stock`'s native
@@ -196,6 +199,7 @@ type Order struct {
 		AssetToken            respjson.Field
 		AssetTokenQuantity    respjson.Field
 		CancelTransactionHash respjson.Field
+		ClientOrderID         respjson.Field
 		Fee                   respjson.Field
 		LimitPrice            respjson.Field
 		OrderRequestID        respjson.Field
@@ -240,6 +244,8 @@ type V2AccountOrderGetParams struct {
 }
 
 type V2AccountOrderListParams struct {
+	// Customer-supplied identifier to search for `Order`s.
+	ClientOrderID param.Opt[string] `query:"client_order_id,omitzero" json:"-"`
 	// Transaction hash of the `Order`.
 	OrderTransactionHash param.Opt[string] `query:"order_transaction_hash,omitzero" json:"-"`
 	Page                 param.Opt[int64]  `query:"page,omitzero" json:"-"`
