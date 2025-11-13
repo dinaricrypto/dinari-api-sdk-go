@@ -36,10 +36,12 @@ func TestV2AccountOrderStockEip155GetFeeQuoteWithOptionalParams(t *testing.T) {
 			OrderTif:             dinariapisdkgo.OrderTifDay,
 			OrderType:            dinariapisdkgo.OrderTypeMarket,
 			PaymentToken:         "payment_token",
-			StockID:              "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			AssetTokenQuantity:   dinariapisdkgo.Float(0),
+			ClientOrderID:        dinariapisdkgo.String("client_order_id"),
 			LimitPrice:           dinariapisdkgo.Float(0),
 			PaymentTokenQuantity: dinariapisdkgo.Float(0),
+			StockID:              dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+			TokenID:              dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		},
 	)
 	if err != nil {
@@ -74,10 +76,12 @@ func TestV2AccountOrderStockEip155PrepareOrderWithOptionalParams(t *testing.T) {
 			OrderTif:             dinariapisdkgo.OrderTifDay,
 			OrderType:            dinariapisdkgo.OrderTypeMarket,
 			PaymentToken:         "payment_token",
-			StockID:              "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			AssetTokenQuantity:   dinariapisdkgo.Float(0),
+			ClientOrderID:        dinariapisdkgo.String("client_order_id"),
 			LimitPrice:           dinariapisdkgo.Float(0),
 			PaymentTokenQuantity: dinariapisdkgo.Float(0),
+			StockID:              dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+			TokenID:              dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		},
 	)
 	if err != nil {

@@ -42,6 +42,10 @@ func NewV2AccountOrderStockEip155Service(opts ...option.RequestOption) (r V2Acco
 //
 // The `order_fee_contract_object` property contains the opaque fee quote structure
 // to be used.
+//
+// **⚠️ This endpoint will be deprecated on 2025-12-15.**
+//
+// Deprecated: deprecated
 func (r *V2AccountOrderStockEip155Service) GetFeeQuote(ctx context.Context, accountID string, body V2AccountOrderStockEip155GetFeeQuoteParams, opts ...option.RequestOption) (res *V2AccountOrderStockEip155GetFeeQuoteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -60,6 +64,10 @@ func (r *V2AccountOrderStockEip155Service) GetFeeQuote(ctx context.Context, acco
 // `Order` using Dinari's EVM smart contracts. Once signed, the transactions can be
 // sent to the EVM network to create the order. Note that the fee quote is already
 // included in the transactions, so no additional fee quote lookup is needed.
+//
+// **⚠️ This endpoint will be deprecated on 2025-12-15.**
+//
+// Deprecated: deprecated
 func (r *V2AccountOrderStockEip155Service) PrepareOrder(ctx context.Context, accountID string, body V2AccountOrderStockEip155PrepareOrderParams, opts ...option.RequestOption) (res *V2AccountOrderStockEip155PrepareOrderResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -285,16 +293,21 @@ type V2AccountOrderStockEip155GetFeeQuoteParams struct {
 	OrderType OrderType `json:"order_type,omitzero,required"`
 	// Address of payment token.
 	PaymentToken string `json:"payment_token,required" format:"eth_address"`
-	// The ID of the `Stock` for which the `Order` is being placed.
-	StockID string `json:"stock_id,required" format:"uuid"`
 	// Amount of dShare asset tokens involved. Required for limit `Orders` and market
 	// sell `Orders`.
 	AssetTokenQuantity param.Opt[float64] `json:"asset_token_quantity,omitzero"`
+	// Customer-supplied unique identifier to map this `Order` to an order in the
+	// customer's systems.
+	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
 	// Price per asset in the asset's native currency. USD for US equities and ETFs.
 	// Required for limit `Orders`.
 	LimitPrice param.Opt[float64] `json:"limit_price,omitzero"`
 	// Amount of payment tokens involved. Required for market buy `Orders`.
 	PaymentTokenQuantity param.Opt[float64] `json:"payment_token_quantity,omitzero"`
+	// The ID of the `Stock` for which the `Order` is being placed.
+	StockID param.Opt[string] `json:"stock_id,omitzero" format:"uuid"`
+	// The ID of the `Token` for which the `Order` is being placed.
+	TokenID param.Opt[string] `json:"token_id,omitzero" format:"uuid"`
 	paramObj
 }
 
@@ -328,16 +341,21 @@ type V2AccountOrderStockEip155PrepareOrderParams struct {
 	OrderType OrderType `json:"order_type,omitzero,required"`
 	// Address of payment token.
 	PaymentToken string `json:"payment_token,required" format:"eth_address"`
-	// The ID of the `Stock` for which the `Order` is being placed.
-	StockID string `json:"stock_id,required" format:"uuid"`
 	// Amount of dShare asset tokens involved. Required for limit `Orders` and market
 	// sell `Orders`.
 	AssetTokenQuantity param.Opt[float64] `json:"asset_token_quantity,omitzero"`
+	// Customer-supplied unique identifier to map this `Order` to an order in the
+	// customer's systems.
+	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
 	// Price per asset in the asset's native currency. USD for US equities and ETFs.
 	// Required for limit `Orders`.
 	LimitPrice param.Opt[float64] `json:"limit_price,omitzero"`
 	// Amount of payment tokens involved. Required for market buy `Orders`.
 	PaymentTokenQuantity param.Opt[float64] `json:"payment_token_quantity,omitzero"`
+	// The ID of the `Stock` for which the `Order` is being placed.
+	StockID param.Opt[string] `json:"stock_id,omitzero" format:"uuid"`
+	// The ID of the `Token` for which the `Order` is being placed.
+	TokenID param.Opt[string] `json:"token_id,omitzero" format:"uuid"`
 	paramObj
 }
 
