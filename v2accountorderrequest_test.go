@@ -61,8 +61,11 @@ func TestV2AccountOrderRequestListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestListParams{
-			Page:     dinariapisdkgo.Int(1),
-			PageSize: dinariapisdkgo.Int(1),
+			ClientOrderID:  dinariapisdkgo.String("client_order_id"),
+			OrderID:        dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+			OrderRequestID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+			Page:           dinariapisdkgo.Int(1),
+			PageSize:       dinariapisdkgo.Int(1),
 		},
 	)
 	if err != nil {
@@ -96,6 +99,7 @@ func TestV2AccountOrderRequestNewLimitBuyWithOptionalParams(t *testing.T) {
 				AssetQuantity:      0,
 				LimitPrice:         0,
 				StockID:            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+				ClientOrderID:      dinariapisdkgo.String("client_order_id"),
 				RecipientAccountID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			},
 		},
@@ -131,6 +135,7 @@ func TestV2AccountOrderRequestNewLimitSellWithOptionalParams(t *testing.T) {
 				AssetQuantity:       0,
 				LimitPrice:          0,
 				StockID:             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+				ClientOrderID:       dinariapisdkgo.String("client_order_id"),
 				PaymentTokenAddress: dinariapisdkgo.String("payment_token_address"),
 				RecipientAccountID:  dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			},
@@ -166,6 +171,7 @@ func TestV2AccountOrderRequestNewMarketBuyWithOptionalParams(t *testing.T) {
 			CreateMarketBuyOrderInput: dinariapisdkgo.CreateMarketBuyOrderInputParam{
 				PaymentAmount:      0,
 				StockID:            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+				ClientOrderID:      dinariapisdkgo.String("client_order_id"),
 				RecipientAccountID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			},
 		},
@@ -200,6 +206,7 @@ func TestV2AccountOrderRequestNewMarketSellWithOptionalParams(t *testing.T) {
 			CreateMarketSellOrderInput: dinariapisdkgo.CreateMarketSellOrderInputParam{
 				AssetQuantity:       0,
 				StockID:             "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+				ClientOrderID:       dinariapisdkgo.String("client_order_id"),
 				PaymentTokenAddress: dinariapisdkgo.String("payment_token_address"),
 				RecipientAccountID:  dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			},

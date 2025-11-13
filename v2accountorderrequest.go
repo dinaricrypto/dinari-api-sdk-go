@@ -58,7 +58,8 @@ func (r *V2AccountOrderRequestService) Get(ctx context.Context, orderRequestID s
 	return
 }
 
-// Lists `OrderRequests`.
+// Lists `OrderRequests`. Optionally `OrderRequests` can be filtered by certain
+// parameters.
 func (r *V2AccountOrderRequestService) List(ctx context.Context, accountID string, query V2AccountOrderRequestListParams, opts ...option.RequestOption) (res *[]OrderRequest, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -71,6 +72,14 @@ func (r *V2AccountOrderRequestService) List(ctx context.Context, accountID strin
 }
 
 // Create a managed `OrderRequest` to place a limit buy `Order`.
+//
+// Fees for the `Order` are included in the transaction. Refer to our
+// [Fee Quote API](https://docs.dinari.com/reference/createproxiedorderfeequote#/)
+// for fee estimation.
+//
+// If an `OrderRequest` with the same `client_order_id` already exists for the
+// given account, the existing `OrderRequest` will be returned instead of creating
+// a new one.
 func (r *V2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accountID string, body V2AccountOrderRequestNewLimitBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -83,6 +92,14 @@ func (r *V2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accountI
 }
 
 // Create a managed `OrderRequest` to place a limit sell `Order`.
+//
+// Fees for the `Order` are included in the transaction. Refer to our
+// [Fee Quote API](https://docs.dinari.com/reference/createproxiedorderfeequote#/)
+// for fee estimation.
+//
+// If an `OrderRequest` with the same `client_order_id` already exists for the
+// given account, the existing `OrderRequest` will be returned instead of creating
+// a new one.
 func (r *V2AccountOrderRequestService) NewLimitSell(ctx context.Context, accountID string, body V2AccountOrderRequestNewLimitSellParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -94,10 +111,15 @@ func (r *V2AccountOrderRequestService) NewLimitSell(ctx context.Context, account
 	return
 }
 
-// Create a managed `OrderRequest` to place a market buy `Order`. Fees for the
-// `Order` are included in the transaction. Refer to our
+// Create a managed `OrderRequest` to place a market buy `Order`.
+//
+// Fees for the `Order` are included in the transaction. Refer to our
 // [Fee Quote API](https://docs.dinari.com/reference/createproxiedorderfeequote#/)
 // for fee estimation.
+//
+// If an `OrderRequest` with the same `client_order_id` already exists for the
+// given account, the existing `OrderRequest` will be returned instead of creating
+// a new one.
 func (r *V2AccountOrderRequestService) NewMarketBuy(ctx context.Context, accountID string, body V2AccountOrderRequestNewMarketBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -110,6 +132,14 @@ func (r *V2AccountOrderRequestService) NewMarketBuy(ctx context.Context, account
 }
 
 // Create a managed `OrderRequest` to place a market sell `Order`.
+//
+// Fees for the `Order` are included in the transaction. Refer to our
+// [Fee Quote API](https://docs.dinari.com/reference/createproxiedorderfeequote#/)
+// for fee estimation.
+//
+// If an `OrderRequest` with the same `client_order_id` already exists for the
+// given account, the existing `OrderRequest` will be returned instead of creating
+// a new one.
 func (r *V2AccountOrderRequestService) NewMarketSell(ctx context.Context, accountID string, body V2AccountOrderRequestNewMarketSellParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -150,6 +180,9 @@ type CreateLimitBuyOrderInputParam struct {
 	LimitPrice float64 `json:"limit_price,required"`
 	// ID of `Stock`.
 	StockID string `json:"stock_id,required" format:"uuid"`
+	// Customer-supplied ID to map this order to an order in their own systems. Must be
+	// unique within the entity.
+	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
 	// ID of `Account` to receive the `Order`.
 	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
 	paramObj
@@ -175,6 +208,9 @@ type CreateLimitSellOrderInputParam struct {
 	LimitPrice float64 `json:"limit_price,required"`
 	// ID of `Stock`.
 	StockID string `json:"stock_id,required" format:"uuid"`
+	// Customer-supplied ID to map this order to an order in their own systems. Must be
+	// unique within the entity.
+	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
 	// Address of the payment token to be used for the sell order. If not provided, the
 	// default payment token (USD+) will be used. Should only be specified if
 	// `recipient_account_id` for a non-managed wallet account is also provided.
@@ -201,6 +237,9 @@ type CreateMarketBuyOrderInputParam struct {
 	PaymentAmount float64 `json:"payment_amount,required"`
 	// ID of `Stock`.
 	StockID string `json:"stock_id,required" format:"uuid"`
+	// Customer-supplied ID to map this order to an order in their own systems. Must be
+	// unique within the entity.
+	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
 	// ID of `Account` to receive the `Order`.
 	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
 	paramObj
@@ -223,6 +262,9 @@ type CreateMarketSellOrderInputParam struct {
 	AssetQuantity float64 `json:"asset_quantity,required"`
 	// ID of `Stock`.
 	StockID string `json:"stock_id,required" format:"uuid"`
+	// Customer-supplied ID to map this order to an order in their own systems. Must be
+	// unique within the entity.
+	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
 	// Address of the payment token to be used for the sell order. If not provided, the
 	// default payment token (USD+) will be used. Should only be specified if
 	// `recipient_account_id` for a non-managed wallet account is also provided.
@@ -272,6 +314,9 @@ type OrderRequest struct {
 	// Any of "QUOTED", "PENDING", "PENDING_BRIDGE", "SUBMITTED", "ERROR", "CANCELLED",
 	// "EXPIRED".
 	Status OrderRequestStatus `json:"status,required"`
+	// Customer-supplied ID to map this `OrderRequest` to an order in their own
+	// systems.
+	ClientOrderID string `json:"client_order_id,nullable"`
 	// ID of `Order` created from the `OrderRequest`. This is the primary identifier
 	// for the `/orders` routes.
 	OrderID string `json:"order_id,nullable" format:"uuid"`
@@ -286,6 +331,7 @@ type OrderRequest struct {
 		OrderTif           respjson.Field
 		OrderType          respjson.Field
 		Status             respjson.Field
+		ClientOrderID      respjson.Field
 		OrderID            respjson.Field
 		RecipientAccountID respjson.Field
 		ExtraFields        map[string]respjson.Field
@@ -336,8 +382,15 @@ type V2AccountOrderRequestGetParams struct {
 }
 
 type V2AccountOrderRequestListParams struct {
-	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	// Customer-supplied ID to map this `OrderRequest` to an order in their own
+	// systems.
+	ClientOrderID param.Opt[string] `query:"client_order_id,omitzero" json:"-"`
+	// Order ID for the `OrderRequest`
+	OrderID param.Opt[string] `query:"order_id,omitzero" format:"uuid" json:"-"`
+	// Order Request ID for the `OrderRequest`
+	OrderRequestID param.Opt[string] `query:"order_request_id,omitzero" format:"uuid" json:"-"`
+	Page           param.Opt[int64]  `query:"page,omitzero" json:"-"`
+	PageSize       param.Opt[int64]  `query:"page_size,omitzero" json:"-"`
 	paramObj
 }
 

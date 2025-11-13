@@ -98,6 +98,9 @@ type V2ListOrdersResponse struct {
 	AssetTokenQuantity float64 `json:"asset_token_quantity,nullable"`
 	// Transaction hash for cancellation of `Order`, if the `Order` was cancelled.
 	CancelTransactionHash string `json:"cancel_transaction_hash,nullable" format:"hex_string"`
+	// Customer-supplied unique identifier to map this `Order` to an order in the
+	// customer's systems.
+	ClientOrderID string `json:"client_order_id,nullable"`
 	// Entity ID of the Order
 	EntityID string `json:"entity_id,nullable" format:"uuid"`
 	// Fee amount associated with `Order`.
@@ -126,6 +129,7 @@ type V2ListOrdersResponse struct {
 		AssetToken            respjson.Field
 		AssetTokenQuantity    respjson.Field
 		CancelTransactionHash respjson.Field
+		ClientOrderID         respjson.Field
 		EntityID              respjson.Field
 		Fee                   respjson.Field
 		LimitPrice            respjson.Field
