@@ -30,6 +30,7 @@ import (
 type V2AccountOrderRequestService struct {
 	Options []option.RequestOption
 	Stocks  V2AccountOrderRequestStockService
+	Eip155  V2AccountOrderRequestEip155Service
 }
 
 // NewV2AccountOrderRequestService generates a new service that applies the given
@@ -39,6 +40,7 @@ func NewV2AccountOrderRequestService(opts ...option.RequestOption) (r V2AccountO
 	r = V2AccountOrderRequestService{}
 	r.Options = opts
 	r.Stocks = NewV2AccountOrderRequestStockService(opts...)
+	r.Eip155 = NewV2AccountOrderRequestEip155Service(opts...)
 	return
 }
 
