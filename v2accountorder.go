@@ -69,6 +69,29 @@ func (r *V2AccountOrderService) List(ctx context.Context, accountID string, quer
 	return
 }
 
+// Cancel multiple `Orders` by their IDs in a single request. Note that this
+// requires the `Order` IDs, not the `OrderRequest` IDs. Once you submit a
+// cancellation request, it cannot be undone. Be advised that orders with a status
+// of PENDING_FILL, PENDING_ESCROW, FILLED, REJECTED, or CANCELLED cannot be
+// cancelled.
+//
+// `Order` cancellation is not guaranteed nor is it immediate. The `Orders` may
+// still be executed if the cancellation request is not received in time.
+//
+// The response will indicate which orders were successfully queued to cancel and
+// which failed to queue. Check the status using the "Get Order by ID" endpoint to
+// confirm whether individual `Orders` have been cancelled.
+func (r *V2AccountOrderService) BatchCancel(ctx context.Context, accountID string, body V2AccountOrderBatchCancelParams, opts ...option.RequestOption) (res *V2AccountOrderBatchCancelResponse, err error) {
+	opts = slices.Concat(r.Options, opts)
+	if accountID == "" {
+		err = errors.New("missing required account_id parameter")
+		return
+	}
+	path := fmt.Sprintf("api/v2/accounts/%s/orders/cancel", accountID)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
+	return
+}
+
 // Cancel an `Order` by its ID. Note that this requires the `Order` ID, not the
 // `OrderRequest` ID. Once you submit a cancellation request, it cannot be undone.
 // Be advised that orders with a status of PENDING_FILL, PENDING_ESCROW, FILLED,
@@ -238,6 +261,26 @@ const (
 	OrderTypeLimit  OrderType = "LIMIT"
 )
 
+type V2AccountOrderBatchCancelResponse struct {
+	// Orders that were queued to cancel.
+	CancelQueuedOrders []Order `json:"cancel_queued_orders,required"`
+	// Orders that could not be queued to cancel.
+	FailedToCancelOrders []Order `json:"failed_to_cancel_orders,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		CancelQueuedOrders   respjson.Field
+		FailedToCancelOrders respjson.Field
+		ExtraFields          map[string]respjson.Field
+		raw                  string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountOrderBatchCancelResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountOrderBatchCancelResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type V2AccountOrderGetParams struct {
 	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
 	paramObj
@@ -267,6 +310,20 @@ func (r V2AccountOrderListParams) URLQuery() (v url.Values, err error) {
 		ArrayFormat:  apiquery.ArrayQueryFormatComma,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
+}
+
+type V2AccountOrderBatchCancelParams struct {
+	// List of `Order` IDs to cancel
+	OrderIDs []string `json:"order_ids,omitzero,required" format:"uuid"`
+	paramObj
+}
+
+func (r V2AccountOrderBatchCancelParams) MarshalJSON() (data []byte, err error) {
+	type shadow V2AccountOrderBatchCancelParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *V2AccountOrderBatchCancelParams) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type V2AccountOrderCancelParams struct {
