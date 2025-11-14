@@ -1,5 +1,41 @@
 # Changelog
 
+## 0.6.0 (2025-11-14)
+
+Full Changelog: [v0.5.0...v0.6.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.5.0...v0.6.0)
+
+### Features
+
+* **api:** api update ([032ae56](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/032ae5646d2a985e25f7daa1f09503d6be6d8c41))
+* **api:** api update ([75351d9](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/75351d991c5ff13791b770c117e792faef282701))
+* **api:** api update ([8604f1f](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/8604f1fd9ac5a47984ab231732f578b556318e3a))
+* **api:** api update ([7663bfb](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/7663bfb35d599fc60595c595cab436ca550faad9))
+* **api:** api update ([bb40438](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/bb40438184fa98d9fee5e76bd26a7daf221303af))
+* **api:** api update ([426a14a](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/426a14a07620b525b237e94ae1266d8e2c23a352))
+* **api:** api update ([e16bb08](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/e16bb08e01c9e151c133ebed4622f87c0835f411))
+* **api:** api update ([1903ae4](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/1903ae45a6e321bd2a171db0945e1a1ab28ea602))
+* **api:** api update ([6f1790b](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/6f1790be9d1da7622a9a5bf17abd5501d48ee6f9))
+* **api:** permit, permit transaction, batch cancel ([ef1bb76](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/ef1bb7677441c38db16c66ec6c8eca6885ad06d0))
+
+
+### Bug Fixes
+
+* bugfix for setting JSON keys with special characters ([a8a1b18](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/a8a1b1803d07dcbdc63269e0976fc59f20ae7474))
+* close body before retrying ([0ac41e7](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/0ac41e7602d68fd52250ac21c37505d56afcddd0))
+* **internal:** unmarshal correctly when there are multiple discriminators ([5f601e1](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/5f601e1b73e4994187bfb64006c17b7520f4090f))
+* remove null from release please manifest ([b25d240](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/b25d240b5e8c83e95a0f80c12717d3a12b9784e4))
+* use release please annotations on more places ([466b9cf](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/466b9cf8d1ccc914db0f9440c90836c83c844530))
+* use slices.Concat instead of sometimes modifying r.Options ([db0be55](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/db0be5566d7a54b36a78488848359d3b1a7db9d7))
+
+
+### Chores
+
+* bump gjson version ([ab3b8e8](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/ab3b8e85e17070179335dec6e81cc90932691706))
+* bump minimum go version to 1.22 ([50dbf8d](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/50dbf8d647c2d4adea685802cc51a7fad516072a))
+* do not install brew dependencies in ./scripts/bootstrap by default ([adec94e](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/adec94ed65d6316057a351032c6d38c9c0af3a11))
+* **internal:** grammar fix (it's -&gt; its) ([aec89eb](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/aec89eb2b79df985ba6366a59748d3892427b3b7))
+* update more docs for 1.22 ([5b17404](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/5b1740437764de9b743331693b048f4fe89ba5a9))
+
 ## 0.5.0 (2025-08-20)
 
 Full Changelog: [v0.4.0...v0.5.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.4.0...v0.5.0)
