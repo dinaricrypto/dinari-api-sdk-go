@@ -136,7 +136,7 @@ func (r *V2AccountService) GetPortfolio(ctx context.Context, accountID string, q
 // This feature is only supported in sandbox mode.
 func (r *V2AccountService) MintSandboxTokens(ctx context.Context, accountID string, body V2AccountMintSandboxTokensParams, opts ...option.RequestOption) (err error) {
 	opts = slices.Concat(r.Options, opts)
-	opts = append([]option.RequestOption{option.WithHeader("Accept", "")}, opts...)
+	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
 		return
