@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.1 (2025-11-18)
+
+Full Changelog: [v0.6.0...v0.6.1](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.6.0...v0.6.1)
+
+### Bug Fixes
+
+* **client:** correctly specify Accept header with */* instead of empty ([d6e6a19](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/d6e6a19630ff71569351d540776e77665a7eb873))
+
 ## 0.6.0 (2025-11-14)
 
 Full Changelog: [v0.5.0...v0.6.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.5.0...v0.6.0)
