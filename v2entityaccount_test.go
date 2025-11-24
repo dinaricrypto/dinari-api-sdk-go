@@ -13,7 +13,7 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 )
 
-func TestV2EntityAccountNew(t *testing.T) {
+func TestV2EntityAccountNewWithOptionalParams(t *testing.T) {
 	t.Skip("Prism tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -27,7 +27,13 @@ func TestV2EntityAccountNew(t *testing.T) {
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
 	)
-	_, err := client.V2.Entities.Accounts.New(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+	_, err := client.V2.Entities.Accounts.New(
+		context.TODO(),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		dinariapisdkgo.V2EntityAccountNewParams{
+			Jurisdiction: dinariapisdkgo.JurisdictionBaseline,
+		},
+	)
 	if err != nil {
 		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
