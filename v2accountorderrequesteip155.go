@@ -4,6 +4,7 @@ package dinariapisdkgo
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 	"time"
 
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/apijson"
+	shimjson "github.com/dinaricrypto/dinari-api-sdk-go/internal/encoding/json"
 	"github.com/dinaricrypto/dinari-api-sdk-go/internal/requestconfig"
 	"github.com/dinaricrypto/dinari-api-sdk-go/option"
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/param"
@@ -81,6 +83,26 @@ func (r *V2AccountOrderRequestEip155Service) Submit(ctx context.Context, account
 	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/eip155", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
+}
+
+// Input parameters for creating a proxied `EIP155OrderRequestPermitTransaction`.
+//
+// The properties OrderRequestID, PermitSignature are required.
+type Eip155OrderRequestPermitTransactionParam struct {
+	// ID of the prepared proxied order to be submitted as a proxied order.
+	OrderRequestID string `json:"order_request_id,required" format:"uuid"`
+	// Signature of the permit typed data, allowing Dinari to spend the payment token
+	// or dShare asset token on behalf of the owner.
+	PermitSignature string `json:"permit_signature,required" format:"hex_string"`
+	paramObj
+}
+
+func (r Eip155OrderRequestPermitTransactionParam) MarshalJSON() (data []byte, err error) {
+	type shadow Eip155OrderRequestPermitTransactionParam
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *Eip155OrderRequestPermitTransactionParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
 }
 
 // Token permit to be signed by the smart contract submitter.
@@ -169,7 +191,7 @@ type V2AccountOrderRequestEip155SubmitResponse struct {
 	//
 	// Any of "QUOTED", "PENDING", "PENDING_BRIDGE", "SUBMITTED", "ERROR", "CANCELLED",
 	// "EXPIRED".
-	Status V2AccountOrderRequestEip155SubmitResponseStatus `json:"status,required"`
+	Status OrderRequestStatus `json:"status,required"`
 	// ID of `Order` created from the `EIP155OrderRequest`. This is the primary
 	// identifier for the `/orders` routes.
 	OrderID string `json:"order_id,nullable" format:"uuid"`
@@ -196,19 +218,6 @@ func (r V2AccountOrderRequestEip155SubmitResponse) RawJSON() string { return r.J
 func (r *V2AccountOrderRequestEip155SubmitResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Status of `EIP155OrderRequest`.
-type V2AccountOrderRequestEip155SubmitResponseStatus string
-
-const (
-	V2AccountOrderRequestEip155SubmitResponseStatusQuoted        V2AccountOrderRequestEip155SubmitResponseStatus = "QUOTED"
-	V2AccountOrderRequestEip155SubmitResponseStatusPending       V2AccountOrderRequestEip155SubmitResponseStatus = "PENDING"
-	V2AccountOrderRequestEip155SubmitResponseStatusPendingBridge V2AccountOrderRequestEip155SubmitResponseStatus = "PENDING_BRIDGE"
-	V2AccountOrderRequestEip155SubmitResponseStatusSubmitted     V2AccountOrderRequestEip155SubmitResponseStatus = "SUBMITTED"
-	V2AccountOrderRequestEip155SubmitResponseStatusError         V2AccountOrderRequestEip155SubmitResponseStatus = "ERROR"
-	V2AccountOrderRequestEip155SubmitResponseStatusCancelled     V2AccountOrderRequestEip155SubmitResponseStatus = "CANCELLED"
-	V2AccountOrderRequestEip155SubmitResponseStatusExpired       V2AccountOrderRequestEip155SubmitResponseStatus = "EXPIRED"
-)
 
 type V2AccountOrderRequestEip155NewPermitParams struct {
 	// CAIP-2 chain ID of the blockchain where the `Order` will be placed.
@@ -259,35 +268,27 @@ func (r *V2AccountOrderRequestEip155NewPermitParams) UnmarshalJSON(data []byte) 
 }
 
 type V2AccountOrderRequestEip155NewPermitTransactionParams struct {
-	// ID of the prepared proxied order to be submitted as a proxied order.
-	OrderRequestID string `json:"order_request_id,required" format:"uuid"`
-	// Signature of the permit typed data, allowing Dinari to spend the payment token
-	// or dShare asset token on behalf of the owner.
-	PermitSignature string `json:"permit_signature,required" format:"hex_string"`
+	// Input parameters for creating a proxied `EIP155OrderRequestPermitTransaction`.
+	Eip155OrderRequestPermitTransaction Eip155OrderRequestPermitTransactionParam
 	paramObj
 }
 
 func (r V2AccountOrderRequestEip155NewPermitTransactionParams) MarshalJSON() (data []byte, err error) {
-	type shadow V2AccountOrderRequestEip155NewPermitTransactionParams
-	return param.MarshalObject(r, (*shadow)(&r))
+	return shimjson.Marshal(r.Eip155OrderRequestPermitTransaction)
 }
 func (r *V2AccountOrderRequestEip155NewPermitTransactionParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
+	return json.Unmarshal(data, &r.Eip155OrderRequestPermitTransaction)
 }
 
 type V2AccountOrderRequestEip155SubmitParams struct {
-	// ID of the prepared proxied order to be submitted as a proxied order.
-	OrderRequestID string `json:"order_request_id,required" format:"uuid"`
-	// Signature of the permit typed data, allowing Dinari to spend the payment token
-	// or dShare asset token on behalf of the owner.
-	PermitSignature string `json:"permit_signature,required" format:"hex_string"`
+	// Input parameters for creating a proxied `EIP155OrderRequestPermitTransaction`.
+	Eip155OrderRequestPermitTransaction Eip155OrderRequestPermitTransactionParam
 	paramObj
 }
 
 func (r V2AccountOrderRequestEip155SubmitParams) MarshalJSON() (data []byte, err error) {
-	type shadow V2AccountOrderRequestEip155SubmitParams
-	return param.MarshalObject(r, (*shadow)(&r))
+	return shimjson.Marshal(r.Eip155OrderRequestPermitTransaction)
 }
 func (r *V2AccountOrderRequestEip155SubmitParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
+	return json.Unmarshal(data, &r.Eip155OrderRequestPermitTransaction)
 }
