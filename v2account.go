@@ -34,6 +34,7 @@ type V2AccountService struct {
 	WithdrawalRequests V2AccountWithdrawalRequestService
 	Withdrawals        V2AccountWithdrawalService
 	TokenTransfers     V2AccountTokenTransferService
+	Activities         V2AccountActivityService
 }
 
 // NewV2AccountService generates a new service that applies the given options to
@@ -49,6 +50,7 @@ func NewV2AccountService(opts ...option.RequestOption) (r V2AccountService) {
 	r.WithdrawalRequests = NewV2AccountWithdrawalRequestService(opts...)
 	r.Withdrawals = NewV2AccountWithdrawalService(opts...)
 	r.TokenTransfers = NewV2AccountTokenTransferService(opts...)
+	r.Activities = NewV2AccountActivityService(opts...)
 	return
 }
 

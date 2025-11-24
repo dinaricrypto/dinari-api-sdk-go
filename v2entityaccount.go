@@ -40,14 +40,14 @@ func NewV2EntityAccountService(opts ...option.RequestOption) (r V2EntityAccountS
 
 // Create a new `Account` for a specific `Entity`. This `Entity` represents your
 // organization itself, or an individual customer of your organization.
-func (r *V2EntityAccountService) New(ctx context.Context, entityID string, opts ...option.RequestOption) (res *Account, err error) {
+func (r *V2EntityAccountService) New(ctx context.Context, entityID string, body V2EntityAccountNewParams, opts ...option.RequestOption) (res *Account, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return
 	}
 	path := fmt.Sprintf("api/v2/entities/%s/accounts", entityID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return
 }
 
@@ -75,6 +75,10 @@ type Account struct {
 	EntityID string `json:"entity_id,required" format:"uuid"`
 	// Indicates whether the `Account` is active.
 	IsActive bool `json:"is_active,required"`
+	// Jurisdiction of the `Account`.
+	//
+	// Any of "BASELINE", "US".
+	Jurisdiction Jurisdiction `json:"jurisdiction,required"`
 	// ID of the brokerage account associated with the `Account`.
 	BrokerageAccountID string `json:"brokerage_account_id,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -83,6 +87,7 @@ type Account struct {
 		CreatedDt          respjson.Field
 		EntityID           respjson.Field
 		IsActive           respjson.Field
+		Jurisdiction       respjson.Field
 		BrokerageAccountID respjson.Field
 		ExtraFields        map[string]respjson.Field
 		raw                string
@@ -92,6 +97,29 @@ type Account struct {
 // Returns the unmodified JSON received from the API
 func (r Account) RawJSON() string { return r.JSON.raw }
 func (r *Account) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type Jurisdiction string
+
+const (
+	JurisdictionBaseline Jurisdiction = "BASELINE"
+	JurisdictionUs       Jurisdiction = "US"
+)
+
+type V2EntityAccountNewParams struct {
+	// Jurisdiction of the `Account`.
+	//
+	// Any of "BASELINE", "US".
+	Jurisdiction Jurisdiction `json:"jurisdiction,omitzero"`
+	paramObj
+}
+
+func (r V2EntityAccountNewParams) MarshalJSON() (data []byte, err error) {
+	type shadow V2EntityAccountNewParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *V2EntityAccountNewParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

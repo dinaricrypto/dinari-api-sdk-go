@@ -347,7 +347,6 @@ func (r *OrderRequest) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Status of `OrderRequest`.
 type OrderRequestStatus string
 
 const (

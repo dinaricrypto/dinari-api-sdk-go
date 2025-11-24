@@ -71,8 +71,10 @@ func TestV2AccountOrderRequestEip155NewPermitTransaction(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestEip155NewPermitTransactionParams{
-			OrderRequestID:  "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-			PermitSignature: "0xeaF12bD1DfFd",
+			Eip155OrderRequestPermitTransaction: dinariapisdkgo.Eip155OrderRequestPermitTransactionParam{
+				OrderRequestID:  "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+				PermitSignature: "0xeaF12bD1DfFd",
+			},
 		},
 	)
 	if err != nil {
@@ -102,8 +104,10 @@ func TestV2AccountOrderRequestEip155Submit(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestEip155SubmitParams{
-			OrderRequestID:  "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
-			PermitSignature: "0xeaF12bD1DfFd",
+			Eip155OrderRequestPermitTransaction: dinariapisdkgo.Eip155OrderRequestPermitTransactionParam{
+				OrderRequestID:  "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+				PermitSignature: "0xeaF12bD1DfFd",
+			},
 		},
 	)
 	if err != nil {
