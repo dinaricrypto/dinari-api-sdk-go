@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.1 (2025-12-02)
+
+Full Changelog: [v0.7.0...v0.7.1](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.7.0...v0.7.1)
+
+### Features
+
+* **api:** use repeat for array parameters ([fac9e0d](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/fac9e0d7c69a0064736e9c5599c316b01f005d9b))
+
 ## 0.7.0 (2025-11-25)
 
 Full Changelog: [v0.6.0...v0.7.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.6.0...v0.7.0)
