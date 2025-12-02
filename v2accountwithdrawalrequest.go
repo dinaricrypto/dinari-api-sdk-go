@@ -165,7 +165,7 @@ type V2AccountWithdrawalRequestListParams struct {
 // `url.Values`.
 func (r V2AccountWithdrawalRequestListParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

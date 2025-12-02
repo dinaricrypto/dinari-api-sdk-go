@@ -147,7 +147,7 @@ type V2AccountWalletExternalGetNonceParams struct {
 // as `url.Values`.
 func (r V2AccountWalletExternalGetNonceParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
