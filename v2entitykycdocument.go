@@ -150,7 +150,7 @@ func (r V2EntityKYCDocumentUploadParams) MarshalMultipart() (data []byte, conten
 // `url.Values`.
 func (r V2EntityKYCDocumentUploadParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }

@@ -134,7 +134,7 @@ type V2AccountOrderFulfillmentQueryParams struct {
 // `url.Values`.
 func (r V2AccountOrderFulfillmentQueryParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
