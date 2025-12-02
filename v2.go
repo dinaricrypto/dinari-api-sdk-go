@@ -168,7 +168,7 @@ type V2ListOrdersParams struct {
 // URLQuery serializes [V2ListOrdersParams]'s query parameters as `url.Values`.
 func (r V2ListOrdersParams) URLQuery() (v url.Values, err error) {
 	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatComma,
+		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
