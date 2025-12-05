@@ -80,8 +80,7 @@ func (r *V2AccountOrderRequestService) List(ctx context.Context, accountID strin
 // for fee estimation.
 //
 // If an `OrderRequest` with the same `client_order_id` already exists for the
-// given account, the existing `OrderRequest` will be returned instead of creating
-// a new one.
+// given account, the creation call will fail.
 func (r *V2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accountID string, body V2AccountOrderRequestNewLimitBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -100,8 +99,7 @@ func (r *V2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accountI
 // for fee estimation.
 //
 // If an `OrderRequest` with the same `client_order_id` already exists for the
-// given account, the existing `OrderRequest` will be returned instead of creating
-// a new one.
+// given account, the creation call will fail.
 func (r *V2AccountOrderRequestService) NewLimitSell(ctx context.Context, accountID string, body V2AccountOrderRequestNewLimitSellParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -120,8 +118,7 @@ func (r *V2AccountOrderRequestService) NewLimitSell(ctx context.Context, account
 // for fee estimation.
 //
 // If an `OrderRequest` with the same `client_order_id` already exists for the
-// given account, the existing `OrderRequest` will be returned instead of creating
-// a new one.
+// given account, the creation call will fail.
 func (r *V2AccountOrderRequestService) NewMarketBuy(ctx context.Context, accountID string, body V2AccountOrderRequestNewMarketBuyParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -140,8 +137,7 @@ func (r *V2AccountOrderRequestService) NewMarketBuy(ctx context.Context, account
 // for fee estimation.
 //
 // If an `OrderRequest` with the same `client_order_id` already exists for the
-// given account, the existing `OrderRequest` will be returned instead of creating
-// a new one.
+// given account, the creation call will fail.
 func (r *V2AccountOrderRequestService) NewMarketSell(ctx context.Context, accountID string, body V2AccountOrderRequestNewMarketSellParams, opts ...option.RequestOption) (res *OrderRequest, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {

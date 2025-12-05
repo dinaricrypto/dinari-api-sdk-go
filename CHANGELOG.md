@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.8.0 (2025-12-05)
+
+Full Changelog: [v0.7.1...v0.8.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.7.1...v0.8.0)
+
+### Features
+
+* **api:** api update ([047dd85](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/047dd8530e4c0962bbc38f01309ff0da99bec69f))
+
+
+### Bug Fixes
+
+* **mcp:** correct code tool API endpoint ([e6ae3aa](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/e6ae3aad0774d2c52a126b65f066b5d36b01f59d))
+* rename param to avoid collision ([548053d](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/548053d193dc0b0e5ce9910f06b802e180a1bcea))
+
+
+### Chores
+
+* elide duplicate aliases ([872a4f5](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/872a4f5bb8807448c4d712cec132990289c72857))
+* **internal:** codegen related update ([e16350f](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/e16350fd98d45afae063c005cd5553f8cfc8cab5))
+
 ## 0.7.1 (2025-12-02)
 
 Full Changelog: [v0.7.0...v0.7.1](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.7.0...v0.7.1)
