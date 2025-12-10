@@ -136,7 +136,8 @@ type V2MarketDataStockListResponse struct {
 	// more information.
 	CompositeFigi string `json:"composite_figi,nullable"`
 	// CUSIP ID. Refer to [this link](https://www.cusip.com/identifiers.html) for more
-	// information.
+	// information. A license agreement with CUSIP Global Services is required to
+	// receive this value.
 	Cusip string `json:"cusip,nullable"`
 	// Description of the company and their services.
 	Description string `json:"description,nullable"`
