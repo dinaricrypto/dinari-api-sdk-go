@@ -170,8 +170,9 @@ func (r *V2AccountOrderRequestService) GetFeeQuote(ctx context.Context, accountI
 //
 // The properties AssetQuantity, LimitPrice, StockID are required.
 type CreateLimitBuyOrderInputParam struct {
-	// Amount of dShare asset involved. Required for limit `Orders` and market sell
-	// `Orders`.
+	// Amount of dShare asset involved. Required for limit `Order Requests` and market
+	// sell `Order Requests`. Must be a positive number with a precision of up to 4
+	// decimal places.
 	AssetQuantity float64 `json:"asset_quantity,required"`
 	// Price at which to execute the order. Must be a positive number with a precision
 	// of up to 2 decimal places.
@@ -198,8 +199,9 @@ func (r *CreateLimitBuyOrderInputParam) UnmarshalJSON(data []byte) error {
 //
 // The properties AssetQuantity, LimitPrice, StockID are required.
 type CreateLimitSellOrderInputParam struct {
-	// Amount of dShare asset involved. Required for limit `Orders` and market sell
-	// `Orders`.
+	// Amount of dShare asset involved. Required for limit `Order Requests` and market
+	// sell `Order Requests`. Must be a positive number with a precision of up to 4
+	// decimal places.
 	AssetQuantity float64 `json:"asset_quantity,required"`
 	// Price at which to execute the order. Must be a positive number with a precision
 	// of up to 2 decimal places.
@@ -256,7 +258,7 @@ func (r *CreateMarketBuyOrderInputParam) UnmarshalJSON(data []byte) error {
 // The properties AssetQuantity, StockID are required.
 type CreateMarketSellOrderInputParam struct {
 	// Quantity of shares to trade. Must be a positive number with a precision of up to
-	// 9 decimal places.
+	// 6 decimal places.
 	AssetQuantity float64 `json:"asset_quantity,required"`
 	// ID of `Stock`.
 	StockID string `json:"stock_id,required" format:"uuid"`
@@ -463,8 +465,10 @@ type V2AccountOrderRequestGetFeeQuoteParams struct {
 	OrderType OrderType `json:"order_type,omitzero,required"`
 	// The Stock ID associated with the Order Request
 	StockID string `json:"stock_id,required" format:"uuid"`
-	// Amount of dShare asset tokens involved. Required for limit `Orders` and market
-	// sell `Order Requests`.
+	// Amount of dShare asset tokens involved. Required for limit `Order Requests` and
+	// market sell `Order Requests`. Must be a positive number with a precision of up
+	// to 4 decimal places for limit `Order Requests` or up to 6 decimal places for
+	// market sell `Order Requests`.
 	AssetTokenQuantity param.Opt[float64] `json:"asset_token_quantity,omitzero"`
 	// Price per asset in the asset's native currency. USD for US equities and ETFs.
 	// Required for limit `Order Requests`.
