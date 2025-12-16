@@ -29,7 +29,6 @@ import (
 // the [NewV2AccountOrderRequestService] method instead.
 type V2AccountOrderRequestService struct {
 	Options []option.RequestOption
-	Stocks  V2AccountOrderRequestStockService
 	Eip155  V2AccountOrderRequestEip155Service
 }
 
@@ -39,7 +38,6 @@ type V2AccountOrderRequestService struct {
 func NewV2AccountOrderRequestService(opts ...option.RequestOption) (r V2AccountOrderRequestService) {
 	r = V2AccountOrderRequestService{}
 	r.Options = opts
-	r.Stocks = NewV2AccountOrderRequestStockService(opts...)
 	r.Eip155 = NewV2AccountOrderRequestEip155Service(opts...)
 	return
 }
