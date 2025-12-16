@@ -314,36 +314,39 @@ type KYCInfoUnionData struct {
 	// This field is from variant [UsKYCCheckData].
 	KYCMetadata UsKYCCheckDataKYCMetadata `json:"kyc_metadata"`
 	// This field is from variant [UsKYCCheckData].
+	NonProfessionalTraderAttestation UsKYCCheckDataNonProfessionalTraderAttestation `json:"non_professional_trader_attestation"`
+	// This field is from variant [UsKYCCheckData].
 	RiskDisclosure UsKYCCheckDataRiskDisclosure `json:"risk_disclosure"`
 	// This field is from variant [UsKYCCheckData].
 	TrustedContact UsKYCCheckDataTrustedContact `json:"trusted_contact"`
 	// This field is from variant [UsKYCCheckData].
 	UsImmigrationInfo UsKYCCheckDataUsImmigrationInfo `json:"us_immigration_info"`
 	JSON              struct {
-		AddressCountryCode      respjson.Field
-		CountryCode             respjson.Field
-		LastName                respjson.Field
-		AddressCity             respjson.Field
-		AddressPostalCode       respjson.Field
-		AddressStreet1          respjson.Field
-		AddressStreet2          respjson.Field
-		AddressSubdivision      respjson.Field
-		BirthDate               respjson.Field
-		Email                   respjson.Field
-		FirstName               respjson.Field
-		MiddleName              respjson.Field
-		TaxIDNumber             respjson.Field
-		AlpacaCustomerAgreement respjson.Field
-		AmlCheck                respjson.Field
-		DataCitation            respjson.Field
-		Employment              respjson.Field
-		FinancialProfile        respjson.Field
-		Identity                respjson.Field
-		KYCMetadata             respjson.Field
-		RiskDisclosure          respjson.Field
-		TrustedContact          respjson.Field
-		UsImmigrationInfo       respjson.Field
-		raw                     string
+		AddressCountryCode               respjson.Field
+		CountryCode                      respjson.Field
+		LastName                         respjson.Field
+		AddressCity                      respjson.Field
+		AddressPostalCode                respjson.Field
+		AddressStreet1                   respjson.Field
+		AddressStreet2                   respjson.Field
+		AddressSubdivision               respjson.Field
+		BirthDate                        respjson.Field
+		Email                            respjson.Field
+		FirstName                        respjson.Field
+		MiddleName                       respjson.Field
+		TaxIDNumber                      respjson.Field
+		AlpacaCustomerAgreement          respjson.Field
+		AmlCheck                         respjson.Field
+		DataCitation                     respjson.Field
+		Employment                       respjson.Field
+		FinancialProfile                 respjson.Field
+		Identity                         respjson.Field
+		KYCMetadata                      respjson.Field
+		NonProfessionalTraderAttestation respjson.Field
+		RiskDisclosure                   respjson.Field
+		TrustedContact                   respjson.Field
+		UsImmigrationInfo                respjson.Field
+		raw                              string
 	} `json:"-"`
 }
 
@@ -451,6 +454,12 @@ type UsKYCCheckData struct {
 	Identity UsKYCCheckDataIdentity `json:"identity,required"`
 	// Metadata about the KYC check.
 	KYCMetadata UsKYCCheckDataKYCMetadata `json:"kyc_metadata,required"`
+	// The non-professional trader property is a self-attestation for US customers that
+	// can affect the metered realtime data fees. This field must be updated when if
+	// there is a change in the user's attestation. This field may also be modified by
+	// Dinari compliance team. For more information, please see the US Customers
+	// Integration Guide.
+	NonProfessionalTraderAttestation UsKYCCheckDataNonProfessionalTraderAttestation `json:"non_professional_trader_attestation,required"`
 	// Risk information about the individual <br/><br/> Fields denote if the account
 	// owner falls under each category defined by FINRA rules. If any of the answers is
 	// true (yes), additional verifications may be required before US account approval.
@@ -467,18 +476,19 @@ type UsKYCCheckData struct {
 	UsImmigrationInfo UsKYCCheckDataUsImmigrationInfo `json:"us_immigration_info,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		AlpacaCustomerAgreement respjson.Field
-		AmlCheck                respjson.Field
-		DataCitation            respjson.Field
-		Employment              respjson.Field
-		FinancialProfile        respjson.Field
-		Identity                respjson.Field
-		KYCMetadata             respjson.Field
-		RiskDisclosure          respjson.Field
-		TrustedContact          respjson.Field
-		UsImmigrationInfo       respjson.Field
-		ExtraFields             map[string]respjson.Field
-		raw                     string
+		AlpacaCustomerAgreement          respjson.Field
+		AmlCheck                         respjson.Field
+		DataCitation                     respjson.Field
+		Employment                       respjson.Field
+		FinancialProfile                 respjson.Field
+		Identity                         respjson.Field
+		KYCMetadata                      respjson.Field
+		NonProfessionalTraderAttestation respjson.Field
+		RiskDisclosure                   respjson.Field
+		TrustedContact                   respjson.Field
+		UsImmigrationInfo                respjson.Field
+		ExtraFields                      map[string]respjson.Field
+		raw                              string
 	} `json:"-"`
 }
 
@@ -731,6 +741,31 @@ func (r *UsKYCCheckDataKYCMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// The non-professional trader property is a self-attestation for US customers that
+// can affect the metered realtime data fees. This field must be updated when if
+// there is a change in the user's attestation. This field may also be modified by
+// Dinari compliance team. For more information, please see the US Customers
+// Integration Guide.
+type UsKYCCheckDataNonProfessionalTraderAttestation struct {
+	// Datetime when the attestation was made.
+	AttestationDt time.Time `json:"attestation_dt,required" format:"date-time"`
+	// Whether the individual attests to being a non-professional trader.
+	IsNonProfessionalTrader bool `json:"is_non_professional_trader,required"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		AttestationDt           respjson.Field
+		IsNonProfessionalTrader respjson.Field
+		ExtraFields             map[string]respjson.Field
+		raw                     string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r UsKYCCheckDataNonProfessionalTraderAttestation) RawJSON() string { return r.JSON.raw }
+func (r *UsKYCCheckDataNonProfessionalTraderAttestation) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Risk information about the individual <br/><br/> Fields denote if the account
 // owner falls under each category defined by FINRA rules. If any of the answers is
 // true (yes), additional verifications may be required before US account approval.
@@ -834,8 +869,8 @@ func (r *UsKYCCheckDataUsImmigrationInfo) UnmarshalJSON(data []byte) error {
 // KYC data for an `Entity` in the US jurisdiction.
 //
 // The properties AlpacaCustomerAgreement, AmlCheck, DataCitation, Employment,
-// FinancialProfile, Identity, KYCMetadata, RiskDisclosure, TrustedContact are
-// required.
+// FinancialProfile, Identity, KYCMetadata, NonProfessionalTraderAttestation,
+// RiskDisclosure, TrustedContact are required.
 type UsKYCCheckDataParam struct {
 	// Information to affirm that the individual has read, agreed to, and signed
 	// Alpaca's customer agreement, found here:
@@ -857,6 +892,12 @@ type UsKYCCheckDataParam struct {
 	Identity UsKYCCheckDataIdentityParam `json:"identity,omitzero,required"`
 	// Metadata about the KYC check.
 	KYCMetadata UsKYCCheckDataKYCMetadataParam `json:"kyc_metadata,omitzero,required"`
+	// The non-professional trader property is a self-attestation for US customers that
+	// can affect the metered realtime data fees. This field must be updated when if
+	// there is a change in the user's attestation. This field may also be modified by
+	// Dinari compliance team. For more information, please see the US Customers
+	// Integration Guide.
+	NonProfessionalTraderAttestation UsKYCCheckDataNonProfessionalTraderAttestationParam `json:"non_professional_trader_attestation,omitzero,required"`
 	// Risk information about the individual <br/><br/> Fields denote if the account
 	// owner falls under each category defined by FINRA rules. If any of the answers is
 	// true (yes), additional verifications may be required before US account approval.
@@ -1093,6 +1134,29 @@ func (r UsKYCCheckDataKYCMetadataParam) MarshalJSON() (data []byte, err error) {
 	return param.MarshalObject(r, (*shadow)(&r))
 }
 func (r *UsKYCCheckDataKYCMetadataParam) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// The non-professional trader property is a self-attestation for US customers that
+// can affect the metered realtime data fees. This field must be updated when if
+// there is a change in the user's attestation. This field may also be modified by
+// Dinari compliance team. For more information, please see the US Customers
+// Integration Guide.
+//
+// The properties AttestationDt, IsNonProfessionalTrader are required.
+type UsKYCCheckDataNonProfessionalTraderAttestationParam struct {
+	// Datetime when the attestation was made.
+	AttestationDt time.Time `json:"attestation_dt,required" format:"date-time"`
+	// Whether the individual attests to being a non-professional trader.
+	IsNonProfessionalTrader bool `json:"is_non_professional_trader,required"`
+	paramObj
+}
+
+func (r UsKYCCheckDataNonProfessionalTraderAttestationParam) MarshalJSON() (data []byte, err error) {
+	type shadow UsKYCCheckDataNonProfessionalTraderAttestationParam
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *UsKYCCheckDataNonProfessionalTraderAttestationParam) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
