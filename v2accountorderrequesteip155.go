@@ -241,8 +241,10 @@ type V2AccountOrderRequestEip155NewPermitParams struct {
 	OrderType OrderType `json:"order_type,omitzero,required"`
 	// Address of payment token.
 	PaymentToken string `json:"payment_token,required" format:"eth_address"`
-	// Amount of dShare asset tokens involved. Required for limit `Orders` and market
-	// sell `Orders`.
+	// Amount of dShare asset tokens involved. Required for limit `Order Requests` and
+	// market sell `Order Requests`. Must be a positive number with a precision of up
+	// to 4 decimal places for limit `Order Requests` or up to 6 decimal places for
+	// market sell `Order Requests`.
 	AssetTokenQuantity param.Opt[float64] `json:"asset_token_quantity,omitzero"`
 	// Customer-supplied unique identifier to map this `Order` to an order in the
 	// customer's systems.

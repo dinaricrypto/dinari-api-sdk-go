@@ -196,17 +196,6 @@ Methods:
 
 ##### Eip155
 
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#OrderFeeAmount">OrderFeeAmount</a>
-- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderStockEip155GetFeeQuoteResponse">V2AccountOrderStockEip155GetFeeQuoteResponse</a>
-- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderStockEip155PrepareOrderResponse">V2AccountOrderStockEip155PrepareOrderResponse</a>
-
-Methods:
-
-- <code title="post /api/v2/accounts/{account_id}/orders/stocks/eip155/fee_quote">client.V2.Accounts.Orders.Stocks.Eip155.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderStockEip155Service.GetFeeQuote">GetFeeQuote</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderStockEip155GetFeeQuoteParams">V2AccountOrderStockEip155GetFeeQuoteParams</a>) (<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderStockEip155GetFeeQuoteResponse">V2AccountOrderStockEip155GetFeeQuoteResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-- <code title="post /api/v2/accounts/{account_id}/orders/stocks/eip155/prepare">client.V2.Accounts.Orders.Stocks.Eip155.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderStockEip155Service.PrepareOrder">PrepareOrder</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderStockEip155PrepareOrderParams">V2AccountOrderStockEip155PrepareOrderParams</a>) (<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderStockEip155PrepareOrderResponse">V2AccountOrderStockEip155PrepareOrderResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
-
 ### OrderFulfillments
 
 Response Types:
@@ -246,15 +235,6 @@ Methods:
 #### Stocks
 
 ##### Eip155
-
-Response Types:
-
-- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#EvmTypedData">EvmTypedData</a>
-- <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse">V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse</a>
-
-Methods:
-
-- <code title="post /api/v2/accounts/{account_id}/order_requests/stocks/eip155/prepare">client.V2.Accounts.OrderRequests.Stocks.Eip155.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderRequestStockEip155Service.PrepareProxiedOrder">PrepareProxiedOrder</a>(ctx <a href="https://pkg.go.dev/context">context</a>.<a href="https://pkg.go.dev/context#Context">Context</a>, accountID <a href="https://pkg.go.dev/builtin#string">string</a>, body <a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderRequestStockEip155PrepareProxiedOrderParams">V2AccountOrderRequestStockEip155PrepareProxiedOrderParams</a>) (<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go">dinariapisdkgo</a>.<a href="https://pkg.go.dev/github.com/dinaricrypto/dinari-api-sdk-go#V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse">V2AccountOrderRequestStockEip155PrepareProxiedOrderResponse</a>, <a href="https://pkg.go.dev/builtin#error">error</a>)</code>
 
 #### Eip155
 
