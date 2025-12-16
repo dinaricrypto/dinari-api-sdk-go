@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.8.0 (2025-12-16)
+
+Full Changelog: [v0.7.1...v0.8.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.7.1...v0.8.0)
+
+### Features
+
+* **api:** api update ([ada4ae6](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/ada4ae6533fbcf0ee3863a7f0146c65e56f74500))
+* **api:** api update ([6485e6a](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/6485e6af08b8eef1cbb311f27424f4e8962eb756))
+* **api:** api update ([047dd85](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/047dd8530e4c0962bbc38f01309ff0da99bec69f))
+* **api:** Regen API after removing EVM prepared routes and adding non-professional trader attestations ([d53af80](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/d53af802e658ba0180387179b1356b9bd8d866da))
+* **encoder:** support bracket encoding form-data object members ([88ae8d8](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/88ae8d8fc6907339204c89a310e1ffd57b7b8621))
+
+
+### Bug Fixes
+
+* **mcp:** correct code tool API endpoint ([e6ae3aa](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/e6ae3aad0774d2c52a126b65f066b5d36b01f59d))
+* rename param to avoid collision ([548053d](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/548053d193dc0b0e5ce9910f06b802e180a1bcea))
+
+
+### Chores
+
+* elide duplicate aliases ([872a4f5](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/872a4f5bb8807448c4d712cec132990289c72857))
+* **internal:** codegen related update ([e16350f](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/e16350fd98d45afae063c005cd5553f8cfc8cab5))
+
 ## 0.7.1 (2025-12-02)
 
 Full Changelog: [v0.7.0...v0.7.1](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.7.0...v0.7.1)
