@@ -25,6 +25,7 @@ func TestUsage(t *testing.T) {
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
 	)
+	t.Skip("Prism tests are disabled")
 	stocks, err := client.V2.MarketData.Stocks.List(context.TODO(), dinariapisdkgo.V2MarketDataStockListParams{})
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
