@@ -187,11 +187,21 @@ type V2AccountOrderRequestEip155SubmitResponse struct {
 	//
 	// Any of "MARKET", "LIMIT".
 	OrderType OrderType `json:"order_type,required"`
-	// Status of `EIP155OrderRequest`.
+	// Status of `EIP155OrderRequest`. Possible values:
+	//
+	// - `QUOTED`: Order request created with fee quote provided, ready for processing
+	// - `PENDING`: Order request is being prepared for submission
+	// - `PENDING_BRIDGE`: Order is waiting for bridge transaction to complete
+	// - `SUBMITTED`: Order has been successfully submitted to the order book
+	// - `ERROR`: An error occurred during order processing
+	// - `CANCELLED`: Order request was cancelled
+	// - `EXPIRED`: Order request expired due to deadline passing
 	//
 	// Any of "QUOTED", "PENDING", "PENDING_BRIDGE", "SUBMITTED", "ERROR", "CANCELLED",
 	// "EXPIRED".
 	Status OrderRequestStatus `json:"status,required"`
+	// Reason for the order cancellation if the order status is CANCELLED
+	CancelMessage string `json:"cancel_message,nullable"`
 	// ID of `Order` created from the `EIP155OrderRequest`. This is the primary
 	// identifier for the `/orders` routes.
 	OrderID string `json:"order_id,nullable" format:"uuid"`
@@ -206,6 +216,7 @@ type V2AccountOrderRequestEip155SubmitResponse struct {
 		OrderTif           respjson.Field
 		OrderType          respjson.Field
 		Status             respjson.Field
+		CancelMessage      respjson.Field
 		OrderID            respjson.Field
 		RecipientAccountID respjson.Field
 		ExtraFields        map[string]respjson.Field
