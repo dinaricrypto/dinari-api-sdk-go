@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.9.0 (2025-12-23)
+
+Full Changelog: [v0.8.0...v0.9.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.8.0...v0.9.0)
+
+### Features
+
+* **api:** api update ([28d9908](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/28d9908bb526c6e3f79ceb0d3139c61906c23edf))
+
+
+### Bug Fixes
+
+* skip usage tests that don't work with Prism ([fbadcd0](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/fbadcd06d5a391619c0b9e29a658bb581dab3e0a))
+
+
+### Chores
+
+* add float64 to valid types for RegisterFieldValidator ([4032189](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/4032189fb10358e5327a2be12e0a96ba94184fce))
+
 ## 0.8.0 (2025-12-16)
 
 Full Changelog: [v0.7.1...v0.8.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.7.1...v0.8.0)
