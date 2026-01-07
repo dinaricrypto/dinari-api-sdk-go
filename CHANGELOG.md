@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.10.0 (2026-01-07)
+
+Full Changelog: [v0.9.0...v0.10.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.9.0...v0.10.0)
+
+### Features
+
+* **api:** api update ([fc11767](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/fc1176700fbd8339bb03ca317c293b99cb3795e9))
+
 ## 0.9.0 (2025-12-23)
 
 Full Changelog: [v0.8.0...v0.9.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.8.0...v0.9.0)
