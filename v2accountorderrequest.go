@@ -316,9 +316,10 @@ type OrderRequest struct {
 	// - `ERROR`: An error occurred during order processing
 	// - `CANCELLED`: Order request was cancelled
 	// - `EXPIRED`: Order request expired due to deadline passing
+	// - `REJECTED`: Order request was rejected
 	//
 	// Any of "QUOTED", "PENDING", "PENDING_BRIDGE", "SUBMITTED", "ERROR", "CANCELLED",
-	// "EXPIRED".
+	// "EXPIRED", "REJECTED".
 	Status OrderRequestStatus `json:"status,required"`
 	// Reason for the order cancellation if the order status is CANCELLED
 	CancelMessage string `json:"cancel_message,nullable"`
@@ -330,6 +331,8 @@ type OrderRequest struct {
 	OrderID string `json:"order_id,nullable" format:"uuid"`
 	// ID of recipient `Account`.
 	RecipientAccountID string `json:"recipient_account_id,nullable" format:"uuid"`
+	// Reason for the order rejection if the order status is REJECTED
+	RejectMessage string `json:"reject_message,nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                 respjson.Field
@@ -343,6 +346,7 @@ type OrderRequest struct {
 		ClientOrderID      respjson.Field
 		OrderID            respjson.Field
 		RecipientAccountID respjson.Field
+		RejectMessage      respjson.Field
 		ExtraFields        map[string]respjson.Field
 		raw                string
 	} `json:"-"`
@@ -364,6 +368,7 @@ const (
 	OrderRequestStatusError         OrderRequestStatus = "ERROR"
 	OrderRequestStatusCancelled     OrderRequestStatus = "CANCELLED"
 	OrderRequestStatusExpired       OrderRequestStatus = "EXPIRED"
+	OrderRequestStatusRejected      OrderRequestStatus = "REJECTED"
 )
 
 // A preview of the fee that would be collected when placing an Order Request.
