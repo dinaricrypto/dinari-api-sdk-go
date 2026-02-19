@@ -14,7 +14,7 @@ import (
 )
 
 func TestV2AccountOrderRequestEip155NewPermitWithOptionalParams(t *testing.T) {
-	t.Skip("Prism tests are disabled")
+	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -54,7 +54,7 @@ func TestV2AccountOrderRequestEip155NewPermitWithOptionalParams(t *testing.T) {
 }
 
 func TestV2AccountOrderRequestEip155NewPermitTransaction(t *testing.T) {
-	t.Skip("Prism tests are disabled")
+	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
@@ -87,7 +87,7 @@ func TestV2AccountOrderRequestEip155NewPermitTransaction(t *testing.T) {
 }
 
 func TestV2AccountOrderRequestEip155Submit(t *testing.T) {
-	t.Skip("Prism tests are disabled")
+	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
 		baseURL = envURL
