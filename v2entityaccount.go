@@ -68,19 +68,19 @@ func (r *V2EntityAccountService) List(ctx context.Context, entityID string, quer
 // Information about an `Account` owned by an `Entity`.
 type Account struct {
 	// Unique ID for the `Account`.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Datetime when the `Account` was created. ISO 8601 timestamp.
-	CreatedDt time.Time `json:"created_dt,required" format:"date-time"`
+	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
 	// ID for the `Entity` that owns the `Account`.
-	EntityID string `json:"entity_id,required" format:"uuid"`
+	EntityID string `json:"entity_id" api:"required" format:"uuid"`
 	// Indicates whether the `Account` is active.
-	IsActive bool `json:"is_active,required"`
+	IsActive bool `json:"is_active" api:"required"`
 	// Jurisdiction of the `Account`.
 	//
 	// Any of "BASELINE", "US".
-	Jurisdiction Jurisdiction `json:"jurisdiction,required"`
+	Jurisdiction Jurisdiction `json:"jurisdiction" api:"required"`
 	// ID of the brokerage account associated with the `Account`.
-	BrokerageAccountID string `json:"brokerage_account_id,nullable"`
+	BrokerageAccountID string `json:"brokerage_account_id" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                 respjson.Field

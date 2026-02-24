@@ -76,15 +76,15 @@ func (r *V2EntityKYCDocumentService) Upload(ctx context.Context, kycID string, p
 // A document associated with KYC for an `Entity`.
 type KYCDocument struct {
 	// ID of the document.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Type of document.
 	//
 	// Any of "GOVERNMENT_ID", "SELFIE", "RESIDENCY", "UNKNOWN".
-	DocumentType KYCDocumentType `json:"document_type,required"`
+	DocumentType KYCDocumentType `json:"document_type" api:"required"`
 	// Filename of document.
-	Filename string `json:"filename,required"`
+	Filename string `json:"filename" api:"required"`
 	// Temporary URL to access the document. Expires in 1 hour.
-	URL string `json:"url,required"`
+	URL string `json:"url" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID           respjson.Field
@@ -112,19 +112,19 @@ const (
 )
 
 type V2EntityKYCDocumentGetParams struct {
-	EntityID string `path:"entity_id,required" format:"uuid" json:"-"`
+	EntityID string `path:"entity_id" api:"required" format:"uuid" json:"-"`
 	paramObj
 }
 
 type V2EntityKYCDocumentUploadParams struct {
-	EntityID string `path:"entity_id,required" format:"uuid" json:"-"`
+	EntityID string `path:"entity_id" api:"required" format:"uuid" json:"-"`
 	// Type of `KYCDocument` to be uploaded.
 	//
 	// Any of "GOVERNMENT_ID", "SELFIE", "RESIDENCY", "UNKNOWN".
-	DocumentType KYCDocumentType `query:"document_type,omitzero,required" json:"-"`
+	DocumentType KYCDocumentType `query:"document_type,omitzero" api:"required" json:"-"`
 	// File to be uploaded. Must be a valid image or PDF file (jpg, jpeg, png, pdf)
 	// less than 10MB in size.
-	File io.Reader `json:"file,omitzero,required" format:"binary"`
+	File io.Reader `json:"file,omitzero" api:"required" format:"binary"`
 	paramObj
 }
 

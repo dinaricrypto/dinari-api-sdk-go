@@ -95,21 +95,21 @@ func (r *V2EntityService) GetCurrent(ctx context.Context, opts ...option.Request
 // organization.
 type Entity struct {
 	// Unique ID of the `Entity`.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Type of `Entity`. `ORGANIZATION` for Dinari Partners and `INDIVIDUAL` for their
 	// individual customers.
 	//
 	// Any of "INDIVIDUAL", "ORGANIZATION".
-	EntityType EntityEntityType `json:"entity_type,required"`
+	EntityType EntityEntityType `json:"entity_type" api:"required"`
 	// Indicates if `Entity` completed KYC.
-	IsKYCComplete bool `json:"is_kyc_complete,required"`
+	IsKYCComplete bool `json:"is_kyc_complete" api:"required"`
 	// Name of `Entity`.
-	Name string `json:"name,nullable"`
+	Name string `json:"name" api:"nullable"`
 	// Nationality or home country of the `Entity`.
-	Nationality string `json:"nationality,nullable"`
+	Nationality string `json:"nationality" api:"nullable"`
 	// Case sensitive unique reference ID that you can set for the `Entity`. We
 	// recommend setting this to the unique ID of the `Entity` in your system.
-	ReferenceID string `json:"reference_id,nullable"`
+	ReferenceID string `json:"reference_id" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID            respjson.Field
@@ -140,7 +140,7 @@ const (
 
 type V2EntityNewParams struct {
 	// Name of the `Entity`.
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Case sensitive unique reference ID for the `Entity`. We recommend setting this
 	// to the unique ID of the `Entity` in your system.
 	ReferenceID param.Opt[string] `json:"reference_id,omitzero"`

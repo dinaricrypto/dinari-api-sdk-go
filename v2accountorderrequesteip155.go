@@ -90,10 +90,10 @@ func (r *V2AccountOrderRequestEip155Service) Submit(ctx context.Context, account
 // The properties OrderRequestID, PermitSignature are required.
 type Eip155OrderRequestPermitTransactionParam struct {
 	// ID of the prepared proxied order to be submitted as a proxied order.
-	OrderRequestID string `json:"order_request_id,required" format:"uuid"`
+	OrderRequestID string `json:"order_request_id" api:"required" format:"uuid"`
 	// Signature of the permit typed data, allowing Dinari to spend the payment token
 	// or dShare asset token on behalf of the owner.
-	PermitSignature string `json:"permit_signature,required" format:"hex_string"`
+	PermitSignature string `json:"permit_signature" api:"required" format:"hex_string"`
 	paramObj
 }
 
@@ -108,10 +108,10 @@ func (r *Eip155OrderRequestPermitTransactionParam) UnmarshalJSON(data []byte) er
 // Token permit to be signed by the smart contract submitter.
 type V2AccountOrderRequestEip155NewPermitResponse struct {
 	// ID representing the EIP155 `OrderRequest`
-	OrderRequestID string `json:"order_request_id,required" format:"uuid"`
+	OrderRequestID string `json:"order_request_id" api:"required" format:"uuid"`
 	// Token permit that is to be signed by smart contract submitter for authorizing
 	// token transfer for the `OrderRequest`
-	Permit map[string]any `json:"permit,required"`
+	Permit map[string]any `json:"permit" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		OrderRequestID respjson.Field
@@ -131,16 +131,16 @@ type V2AccountOrderRequestEip155NewPermitTransactionResponse struct {
 	// [JSON ABI](https://docs.soliditylang.org/en/v0.8.30/abi-spec.html#json) of the
 	// smart contract function encoded in the transaction. Provided for informational
 	// purposes.
-	Abi any `json:"abi,required"`
+	Abi any `json:"abi" api:"required"`
 	// Arguments to the smart contract function encoded in the transaction. Provided
 	// for informational purposes.
-	Args any `json:"args,required"`
+	Args any `json:"args" api:"required"`
 	// Smart contract address that the transaction should call.
-	ContractAddress string `json:"contract_address,required" format:"eth_address"`
+	ContractAddress string `json:"contract_address" api:"required" format:"eth_address"`
 	// Hex-encoded function call.
-	Data string `json:"data,required" format:"hex_string"`
+	Data string `json:"data" api:"required" format:"hex_string"`
 	// Transaction value estimate in Wei.
-	Value string `json:"value,required" format:"bigint"`
+	Value string `json:"value" api:"required" format:"bigint"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Abi             respjson.Field
@@ -170,23 +170,23 @@ func (r *V2AccountOrderRequestEip155NewPermitTransactionResponse) UnmarshalJSON(
 type V2AccountOrderRequestEip155SubmitResponse struct {
 	// ID of `EIP155OrderRequest`. This is the primary identifier for the
 	// `/order_requests` routes.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// ID of `Account` placing the `EIP155OrderRequest`.
-	AccountID string `json:"account_id,required" format:"uuid"`
+	AccountID string `json:"account_id" api:"required" format:"uuid"`
 	// Datetime at which the `EIP155OrderRequest` was created. ISO 8601 timestamp.
-	CreatedDt time.Time `json:"created_dt,required" format:"date-time"`
+	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
 	// Indicates whether `Order` is a buy or sell.
 	//
 	// Any of "BUY", "SELL".
-	OrderSide OrderSide `json:"order_side,required"`
+	OrderSide OrderSide `json:"order_side" api:"required"`
 	// Indicates how long `Order` is valid for.
 	//
 	// Any of "DAY", "GTC", "IOC", "FOK".
-	OrderTif OrderTif `json:"order_tif,required"`
+	OrderTif OrderTif `json:"order_tif" api:"required"`
 	// Type of `Order`.
 	//
 	// Any of "MARKET", "LIMIT".
-	OrderType OrderType `json:"order_type,required"`
+	OrderType OrderType `json:"order_type" api:"required"`
 	// Status of `EIP155OrderRequest`. Possible values:
 	//
 	// - `QUOTED`: Order request created with fee quote provided, ready for processing
@@ -200,16 +200,16 @@ type V2AccountOrderRequestEip155SubmitResponse struct {
 	//
 	// Any of "QUOTED", "PENDING", "PENDING_BRIDGE", "SUBMITTED", "ERROR", "CANCELLED",
 	// "EXPIRED", "REJECTED".
-	Status OrderRequestStatus `json:"status,required"`
+	Status OrderRequestStatus `json:"status" api:"required"`
 	// Reason for the order cancellation if the order status is CANCELLED
-	CancelMessage string `json:"cancel_message,nullable"`
+	CancelMessage string `json:"cancel_message" api:"nullable"`
 	// ID of `Order` created from the `EIP155OrderRequest`. This is the primary
 	// identifier for the `/orders` routes.
-	OrderID string `json:"order_id,nullable" format:"uuid"`
+	OrderID string `json:"order_id" api:"nullable" format:"uuid"`
 	// ID of recipient `Account`.
-	RecipientAccountID string `json:"recipient_account_id,nullable" format:"uuid"`
+	RecipientAccountID string `json:"recipient_account_id" api:"nullable" format:"uuid"`
 	// Reason for the order rejection if the order status is REJECTED
-	RejectMessage string `json:"reject_message,nullable"`
+	RejectMessage string `json:"reject_message" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                 respjson.Field
@@ -241,21 +241,21 @@ type V2AccountOrderRequestEip155NewPermitParams struct {
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
 	// "eip155:179202", "eip155:98865", "eip155:7887".
-	ChainID Chain `json:"chain_id,omitzero,required"`
+	ChainID Chain `json:"chain_id,omitzero" api:"required"`
 	// Indicates whether `Order` is a buy or sell.
 	//
 	// Any of "BUY", "SELL".
-	OrderSide OrderSide `json:"order_side,omitzero,required"`
+	OrderSide OrderSide `json:"order_side,omitzero" api:"required"`
 	// Time in force. Indicates how long `Order` is valid for.
 	//
 	// Any of "DAY", "GTC", "IOC", "FOK".
-	OrderTif OrderTif `json:"order_tif,omitzero,required"`
+	OrderTif OrderTif `json:"order_tif,omitzero" api:"required"`
 	// Type of `Order`.
 	//
 	// Any of "MARKET", "LIMIT".
-	OrderType OrderType `json:"order_type,omitzero,required"`
+	OrderType OrderType `json:"order_type,omitzero" api:"required"`
 	// Address of payment token.
-	PaymentToken string `json:"payment_token,required" format:"eth_address"`
+	PaymentToken string `json:"payment_token" api:"required" format:"eth_address"`
 	// Amount of dShare asset tokens involved. Required for limit `Order Requests` and
 	// market sell `Order Requests`. Must be a positive number with a precision of up
 	// to 4 decimal places for limit `Order Requests` or up to 6 decimal places for

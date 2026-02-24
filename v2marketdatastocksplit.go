@@ -80,32 +80,32 @@ func (r *V2MarketDataStockSplitService) ListForStock(ctx context.Context, stockI
 // status of the split.
 type StockSplit struct {
 	// ID of the `StockSplit`
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Ex-date of the split in Eastern Time Zone. First day the stock trades at
 	// post-split prices. Typically is last date in the process, and the main important
 	// date for investors. In ISO 8601 format, YYYY-MM-DD.
-	ExDate time.Time `json:"ex_date,required" format:"date"`
+	ExDate time.Time `json:"ex_date" api:"required" format:"date"`
 	// Payable date of the split in Eastern Time Zone. This is the date when company
 	// will send out the new shares. Mainly for record keeping by brokerages, who
 	// forward the shares to eventual owners. Typically is the second date in the
 	// process. In ISO 8601 format, YYYY-MM-DD.
-	PayableDate time.Time `json:"payable_date,required" format:"date"`
+	PayableDate time.Time `json:"payable_date" api:"required" format:"date"`
 	// Record date of the split in Eastern Time Zone, for company to determine where to
 	// send their new shares. Mainly for record keeping by brokerages, who forward the
 	// shares to eventual owners. Typically is the first date in the process. In ISO
 	// 8601 format, YYYY-MM-DD.
-	RecordDate time.Time `json:"record_date,required" format:"date"`
+	RecordDate time.Time `json:"record_date" api:"required" format:"date"`
 	// The number of shares before the split. In a 10-for-1 split, this would be 1.
-	SplitFrom float64 `json:"split_from,required"`
+	SplitFrom float64 `json:"split_from" api:"required"`
 	// The number of shares after the split. In a 10-for-1 split, this would be 10.
-	SplitTo float64 `json:"split_to,required"`
+	SplitTo float64 `json:"split_to" api:"required"`
 	// The status of Dinari's processing of the `StockSplit`. `Stocks` for which this
 	// status is `IN_PROGRESS` will not be available for trading.
 	//
 	// Any of "PENDING", "IN_PROGRESS", "COMPLETE".
-	Status StockSplitStatus `json:"status,required"`
+	Status StockSplitStatus `json:"status" api:"required"`
 	// ID of the `Stock` whose shares are being split.
-	StockID string `json:"stock_id,required" format:"uuid"`
+	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID          respjson.Field
