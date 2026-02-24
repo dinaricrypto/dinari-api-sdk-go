@@ -171,12 +171,12 @@ type CreateLimitBuyOrderInputParam struct {
 	// Amount of dShare asset involved. Required for limit `Order Requests` and market
 	// sell `Order Requests`. Must be a positive number with a precision of up to 4
 	// decimal places.
-	AssetQuantity float64 `json:"asset_quantity,required"`
+	AssetQuantity float64 `json:"asset_quantity" api:"required"`
 	// Price at which to execute the order. Must be a positive number with a precision
 	// of up to 2 decimal places.
-	LimitPrice float64 `json:"limit_price,required"`
+	LimitPrice float64 `json:"limit_price" api:"required"`
 	// ID of `Stock`.
-	StockID string `json:"stock_id,required" format:"uuid"`
+	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// Customer-supplied ID to map this order to an order in their own systems. Must be
 	// unique within the entity.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
@@ -200,12 +200,12 @@ type CreateLimitSellOrderInputParam struct {
 	// Amount of dShare asset involved. Required for limit `Order Requests` and market
 	// sell `Order Requests`. Must be a positive number with a precision of up to 4
 	// decimal places.
-	AssetQuantity float64 `json:"asset_quantity,required"`
+	AssetQuantity float64 `json:"asset_quantity" api:"required"`
 	// Price at which to execute the order. Must be a positive number with a precision
 	// of up to 2 decimal places.
-	LimitPrice float64 `json:"limit_price,required"`
+	LimitPrice float64 `json:"limit_price" api:"required"`
 	// ID of `Stock`.
-	StockID string `json:"stock_id,required" format:"uuid"`
+	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// Customer-supplied ID to map this order to an order in their own systems. Must be
 	// unique within the entity.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
@@ -232,9 +232,9 @@ func (r *CreateLimitSellOrderInputParam) UnmarshalJSON(data []byte) error {
 type CreateMarketBuyOrderInputParam struct {
 	// Amount of currency (USD for US equities and ETFs) to pay for the order. Must be
 	// a positive number with a precision of up to 2 decimal places.
-	PaymentAmount float64 `json:"payment_amount,required"`
+	PaymentAmount float64 `json:"payment_amount" api:"required"`
 	// ID of `Stock`.
-	StockID string `json:"stock_id,required" format:"uuid"`
+	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// Customer-supplied ID to map this order to an order in their own systems. Must be
 	// unique within the entity.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
@@ -257,9 +257,9 @@ func (r *CreateMarketBuyOrderInputParam) UnmarshalJSON(data []byte) error {
 type CreateMarketSellOrderInputParam struct {
 	// Quantity of shares to trade. Must be a positive number with a precision of up to
 	// 6 decimal places.
-	AssetQuantity float64 `json:"asset_quantity,required"`
+	AssetQuantity float64 `json:"asset_quantity" api:"required"`
 	// ID of `Stock`.
-	StockID string `json:"stock_id,required" format:"uuid"`
+	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// Customer-supplied ID to map this order to an order in their own systems. Must be
 	// unique within the entity.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
@@ -290,23 +290,23 @@ func (r *CreateMarketSellOrderInputParam) UnmarshalJSON(data []byte) error {
 type OrderRequest struct {
 	// ID of `OrderRequest`. This is the primary identifier for the `/order_requests`
 	// routes.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// ID of `Account` placing the `OrderRequest`.
-	AccountID string `json:"account_id,required" format:"uuid"`
+	AccountID string `json:"account_id" api:"required" format:"uuid"`
 	// Datetime at which the `OrderRequest` was created. ISO 8601 timestamp.
-	CreatedDt time.Time `json:"created_dt,required" format:"date-time"`
+	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
 	// Indicates whether `Order` is a buy or sell.
 	//
 	// Any of "BUY", "SELL".
-	OrderSide OrderSide `json:"order_side,required"`
+	OrderSide OrderSide `json:"order_side" api:"required"`
 	// Indicates how long `Order` is valid for.
 	//
 	// Any of "DAY", "GTC", "IOC", "FOK".
-	OrderTif OrderTif `json:"order_tif,required"`
+	OrderTif OrderTif `json:"order_tif" api:"required"`
 	// Type of `Order`.
 	//
 	// Any of "MARKET", "LIMIT".
-	OrderType OrderType `json:"order_type,required"`
+	OrderType OrderType `json:"order_type" api:"required"`
 	// Status of `OrderRequest`. Possible values:
 	//
 	// - `QUOTED`: Order request created with fee quote provided, ready for processing
@@ -320,19 +320,19 @@ type OrderRequest struct {
 	//
 	// Any of "QUOTED", "PENDING", "PENDING_BRIDGE", "SUBMITTED", "ERROR", "CANCELLED",
 	// "EXPIRED", "REJECTED".
-	Status OrderRequestStatus `json:"status,required"`
+	Status OrderRequestStatus `json:"status" api:"required"`
 	// Reason for the order cancellation if the order status is CANCELLED
-	CancelMessage string `json:"cancel_message,nullable"`
+	CancelMessage string `json:"cancel_message" api:"nullable"`
 	// Customer-supplied ID to map this `OrderRequest` to an order in their own
 	// systems.
-	ClientOrderID string `json:"client_order_id,nullable"`
+	ClientOrderID string `json:"client_order_id" api:"nullable"`
 	// ID of `Order` created from the `OrderRequest`. This is the primary identifier
 	// for the `/orders` routes.
-	OrderID string `json:"order_id,nullable" format:"uuid"`
+	OrderID string `json:"order_id" api:"nullable" format:"uuid"`
 	// ID of recipient `Account`.
-	RecipientAccountID string `json:"recipient_account_id,nullable" format:"uuid"`
+	RecipientAccountID string `json:"recipient_account_id" api:"nullable" format:"uuid"`
 	// Reason for the order rejection if the order status is REJECTED
-	RejectMessage string `json:"reject_message,nullable"`
+	RejectMessage string `json:"reject_message" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                 respjson.Field
@@ -374,7 +374,7 @@ const (
 // A preview of the fee that would be collected when placing an Order Request.
 type V2AccountOrderRequestGetFeeQuoteResponse struct {
 	// Cash amount in USD paid for fees for the Order Request.
-	Fee float64 `json:"fee,required"`
+	Fee float64 `json:"fee" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Fee         respjson.Field
@@ -390,7 +390,7 @@ func (r *V2AccountOrderRequestGetFeeQuoteResponse) UnmarshalJSON(data []byte) er
 }
 
 type V2AccountOrderRequestGetParams struct {
-	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	AccountID string `path:"account_id" api:"required" format:"uuid" json:"-"`
 	paramObj
 }
 
@@ -472,13 +472,13 @@ type V2AccountOrderRequestGetFeeQuoteParams struct {
 	// Indicates whether `Order Request` is a buy or sell.
 	//
 	// Any of "BUY", "SELL".
-	OrderSide OrderSide `json:"order_side,omitzero,required"`
+	OrderSide OrderSide `json:"order_side,omitzero" api:"required"`
 	// Type of `Order Request`.
 	//
 	// Any of "MARKET", "LIMIT".
-	OrderType OrderType `json:"order_type,omitzero,required"`
+	OrderType OrderType `json:"order_type,omitzero" api:"required"`
 	// The Stock ID associated with the Order Request
-	StockID string `json:"stock_id,required" format:"uuid"`
+	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// Amount of dShare asset tokens involved. Required for limit `Order Requests` and
 	// market sell `Order Requests`. Must be a positive number with a precision of up
 	// to 4 decimal places for limit `Order Requests` or up to 6 decimal places for

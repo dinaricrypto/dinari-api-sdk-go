@@ -91,34 +91,34 @@ func (r *V2EntityKYCService) Submit(ctx context.Context, entityID string, body V
 // KYC data for an `Entity` in the BASELINE jurisdiction.
 type BaselineKYCCheckData struct {
 	// Country of residence. ISO 3166-1 alpha 2 country code.
-	AddressCountryCode string `json:"address_country_code,required"`
+	AddressCountryCode string `json:"address_country_code" api:"required"`
 	// Country of citizenship or home country of the organization. ISO 3166-1 alpha 2
 	// country code.
-	CountryCode string `json:"country_code,required"`
+	CountryCode string `json:"country_code" api:"required"`
 	// Last name of the person.
-	LastName string `json:"last_name,required"`
+	LastName string `json:"last_name" api:"required"`
 	// City of address. Not all international addresses use this attribute.
-	AddressCity string `json:"address_city,nullable"`
+	AddressCity string `json:"address_city" api:"nullable"`
 	// Postal code of residence address. Not all international addresses use this
 	// attribute.
-	AddressPostalCode string `json:"address_postal_code,nullable"`
+	AddressPostalCode string `json:"address_postal_code" api:"nullable"`
 	// Street address of address.
-	AddressStreet1 string `json:"address_street_1,nullable"`
+	AddressStreet1 string `json:"address_street_1" api:"nullable"`
 	// Extension of address, usually apartment or suite number.
-	AddressStreet2 string `json:"address_street_2,nullable"`
+	AddressStreet2 string `json:"address_street_2" api:"nullable"`
 	// State or subdivision of address. In the US, this should be the unabbreviated
 	// name of the state. Not all international addresses use this attribute.
-	AddressSubdivision string `json:"address_subdivision,nullable"`
+	AddressSubdivision string `json:"address_subdivision" api:"nullable"`
 	// Birth date of the individual. In ISO 8601 format, YYYY-MM-DD.
-	BirthDate time.Time `json:"birth_date,nullable" format:"date"`
+	BirthDate time.Time `json:"birth_date" api:"nullable" format:"date"`
 	// Email address.
-	Email string `json:"email,nullable"`
+	Email string `json:"email" api:"nullable"`
 	// First name of the person.
-	FirstName string `json:"first_name,nullable"`
+	FirstName string `json:"first_name" api:"nullable"`
 	// Middle name of the user
-	MiddleName string `json:"middle_name,nullable"`
+	MiddleName string `json:"middle_name" api:"nullable"`
 	// ID number of the official tax document of the country the entity belongs to.
-	TaxIDNumber string `json:"tax_id_number,nullable"`
+	TaxIDNumber string `json:"tax_id_number" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AddressCountryCode respjson.Field
@@ -159,12 +159,12 @@ func (r BaselineKYCCheckData) ToParam() BaselineKYCCheckDataParam {
 // The properties AddressCountryCode, CountryCode, LastName are required.
 type BaselineKYCCheckDataParam struct {
 	// Country of residence. ISO 3166-1 alpha 2 country code.
-	AddressCountryCode string `json:"address_country_code,required"`
+	AddressCountryCode string `json:"address_country_code" api:"required"`
 	// Country of citizenship or home country of the organization. ISO 3166-1 alpha 2
 	// country code.
-	CountryCode string `json:"country_code,required"`
+	CountryCode string `json:"country_code" api:"required"`
 	// Last name of the person.
-	LastName string `json:"last_name,required"`
+	LastName string `json:"last_name" api:"required"`
 	// City of address. Not all international addresses use this attribute.
 	AddressCity param.Opt[string] `json:"address_city,omitzero"`
 	// Postal code of residence address. Not all international addresses use this
@@ -357,15 +357,15 @@ func (r *KYCInfoUnionData) UnmarshalJSON(data []byte) error {
 // KYC information for an `Entity` in the baseline jurisdiction.
 type KYCInfoBaseline struct {
 	// ID of the KYC check.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// KYC check status.
 	//
 	// Any of "PASS", "FAIL", "PENDING", "INCOMPLETE", "NEEDS_REVIEW".
-	Status KYCStatus `json:"status,required"`
+	Status KYCStatus `json:"status" api:"required"`
 	// Datetime when the KYC was last checked. ISO 8601 timestamp.
-	CheckedDt time.Time `json:"checked_dt,nullable" format:"date-time"`
+	CheckedDt time.Time `json:"checked_dt" api:"nullable" format:"date-time"`
 	// KYC data for an `Entity` in the BASELINE jurisdiction.
-	Data BaselineKYCCheckData `json:"data,nullable"`
+	Data BaselineKYCCheckData `json:"data" api:"nullable"`
 	// Jurisdiction of the KYC check.
 	//
 	// Any of "BASELINE".
@@ -391,15 +391,15 @@ func (r *KYCInfoBaseline) UnmarshalJSON(data []byte) error {
 // KYC information for an `Entity` in the US jurisdiction.
 type KYCInfoUs struct {
 	// ID of the KYC check.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// KYC check status.
 	//
 	// Any of "PASS", "FAIL", "PENDING", "INCOMPLETE", "NEEDS_REVIEW".
-	Status KYCStatus `json:"status,required"`
+	Status KYCStatus `json:"status" api:"required"`
 	// Datetime when the KYC was last checked. ISO 8601 timestamp.
-	CheckedDt time.Time `json:"checked_dt,nullable" format:"date-time"`
+	CheckedDt time.Time `json:"checked_dt" api:"nullable" format:"date-time"`
 	// KYC data for an `Entity` in the US jurisdiction.
-	Data UsKYCCheckData `json:"data,nullable"`
+	Data UsKYCCheckData `json:"data" api:"nullable"`
 	// Jurisdiction of the KYC check.
 	//
 	// Any of "US".
@@ -437,43 +437,43 @@ type UsKYCCheckData struct {
 	// Information to affirm that the individual has read, agreed to, and signed
 	// Alpaca's customer agreement, found here:
 	// https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf
-	AlpacaCustomerAgreement UsKYCCheckDataAlpacaCustomerAgreement `json:"alpaca_customer_agreement,required"`
+	AlpacaCustomerAgreement UsKYCCheckDataAlpacaCustomerAgreement `json:"alpaca_customer_agreement" api:"required"`
 	// AML check information for this individual. If any of the checks have a match,
 	// provide details about the matches or hits found. The individual will be marked
 	// as high risk and be subject to manual review.
-	AmlCheck UsKYCCheckDataAmlCheck `json:"aml_check,required"`
+	AmlCheck UsKYCCheckDataAmlCheck `json:"aml_check" api:"required"`
 	// Data source citations for a KYC check.
-	DataCitation UsKYCCheckDataDataCitation `json:"data_citation,required"`
+	DataCitation UsKYCCheckDataDataCitation `json:"data_citation" api:"required"`
 	// Employment information for the individual
-	Employment UsKYCCheckDataEmployment `json:"employment,required"`
+	Employment UsKYCCheckDataEmployment `json:"employment" api:"required"`
 	// Financial profile information for the individual <br/><br/> Examples of liquid
 	// net worth ranges: <br/> - $0 - $20,000 <br/> - $20,000 - $50,000 <br/> -
 	// $50,000 - $100,000 <br/> - $100,000 - $500,000 <br/> - $500,000 - $1,000,000
-	FinancialProfile UsKYCCheckDataFinancialProfile `json:"financial_profile,required"`
+	FinancialProfile UsKYCCheckDataFinancialProfile `json:"financial_profile" api:"required"`
 	// Identity information for the individual
-	Identity UsKYCCheckDataIdentity `json:"identity,required"`
+	Identity UsKYCCheckDataIdentity `json:"identity" api:"required"`
 	// Metadata about the KYC check.
-	KYCMetadata UsKYCCheckDataKYCMetadata `json:"kyc_metadata,required"`
+	KYCMetadata UsKYCCheckDataKYCMetadata `json:"kyc_metadata" api:"required"`
 	// The non-professional trader property is a self-attestation for US customers that
 	// can affect the metered realtime data fees. This field must be updated when if
 	// there is a change in the user's attestation. This field may also be modified by
 	// Dinari compliance team. For more information, please see the US Customers
 	// Integration Guide.
-	NonProfessionalTraderAttestation UsKYCCheckDataNonProfessionalTraderAttestation `json:"non_professional_trader_attestation,required"`
+	NonProfessionalTraderAttestation UsKYCCheckDataNonProfessionalTraderAttestation `json:"non_professional_trader_attestation" api:"required"`
 	// Risk information about the individual <br/><br/> Fields denote if the account
 	// owner falls under each category defined by FINRA rules. If any of the answers is
 	// true (yes), additional verifications may be required before US account approval.
-	RiskDisclosure UsKYCCheckDataRiskDisclosure `json:"risk_disclosure,required"`
+	RiskDisclosure UsKYCCheckDataRiskDisclosure `json:"risk_disclosure" api:"required"`
 	// Information for a trusted contact person for the individual. More information:
 	// <br/> -
 	// <a href="https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-trusted-contact" target="_blank" rel="noopener noreferrer">Investor.gov -
 	// Trusted Contact</a> <br/> -
 	// <a href="https://www.finra.org/investors/insights/trusted-contact" target="_blank" rel="noopener noreferrer">FINRA -
 	// Trusted Contact</a>
-	TrustedContact UsKYCCheckDataTrustedContact `json:"trusted_contact,required"`
+	TrustedContact UsKYCCheckDataTrustedContact `json:"trusted_contact" api:"required"`
 	// US immigration information for this individual. Required if the individual is
 	// not a US citizen.
-	UsImmigrationInfo UsKYCCheckDataUsImmigrationInfo `json:"us_immigration_info,nullable"`
+	UsImmigrationInfo UsKYCCheckDataUsImmigrationInfo `json:"us_immigration_info" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AlpacaCustomerAgreement          respjson.Field
@@ -512,9 +512,9 @@ func (r UsKYCCheckData) ToParam() UsKYCCheckDataParam {
 // https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf
 type UsKYCCheckDataAlpacaCustomerAgreement struct {
 	// The IP address from where the individual signed the agreement.
-	IPAddress string `json:"ip_address,required" format:"ip"`
+	IPAddress string `json:"ip_address" api:"required" format:"ip"`
 	// The timestamp the agreement was signed.
-	SignedAt time.Time `json:"signed_at,required" format:"date-time"`
+	SignedAt time.Time `json:"signed_at" api:"required" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		IPAddress   respjson.Field
@@ -535,20 +535,20 @@ func (r *UsKYCCheckDataAlpacaCustomerAgreement) UnmarshalJSON(data []byte) error
 // as high risk and be subject to manual review.
 type UsKYCCheckDataAmlCheck struct {
 	// Datetime that this AML check was created.
-	CheckCreatedAt time.Time `json:"check_created_at,required" format:"date-time"`
+	CheckCreatedAt time.Time `json:"check_created_at" api:"required" format:"date-time"`
 	// Whether there was a match in the adverse media check.
-	IsAdverseMediaMatch bool `json:"is_adverse_media_match,required"`
+	IsAdverseMediaMatch bool `json:"is_adverse_media_match" api:"required"`
 	// Whether there was a match in the monitored lists check.
-	IsMonitoredListsMatch bool `json:"is_monitored_lists_match,required"`
+	IsMonitoredListsMatch bool `json:"is_monitored_lists_match" api:"required"`
 	// Whether there was a match in the politically exposed person (PEP) check.
-	IsPoliticallyExposedPersonMatch bool `json:"is_politically_exposed_person_match,required"`
+	IsPoliticallyExposedPersonMatch bool `json:"is_politically_exposed_person_match" api:"required"`
 	// Whether there was a match in the sanctions check.
-	IsSanctionsMatch bool `json:"is_sanctions_match,required"`
+	IsSanctionsMatch bool `json:"is_sanctions_match" api:"required"`
 	// If any of the checks have a match, provide details about the matches or hits
 	// found.
-	Records []string `json:"records,required"`
+	Records []string `json:"records" api:"required"`
 	// Your unique identifier for the AML check.
-	RefID string `json:"ref_id,required"`
+	RefID string `json:"ref_id" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CheckCreatedAt                  respjson.Field
@@ -572,11 +572,11 @@ func (r *UsKYCCheckDataAmlCheck) UnmarshalJSON(data []byte) error {
 // Data source citations for a KYC check.
 type UsKYCCheckDataDataCitation struct {
 	// List of sources for address verification
-	AddressSources []string `json:"address_sources,required"`
+	AddressSources []string `json:"address_sources" api:"required"`
 	// List of sources for date of birth verification
-	DateOfBirthSources []string `json:"date_of_birth_sources,required"`
+	DateOfBirthSources []string `json:"date_of_birth_sources" api:"required"`
 	// List of sources for tax ID verification
-	TaxIDSources []string `json:"tax_id_sources,required"`
+	TaxIDSources []string `json:"tax_id_sources" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AddressSources     respjson.Field
@@ -598,13 +598,13 @@ type UsKYCCheckDataEmployment struct {
 	// One of the following: employed, unemployed, retired, or student.
 	//
 	// Any of "UNEMPLOYED", "EMPLOYED", "STUDENT", "RETIRED".
-	EmploymentStatus string `json:"employment_status,required"`
+	EmploymentStatus string `json:"employment_status" api:"required"`
 	// The employer's address if the user is employed.
-	EmployerAddress string `json:"employer_address,nullable"`
+	EmployerAddress string `json:"employer_address" api:"nullable"`
 	// The name of the employer if the user is employed.
-	EmployerName string `json:"employer_name,nullable"`
+	EmployerName string `json:"employer_name" api:"nullable"`
 	// The user's position if they are employed.
-	EmploymentPosition string `json:"employment_position,nullable"`
+	EmploymentPosition string `json:"employment_position" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		EmploymentStatus   respjson.Field
@@ -631,12 +631,12 @@ type UsKYCCheckDataFinancialProfile struct {
 	//
 	// Any of "EMPLOYMENT_INCOME", "INVESTMENTS", "INHERITANCE", "BUSINESS_INCOME",
 	// "SAVINGS", "FAMILY".
-	FundingSources []string `json:"funding_sources,required"`
+	FundingSources []string `json:"funding_sources" api:"required"`
 	// The upper bound of the user's liquid net worth (USD).
-	LiquidNetWorthMax int64 `json:"liquid_net_worth_max,required"`
+	LiquidNetWorthMax int64 `json:"liquid_net_worth_max" api:"required"`
 	// The lower bound of the user's liquid net worth (USD). Can be 0 if max is
 	// <=$20,000, but otherwise must be within an order of magnitude of the max value.
-	LiquidNetWorthMin int64 `json:"liquid_net_worth_min,required"`
+	LiquidNetWorthMin int64 `json:"liquid_net_worth_min" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		FundingSources    respjson.Field
@@ -656,37 +656,37 @@ func (r *UsKYCCheckDataFinancialProfile) UnmarshalJSON(data []byte) error {
 // Identity information for the individual
 type UsKYCCheckDataIdentity struct {
 	// City of the applicant.
-	City string `json:"city,required"`
+	City string `json:"city" api:"required"`
 	// Nationality of the applicant.
-	CountryOfCitizenship string `json:"country_of_citizenship,required"`
+	CountryOfCitizenship string `json:"country_of_citizenship" api:"required"`
 	// Country of residency of the applicant. Must be 'US'.
 	//
 	// Any of "US".
-	CountryOfTaxResidence string `json:"country_of_tax_residence,required"`
+	CountryOfTaxResidence string `json:"country_of_tax_residence" api:"required"`
 	// Date of birth of the applicant.
-	DateOfBirth time.Time `json:"date_of_birth,required" format:"date"`
+	DateOfBirth time.Time `json:"date_of_birth" api:"required" format:"date"`
 	// Email address of the applicant.
-	EmailAddress string `json:"email_address,required"`
+	EmailAddress string `json:"email_address" api:"required"`
 	// The last name (surname) of the user.
-	FamilyName string `json:"family_name,required"`
+	FamilyName string `json:"family_name" api:"required"`
 	// The first/given name of the user.
-	GivenName string `json:"given_name,required"`
+	GivenName string `json:"given_name" api:"required"`
 	// Phone number should include the country code, format: “+15555555555”
-	PhoneNumber string `json:"phone_number,required"`
+	PhoneNumber string `json:"phone_number" api:"required"`
 	// Postal code of the applicant.
-	PostalCode string `json:"postal_code,required"`
+	PostalCode string `json:"postal_code" api:"required"`
 	// Street address of the applicant.
-	StreetAddress string `json:"street_address,required"`
+	StreetAddress string `json:"street_address" api:"required"`
 	// Social Security Number (SSN) or Tax Identification Number (TIN) of the
 	// applicant.
-	TaxID string `json:"tax_id,required"`
+	TaxID string `json:"tax_id" api:"required"`
 	// The middle name of the user.
-	MiddleName string `json:"middle_name,nullable"`
+	MiddleName string `json:"middle_name" api:"nullable"`
 	// State of the applicant. Required if the applicant resides in the US as a
 	// 2-letter abbreviation.
-	State string `json:"state,nullable"`
+	State string `json:"state" api:"nullable"`
 	// The specific apartment number if applicable
-	Unit string `json:"unit,nullable"`
+	Unit string `json:"unit" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		City                  respjson.Field
@@ -717,13 +717,13 @@ func (r *UsKYCCheckDataIdentity) UnmarshalJSON(data []byte) error {
 // Metadata about the KYC check.
 type UsKYCCheckDataKYCMetadata struct {
 	// Completion datetime of KYC check.
-	CheckCompletedAt time.Time `json:"check_completed_at,required" format:"date-time"`
+	CheckCompletedAt time.Time `json:"check_completed_at" api:"required" format:"date-time"`
 	// Start datetime of KYC check.
-	CheckInitiatedAt time.Time `json:"check_initiated_at,required" format:"date-time"`
+	CheckInitiatedAt time.Time `json:"check_initiated_at" api:"required" format:"date-time"`
 	// IP address of applicant at time of KYC check.
-	IPAddress string `json:"ip_address,required" format:"ip"`
+	IPAddress string `json:"ip_address" api:"required" format:"ip"`
 	// Your unique identifier for the KYC check.
-	RefID string `json:"ref_id,required"`
+	RefID string `json:"ref_id" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CheckCompletedAt respjson.Field
@@ -748,9 +748,9 @@ func (r *UsKYCCheckDataKYCMetadata) UnmarshalJSON(data []byte) error {
 // Integration Guide.
 type UsKYCCheckDataNonProfessionalTraderAttestation struct {
 	// Datetime when the attestation was made.
-	AttestationDt time.Time `json:"attestation_dt,required" format:"date-time"`
+	AttestationDt time.Time `json:"attestation_dt" api:"required" format:"date-time"`
 	// Whether the individual attests to being a non-professional trader.
-	IsNonProfessionalTrader bool `json:"is_non_professional_trader,required"`
+	IsNonProfessionalTrader bool `json:"is_non_professional_trader" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AttestationDt           respjson.Field
@@ -772,15 +772,15 @@ func (r *UsKYCCheckDataNonProfessionalTraderAttestation) UnmarshalJSON(data []by
 type UsKYCCheckDataRiskDisclosure struct {
 	// If the individual's immediate family member (sibling, husband/wife, child,
 	// parent) is either politically exposed or holds a control position.
-	ImmediateFamilyExposed bool `json:"immediate_family_exposed,required"`
+	ImmediateFamilyExposed bool `json:"immediate_family_exposed" api:"required"`
 	// Whether the individual is affiliated with any exchanges or FINRA.
-	IsAffiliatedExchangeOrFinra bool `json:"is_affiliated_exchange_or_finra,required"`
+	IsAffiliatedExchangeOrFinra bool `json:"is_affiliated_exchange_or_finra" api:"required"`
 	// Whether the individual holds a controlling position in a publicly traded
 	// company, is a member of the board of directors, or has policy making abilities
 	// in a publicly traded company.
-	IsControlPerson bool `json:"is_control_person,required"`
+	IsControlPerson bool `json:"is_control_person" api:"required"`
 	// Whether the individual is politically exposed.
-	IsPoliticallyExposed bool `json:"is_politically_exposed,required"`
+	IsPoliticallyExposed bool `json:"is_politically_exposed" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ImmediateFamilyExposed      respjson.Field
@@ -806,15 +806,15 @@ func (r *UsKYCCheckDataRiskDisclosure) UnmarshalJSON(data []byte) error {
 // Trusted Contact</a>
 type UsKYCCheckDataTrustedContact struct {
 	// The family name of the trusted contact
-	FamilyName string `json:"family_name,required"`
+	FamilyName string `json:"family_name" api:"required"`
 	// The given name of the trusted contact
-	GivenName string `json:"given_name,required"`
+	GivenName string `json:"given_name" api:"required"`
 	// The email address of the trusted contact. At least one of email_address or
 	// phone_number is required.
-	EmailAddress string `json:"email_address,nullable"`
+	EmailAddress string `json:"email_address" api:"nullable"`
 	// The phone number of the trusted contact. At least one of email_address or
 	// phone_number is required.
-	PhoneNumber string `json:"phone_number,nullable"`
+	PhoneNumber string `json:"phone_number" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		FamilyName   respjson.Field
@@ -836,13 +836,13 @@ func (r *UsKYCCheckDataTrustedContact) UnmarshalJSON(data []byte) error {
 // not a US citizen.
 type UsKYCCheckDataUsImmigrationInfo struct {
 	// Country where the individual was born.
-	CountryOfBirth string `json:"country_of_birth,required"`
+	CountryOfBirth string `json:"country_of_birth" api:"required"`
 	// Whether the individual is a US permanent resident (green card holder).
-	IsPermanentResident bool `json:"is_permanent_resident,required"`
+	IsPermanentResident bool `json:"is_permanent_resident" api:"required"`
 	// Date the individual is scheduled to leave the US. Required for B1 and B2 visas.
-	DepartureFromUsDate time.Time `json:"departure_from_us_date,nullable" format:"date"`
+	DepartureFromUsDate time.Time `json:"departure_from_us_date" api:"nullable" format:"date"`
 	// Expiration date of the visa. Required if visa_type is provided.
-	VisaExpirationDate time.Time `json:"visa_expiration_date,nullable" format:"date"`
+	VisaExpirationDate time.Time `json:"visa_expiration_date" api:"nullable" format:"date"`
 	// Type of visa the individual holds. Required if not a permanent resident.
 	//
 	// Any of "B1", "B2", "DACA", "E1", "E2", "E3", "F1", "G4", "H1B", "J1", "L1",
@@ -875,40 +875,40 @@ type UsKYCCheckDataParam struct {
 	// Information to affirm that the individual has read, agreed to, and signed
 	// Alpaca's customer agreement, found here:
 	// https://files.alpaca.markets/disclosures/library/AcctAppMarginAndCustAgmt.pdf
-	AlpacaCustomerAgreement UsKYCCheckDataAlpacaCustomerAgreementParam `json:"alpaca_customer_agreement,omitzero,required"`
+	AlpacaCustomerAgreement UsKYCCheckDataAlpacaCustomerAgreementParam `json:"alpaca_customer_agreement,omitzero" api:"required"`
 	// AML check information for this individual. If any of the checks have a match,
 	// provide details about the matches or hits found. The individual will be marked
 	// as high risk and be subject to manual review.
-	AmlCheck UsKYCCheckDataAmlCheckParam `json:"aml_check,omitzero,required"`
+	AmlCheck UsKYCCheckDataAmlCheckParam `json:"aml_check,omitzero" api:"required"`
 	// Data source citations for a KYC check.
-	DataCitation UsKYCCheckDataDataCitationParam `json:"data_citation,omitzero,required"`
+	DataCitation UsKYCCheckDataDataCitationParam `json:"data_citation,omitzero" api:"required"`
 	// Employment information for the individual
-	Employment UsKYCCheckDataEmploymentParam `json:"employment,omitzero,required"`
+	Employment UsKYCCheckDataEmploymentParam `json:"employment,omitzero" api:"required"`
 	// Financial profile information for the individual <br/><br/> Examples of liquid
 	// net worth ranges: <br/> - $0 - $20,000 <br/> - $20,000 - $50,000 <br/> -
 	// $50,000 - $100,000 <br/> - $100,000 - $500,000 <br/> - $500,000 - $1,000,000
-	FinancialProfile UsKYCCheckDataFinancialProfileParam `json:"financial_profile,omitzero,required"`
+	FinancialProfile UsKYCCheckDataFinancialProfileParam `json:"financial_profile,omitzero" api:"required"`
 	// Identity information for the individual
-	Identity UsKYCCheckDataIdentityParam `json:"identity,omitzero,required"`
+	Identity UsKYCCheckDataIdentityParam `json:"identity,omitzero" api:"required"`
 	// Metadata about the KYC check.
-	KYCMetadata UsKYCCheckDataKYCMetadataParam `json:"kyc_metadata,omitzero,required"`
+	KYCMetadata UsKYCCheckDataKYCMetadataParam `json:"kyc_metadata,omitzero" api:"required"`
 	// The non-professional trader property is a self-attestation for US customers that
 	// can affect the metered realtime data fees. This field must be updated when if
 	// there is a change in the user's attestation. This field may also be modified by
 	// Dinari compliance team. For more information, please see the US Customers
 	// Integration Guide.
-	NonProfessionalTraderAttestation UsKYCCheckDataNonProfessionalTraderAttestationParam `json:"non_professional_trader_attestation,omitzero,required"`
+	NonProfessionalTraderAttestation UsKYCCheckDataNonProfessionalTraderAttestationParam `json:"non_professional_trader_attestation,omitzero" api:"required"`
 	// Risk information about the individual <br/><br/> Fields denote if the account
 	// owner falls under each category defined by FINRA rules. If any of the answers is
 	// true (yes), additional verifications may be required before US account approval.
-	RiskDisclosure UsKYCCheckDataRiskDisclosureParam `json:"risk_disclosure,omitzero,required"`
+	RiskDisclosure UsKYCCheckDataRiskDisclosureParam `json:"risk_disclosure,omitzero" api:"required"`
 	// Information for a trusted contact person for the individual. More information:
 	// <br/> -
 	// <a href="https://www.investor.gov/introduction-investing/general-resources/news-alerts/alerts-bulletins/investor-bulletins-trusted-contact" target="_blank" rel="noopener noreferrer">Investor.gov -
 	// Trusted Contact</a> <br/> -
 	// <a href="https://www.finra.org/investors/insights/trusted-contact" target="_blank" rel="noopener noreferrer">FINRA -
 	// Trusted Contact</a>
-	TrustedContact UsKYCCheckDataTrustedContactParam `json:"trusted_contact,omitzero,required"`
+	TrustedContact UsKYCCheckDataTrustedContactParam `json:"trusted_contact,omitzero" api:"required"`
 	// US immigration information for this individual. Required if the individual is
 	// not a US citizen.
 	UsImmigrationInfo UsKYCCheckDataUsImmigrationInfoParam `json:"us_immigration_info,omitzero"`
@@ -930,9 +930,9 @@ func (r *UsKYCCheckDataParam) UnmarshalJSON(data []byte) error {
 // The properties IPAddress, SignedAt are required.
 type UsKYCCheckDataAlpacaCustomerAgreementParam struct {
 	// The IP address from where the individual signed the agreement.
-	IPAddress string `json:"ip_address,required" format:"ip"`
+	IPAddress string `json:"ip_address" api:"required" format:"ip"`
 	// The timestamp the agreement was signed.
-	SignedAt time.Time `json:"signed_at,required" format:"date-time"`
+	SignedAt time.Time `json:"signed_at" api:"required" format:"date-time"`
 	paramObj
 }
 
@@ -952,20 +952,20 @@ func (r *UsKYCCheckDataAlpacaCustomerAgreementParam) UnmarshalJSON(data []byte) 
 // IsPoliticallyExposedPersonMatch, IsSanctionsMatch, Records, RefID are required.
 type UsKYCCheckDataAmlCheckParam struct {
 	// Datetime that this AML check was created.
-	CheckCreatedAt time.Time `json:"check_created_at,required" format:"date-time"`
+	CheckCreatedAt time.Time `json:"check_created_at" api:"required" format:"date-time"`
 	// Whether there was a match in the adverse media check.
-	IsAdverseMediaMatch bool `json:"is_adverse_media_match,required"`
+	IsAdverseMediaMatch bool `json:"is_adverse_media_match" api:"required"`
 	// Whether there was a match in the monitored lists check.
-	IsMonitoredListsMatch bool `json:"is_monitored_lists_match,required"`
+	IsMonitoredListsMatch bool `json:"is_monitored_lists_match" api:"required"`
 	// Whether there was a match in the politically exposed person (PEP) check.
-	IsPoliticallyExposedPersonMatch bool `json:"is_politically_exposed_person_match,required"`
+	IsPoliticallyExposedPersonMatch bool `json:"is_politically_exposed_person_match" api:"required"`
 	// Whether there was a match in the sanctions check.
-	IsSanctionsMatch bool `json:"is_sanctions_match,required"`
+	IsSanctionsMatch bool `json:"is_sanctions_match" api:"required"`
 	// If any of the checks have a match, provide details about the matches or hits
 	// found.
-	Records []string `json:"records,omitzero,required"`
+	Records []string `json:"records,omitzero" api:"required"`
 	// Your unique identifier for the AML check.
-	RefID string `json:"ref_id,required"`
+	RefID string `json:"ref_id" api:"required"`
 	paramObj
 }
 
@@ -982,11 +982,11 @@ func (r *UsKYCCheckDataAmlCheckParam) UnmarshalJSON(data []byte) error {
 // The properties AddressSources, DateOfBirthSources, TaxIDSources are required.
 type UsKYCCheckDataDataCitationParam struct {
 	// List of sources for address verification
-	AddressSources []string `json:"address_sources,omitzero,required"`
+	AddressSources []string `json:"address_sources,omitzero" api:"required"`
 	// List of sources for date of birth verification
-	DateOfBirthSources []string `json:"date_of_birth_sources,omitzero,required"`
+	DateOfBirthSources []string `json:"date_of_birth_sources,omitzero" api:"required"`
 	// List of sources for tax ID verification
-	TaxIDSources []string `json:"tax_id_sources,omitzero,required"`
+	TaxIDSources []string `json:"tax_id_sources,omitzero" api:"required"`
 	paramObj
 }
 
@@ -1005,7 +1005,7 @@ type UsKYCCheckDataEmploymentParam struct {
 	// One of the following: employed, unemployed, retired, or student.
 	//
 	// Any of "UNEMPLOYED", "EMPLOYED", "STUDENT", "RETIRED".
-	EmploymentStatus string `json:"employment_status,omitzero,required"`
+	EmploymentStatus string `json:"employment_status,omitzero" api:"required"`
 	// The employer's address if the user is employed.
 	EmployerAddress param.Opt[string] `json:"employer_address,omitzero"`
 	// The name of the employer if the user is employed.
@@ -1041,12 +1041,12 @@ type UsKYCCheckDataFinancialProfileParam struct {
 	//
 	// Any of "EMPLOYMENT_INCOME", "INVESTMENTS", "INHERITANCE", "BUSINESS_INCOME",
 	// "SAVINGS", "FAMILY".
-	FundingSources []string `json:"funding_sources,omitzero,required"`
+	FundingSources []string `json:"funding_sources,omitzero" api:"required"`
 	// The upper bound of the user's liquid net worth (USD).
-	LiquidNetWorthMax int64 `json:"liquid_net_worth_max,required"`
+	LiquidNetWorthMax int64 `json:"liquid_net_worth_max" api:"required"`
 	// The lower bound of the user's liquid net worth (USD). Can be 0 if max is
 	// <=$20,000, but otherwise must be within an order of magnitude of the max value.
-	LiquidNetWorthMin int64 `json:"liquid_net_worth_min,required"`
+	LiquidNetWorthMin int64 `json:"liquid_net_worth_min" api:"required"`
 	paramObj
 }
 
@@ -1065,30 +1065,30 @@ func (r *UsKYCCheckDataFinancialProfileParam) UnmarshalJSON(data []byte) error {
 // TaxID are required.
 type UsKYCCheckDataIdentityParam struct {
 	// City of the applicant.
-	City string `json:"city,required"`
+	City string `json:"city" api:"required"`
 	// Nationality of the applicant.
-	CountryOfCitizenship string `json:"country_of_citizenship,required"`
+	CountryOfCitizenship string `json:"country_of_citizenship" api:"required"`
 	// Country of residency of the applicant. Must be 'US'.
 	//
 	// Any of "US".
-	CountryOfTaxResidence string `json:"country_of_tax_residence,omitzero,required"`
+	CountryOfTaxResidence string `json:"country_of_tax_residence,omitzero" api:"required"`
 	// Date of birth of the applicant.
-	DateOfBirth time.Time `json:"date_of_birth,required" format:"date"`
+	DateOfBirth time.Time `json:"date_of_birth" api:"required" format:"date"`
 	// Email address of the applicant.
-	EmailAddress string `json:"email_address,required"`
+	EmailAddress string `json:"email_address" api:"required"`
 	// The last name (surname) of the user.
-	FamilyName string `json:"family_name,required"`
+	FamilyName string `json:"family_name" api:"required"`
 	// The first/given name of the user.
-	GivenName string `json:"given_name,required"`
+	GivenName string `json:"given_name" api:"required"`
 	// Phone number should include the country code, format: “+15555555555”
-	PhoneNumber string `json:"phone_number,required"`
+	PhoneNumber string `json:"phone_number" api:"required"`
 	// Postal code of the applicant.
-	PostalCode string `json:"postal_code,required"`
+	PostalCode string `json:"postal_code" api:"required"`
 	// Street address of the applicant.
-	StreetAddress string `json:"street_address,required"`
+	StreetAddress string `json:"street_address" api:"required"`
 	// Social Security Number (SSN) or Tax Identification Number (TIN) of the
 	// applicant.
-	TaxID string `json:"tax_id,required"`
+	TaxID string `json:"tax_id" api:"required"`
 	// The middle name of the user.
 	MiddleName param.Opt[string] `json:"middle_name,omitzero"`
 	// State of the applicant. Required if the applicant resides in the US as a
@@ -1119,13 +1119,13 @@ func init() {
 // required.
 type UsKYCCheckDataKYCMetadataParam struct {
 	// Completion datetime of KYC check.
-	CheckCompletedAt time.Time `json:"check_completed_at,required" format:"date-time"`
+	CheckCompletedAt time.Time `json:"check_completed_at" api:"required" format:"date-time"`
 	// Start datetime of KYC check.
-	CheckInitiatedAt time.Time `json:"check_initiated_at,required" format:"date-time"`
+	CheckInitiatedAt time.Time `json:"check_initiated_at" api:"required" format:"date-time"`
 	// IP address of applicant at time of KYC check.
-	IPAddress string `json:"ip_address,required" format:"ip"`
+	IPAddress string `json:"ip_address" api:"required" format:"ip"`
 	// Your unique identifier for the KYC check.
-	RefID string `json:"ref_id,required"`
+	RefID string `json:"ref_id" api:"required"`
 	paramObj
 }
 
@@ -1146,9 +1146,9 @@ func (r *UsKYCCheckDataKYCMetadataParam) UnmarshalJSON(data []byte) error {
 // The properties AttestationDt, IsNonProfessionalTrader are required.
 type UsKYCCheckDataNonProfessionalTraderAttestationParam struct {
 	// Datetime when the attestation was made.
-	AttestationDt time.Time `json:"attestation_dt,required" format:"date-time"`
+	AttestationDt time.Time `json:"attestation_dt" api:"required" format:"date-time"`
 	// Whether the individual attests to being a non-professional trader.
-	IsNonProfessionalTrader bool `json:"is_non_professional_trader,required"`
+	IsNonProfessionalTrader bool `json:"is_non_professional_trader" api:"required"`
 	paramObj
 }
 
@@ -1169,15 +1169,15 @@ func (r *UsKYCCheckDataNonProfessionalTraderAttestationParam) UnmarshalJSON(data
 type UsKYCCheckDataRiskDisclosureParam struct {
 	// If the individual's immediate family member (sibling, husband/wife, child,
 	// parent) is either politically exposed or holds a control position.
-	ImmediateFamilyExposed bool `json:"immediate_family_exposed,required"`
+	ImmediateFamilyExposed bool `json:"immediate_family_exposed" api:"required"`
 	// Whether the individual is affiliated with any exchanges or FINRA.
-	IsAffiliatedExchangeOrFinra bool `json:"is_affiliated_exchange_or_finra,required"`
+	IsAffiliatedExchangeOrFinra bool `json:"is_affiliated_exchange_or_finra" api:"required"`
 	// Whether the individual holds a controlling position in a publicly traded
 	// company, is a member of the board of directors, or has policy making abilities
 	// in a publicly traded company.
-	IsControlPerson bool `json:"is_control_person,required"`
+	IsControlPerson bool `json:"is_control_person" api:"required"`
 	// Whether the individual is politically exposed.
-	IsPoliticallyExposed bool `json:"is_politically_exposed,required"`
+	IsPoliticallyExposed bool `json:"is_politically_exposed" api:"required"`
 	paramObj
 }
 
@@ -1199,9 +1199,9 @@ func (r *UsKYCCheckDataRiskDisclosureParam) UnmarshalJSON(data []byte) error {
 // The properties FamilyName, GivenName are required.
 type UsKYCCheckDataTrustedContactParam struct {
 	// The family name of the trusted contact
-	FamilyName string `json:"family_name,required"`
+	FamilyName string `json:"family_name" api:"required"`
 	// The given name of the trusted contact
-	GivenName string `json:"given_name,required"`
+	GivenName string `json:"given_name" api:"required"`
 	// The email address of the trusted contact. At least one of email_address or
 	// phone_number is required.
 	EmailAddress param.Opt[string] `json:"email_address,omitzero"`
@@ -1225,9 +1225,9 @@ func (r *UsKYCCheckDataTrustedContactParam) UnmarshalJSON(data []byte) error {
 // The properties CountryOfBirth, IsPermanentResident are required.
 type UsKYCCheckDataUsImmigrationInfoParam struct {
 	// Country where the individual was born.
-	CountryOfBirth string `json:"country_of_birth,required"`
+	CountryOfBirth string `json:"country_of_birth" api:"required"`
 	// Whether the individual is a US permanent resident (green card holder).
-	IsPermanentResident bool `json:"is_permanent_resident,required"`
+	IsPermanentResident bool `json:"is_permanent_resident" api:"required"`
 	// Date the individual is scheduled to leave the US. Required for B1 and B2 visas.
 	DepartureFromUsDate param.Opt[time.Time] `json:"departure_from_us_date,omitzero" format:"date"`
 	// Expiration date of the visa. Required if visa_type is provided.
@@ -1257,9 +1257,9 @@ func init() {
 // URL for a managed KYC flow for an `Entity`.
 type V2EntityKYCNewManagedCheckResponse struct {
 	// URL of a managed KYC flow interface for the `Entity`.
-	EmbedURL string `json:"embed_url,required"`
+	EmbedURL string `json:"embed_url" api:"required"`
 	// Datetime at which the KYC request will expired. ISO 8601 timestamp.
-	ExpirationDt time.Time `json:"expiration_dt,required" format:"date-time"`
+	ExpirationDt time.Time `json:"expiration_dt" api:"required" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		EmbedURL     respjson.Field
@@ -1305,9 +1305,9 @@ func (r *V2EntityKYCSubmitParams) UnmarshalJSON(data []byte) error {
 // The properties Data, ProviderName are required.
 type V2EntityKYCSubmitParamsBodyBaseline struct {
 	// KYC data for an `Entity` in the BASELINE jurisdiction.
-	Data BaselineKYCCheckDataParam `json:"data,omitzero,required"`
+	Data BaselineKYCCheckDataParam `json:"data,omitzero" api:"required"`
 	// Name of the KYC provider that provided the KYC information.
-	ProviderName string `json:"provider_name,required"`
+	ProviderName string `json:"provider_name" api:"required"`
 	// Jurisdiction of the KYC check.
 	//
 	// Any of "BASELINE".
@@ -1335,9 +1335,9 @@ func init() {
 // The properties Data, ProviderName are required.
 type V2EntityKYCSubmitParamsBodyUs struct {
 	// KYC data for an `Entity` in the US jurisdiction.
-	Data UsKYCCheckDataParam `json:"data,omitzero,required"`
+	Data UsKYCCheckDataParam `json:"data,omitzero" api:"required"`
 	// Name of the KYC provider that provided the KYC information.
-	ProviderName string `json:"provider_name,required"`
+	ProviderName string `json:"provider_name" api:"required"`
 	// Jurisdiction of the KYC check.
 	//
 	// Any of "US".

@@ -93,33 +93,33 @@ func (r *V2AccountTokenTransferService) List(ctx context.Context, accountID stri
 // Information about a token transfer between accounts.
 type TokenTransfer struct {
 	// ID of the token transfer.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// CAIP-2 chain ID of the blockchain that the transfer is made on.
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
 	// "eip155:179202", "eip155:98865", "eip155:7887".
-	ChainID Chain `json:"chain_id,required"`
+	ChainID Chain `json:"chain_id" api:"required"`
 	// Datetime at which the transfer was created. ISO 8601 timestamp.
-	CreatedDt time.Time `json:"created_dt,required" format:"date-time"`
+	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
 	// Quantity of the token being transferred.
-	Quantity float64 `json:"quantity,required"`
+	Quantity float64 `json:"quantity" api:"required"`
 	// ID of the account to which the tokens are transferred.
-	RecipientAccountID string `json:"recipient_account_id,required" format:"uuid"`
+	RecipientAccountID string `json:"recipient_account_id" api:"required" format:"uuid"`
 	// ID of the account from which the tokens are transferred.
-	SenderAccountID string `json:"sender_account_id,required" format:"uuid"`
+	SenderAccountID string `json:"sender_account_id" api:"required" format:"uuid"`
 	// Status of the token transfer.
 	//
 	// Any of "PENDING", "IN_PROGRESS", "COMPLETE", "FAILED".
-	Status TokenTransferStatus `json:"status,required"`
+	Status TokenTransferStatus `json:"status" api:"required"`
 	// Address of the token being transferred.
-	TokenAddress string `json:"token_address,required" format:"eth_address"`
+	TokenAddress string `json:"token_address" api:"required" format:"eth_address"`
 	// Datetime at which the transfer was last updated. ISO 8601 timestamp.
-	UpdatedDt time.Time `json:"updated_dt,required" format:"date-time"`
+	UpdatedDt time.Time `json:"updated_dt" api:"required" format:"date-time"`
 	// Transaction hash of the transfer on the blockchain, if applicable. This is only
 	// present if the transfer has been executed on-chain.
-	TransactionHash string `json:"transaction_hash,nullable" format:"hex_string"`
+	TransactionHash string `json:"transaction_hash" api:"nullable" format:"hex_string"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                 respjson.Field
@@ -155,11 +155,11 @@ const (
 
 type V2AccountTokenTransferNewParams struct {
 	// Quantity of the token to transfer.
-	Quantity float64 `json:"quantity,required"`
+	Quantity float64 `json:"quantity" api:"required"`
 	// ID of the recipient account to which the tokens will be transferred.
-	RecipientAccountID string `json:"recipient_account_id,required" format:"uuid"`
+	RecipientAccountID string `json:"recipient_account_id" api:"required" format:"uuid"`
 	// Address of the token to transfer.
-	TokenAddress string `json:"token_address,required" format:"eth_address"`
+	TokenAddress string `json:"token_address" api:"required" format:"eth_address"`
 	paramObj
 }
 
@@ -172,7 +172,7 @@ func (r *V2AccountTokenTransferNewParams) UnmarshalJSON(data []byte) error {
 }
 
 type V2AccountTokenTransferGetParams struct {
-	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	AccountID string `path:"account_id" api:"required" format:"uuid" json:"-"`
 	paramObj
 }
 

@@ -171,18 +171,18 @@ const (
 // Balance of a payment token in an `Account`.
 type V2AccountGetCashBalancesResponse struct {
 	// Total amount of the payment token in the `Account`.
-	Amount float64 `json:"amount,required"`
+	Amount float64 `json:"amount" api:"required"`
 	// CAIP-2 chain ID of the payment token.
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
 	// "eip155:179202", "eip155:98865", "eip155:7887".
-	ChainID Chain `json:"chain_id,required"`
+	ChainID Chain `json:"chain_id" api:"required"`
 	// Symbol of the payment token.
-	Symbol string `json:"symbol,required"`
+	Symbol string `json:"symbol" api:"required"`
 	// Address of the payment token.
-	TokenAddress string `json:"token_address,required" format:"eth_address"`
+	TokenAddress string `json:"token_address" api:"required" format:"eth_address"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Amount       respjson.Field
@@ -203,13 +203,13 @@ func (r *V2AccountGetCashBalancesResponse) UnmarshalJSON(data []byte) error {
 // Represents a dividend payment event for an `Account`.
 type V2AccountGetDividendPaymentsResponse struct {
 	// Amount of the dividend paid.
-	Amount float64 `json:"amount,required"`
+	Amount float64 `json:"amount" api:"required"`
 	// Currency in which the dividend was paid. (e.g. USD)
-	Currency string `json:"currency,required"`
+	Currency string `json:"currency" api:"required"`
 	// Date the dividend was distributed to the account. ISO 8601 format, YYYY-MM-DD.
-	PaymentDate time.Time `json:"payment_date,required" format:"date"`
+	PaymentDate time.Time `json:"payment_date" api:"required" format:"date"`
 	// ID of the `Stock` for which the dividend was paid.
-	StockID string `json:"stock_id,required" format:"uuid"`
+	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Amount      respjson.Field
@@ -230,11 +230,11 @@ func (r *V2AccountGetDividendPaymentsResponse) UnmarshalJSON(data []byte) error 
 // An object representing an interest payment from stablecoin holdings.
 type V2AccountGetInterestPaymentsResponse struct {
 	// Amount of interest paid.
-	Amount float64 `json:"amount,required"`
+	Amount float64 `json:"amount" api:"required"`
 	// Currency in which the interest was paid (e.g. USD).
-	Currency string `json:"currency,required"`
+	Currency string `json:"currency" api:"required"`
 	// Date of interest payment in US Eastern time zone. ISO 8601 format, YYYY-MM-DD.
-	PaymentDate time.Time `json:"payment_date,required" format:"date"`
+	PaymentDate time.Time `json:"payment_date" api:"required" format:"date"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Amount      respjson.Field
@@ -254,7 +254,7 @@ func (r *V2AccountGetInterestPaymentsResponse) UnmarshalJSON(data []byte) error 
 // Balance information of `Stock` assets in your `Account`.
 type V2AccountGetPortfolioResponse struct {
 	// Balance details for all owned `Stocks`.
-	Assets []V2AccountGetPortfolioResponseAsset `json:"assets,required"`
+	Assets []V2AccountGetPortfolioResponseAsset `json:"assets" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Assets      respjson.Field
@@ -272,20 +272,20 @@ func (r *V2AccountGetPortfolioResponse) UnmarshalJSON(data []byte) error {
 // Balance of a dShare in an `Account`.
 type V2AccountGetPortfolioResponseAsset struct {
 	// Total amount of the dShare asset token in the `Account`.
-	Amount float64 `json:"amount,required"`
+	Amount float64 `json:"amount" api:"required"`
 	// CAIP-2 chain ID of the blockchain where the dShare asset token exists.
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
 	// "eip155:179202", "eip155:98865", "eip155:7887".
-	ChainID Chain `json:"chain_id,required"`
+	ChainID Chain `json:"chain_id" api:"required"`
 	// ID of the underlying `Stock` represented by the dShare asset token.
-	StockID string `json:"stock_id,required" format:"uuid"`
+	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// Token symbol of the dShare asset token.
-	Symbol string `json:"symbol,required"`
+	Symbol string `json:"symbol" api:"required"`
 	// Address of the dShare asset token.
-	TokenAddress string `json:"token_address,required" format:"eth_address"`
+	TokenAddress string `json:"token_address" api:"required" format:"eth_address"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Amount       respjson.Field
@@ -306,9 +306,9 @@ func (r *V2AccountGetPortfolioResponseAsset) UnmarshalJSON(data []byte) error {
 
 type V2AccountGetDividendPaymentsParams struct {
 	// End date, exclusive, in US Eastern time zone. ISO 8601 format, YYYY-MM-DD.
-	EndDate time.Time `query:"end_date,required" format:"date" json:"-"`
+	EndDate time.Time `query:"end_date" api:"required" format:"date" json:"-"`
 	// Start date, inclusive, in US Eastern time zone. ISO 8601 format, YYYY-MM-DD.
-	StartDate time.Time `query:"start_date,required" format:"date" json:"-"`
+	StartDate time.Time `query:"start_date" api:"required" format:"date" json:"-"`
 	// Optional ID of the `Stock` to filter by
 	StockID  param.Opt[string] `query:"stock_id,omitzero" format:"uuid" json:"-"`
 	Page     param.Opt[int64]  `query:"page,omitzero" json:"-"`
@@ -327,9 +327,9 @@ func (r V2AccountGetDividendPaymentsParams) URLQuery() (v url.Values, err error)
 
 type V2AccountGetInterestPaymentsParams struct {
 	// End date, exclusive, in US Eastern time zone. ISO 8601 format, YYYY-MM-DD.
-	EndDate time.Time `query:"end_date,required" format:"date" json:"-"`
+	EndDate time.Time `query:"end_date" api:"required" format:"date" json:"-"`
 	// Start date, inclusive, in US Eastern time zone. ISO 8601 format, YYYY-MM-DD.
-	StartDate time.Time        `query:"start_date,required" format:"date" json:"-"`
+	StartDate time.Time        `query:"start_date" api:"required" format:"date" json:"-"`
 	Page      param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize  param.Opt[int64] `query:"page_size,omitzero" json:"-"`
 	paramObj

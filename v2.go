@@ -53,7 +53,7 @@ func (r *V2Service) ListOrders(ctx context.Context, query V2ListOrdersParams, op
 
 type V2ListOrdersResponse struct {
 	// ID of the `Order`.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// CAIP-2 formatted chain ID of the blockchain that the `Order` transaction was run
 	// on.
 	//
@@ -61,57 +61,57 @@ type V2ListOrdersResponse struct {
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
 	// "eip155:179202", "eip155:98865", "eip155:7887".
-	ChainID Chain `json:"chain_id,required"`
+	ChainID Chain `json:"chain_id" api:"required"`
 	// Datetime at which the `Order` was created. ISO 8601 timestamp.
-	CreatedDt time.Time `json:"created_dt,required" format:"date-time"`
+	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
 	// Smart contract address that `Order` was created from.
-	OrderContractAddress string `json:"order_contract_address,required" format:"eth_address"`
+	OrderContractAddress string `json:"order_contract_address" api:"required" format:"eth_address"`
 	// Indicates whether `Order` is a buy or sell.
 	//
 	// Any of "BUY", "SELL".
-	OrderSide OrderSide `json:"order_side,required"`
+	OrderSide OrderSide `json:"order_side" api:"required"`
 	// Time in force. Indicates how long `Order` is valid for.
 	//
 	// Any of "DAY", "GTC", "IOC", "FOK".
-	OrderTif OrderTif `json:"order_tif,required"`
+	OrderTif OrderTif `json:"order_tif" api:"required"`
 	// Transaction hash for the `Order` creation.
-	OrderTransactionHash string `json:"order_transaction_hash,required" format:"hex_string"`
+	OrderTransactionHash string `json:"order_transaction_hash" api:"required" format:"hex_string"`
 	// Type of `Order`.
 	//
 	// Any of "MARKET", "LIMIT".
-	OrderType OrderType `json:"order_type,required"`
+	OrderType OrderType `json:"order_type" api:"required"`
 	// The payment token (stablecoin) address.
-	PaymentToken string `json:"payment_token,required" format:"eth_address"`
+	PaymentToken string `json:"payment_token" api:"required" format:"eth_address"`
 	// Status of the `Order`.
 	//
 	// Any of "PENDING_SUBMIT", "PENDING_CANCEL", "PENDING_ESCROW", "PENDING_FILL",
 	// "ESCROWED", "SUBMITTED", "CANCELLED", "FILLED", "REJECTED", "REQUIRING_CONTACT",
 	// "ERROR".
-	Status BrokerageOrderStatus `json:"status,required"`
+	Status BrokerageOrderStatus `json:"status" api:"required"`
 	// The `Stock` ID associated with the `Order`
-	StockID string `json:"stock_id,required" format:"uuid"`
+	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// Account ID the order was made for.
-	AccountID string `json:"account_id,nullable" format:"uuid"`
+	AccountID string `json:"account_id" api:"nullable" format:"uuid"`
 	// The dShare asset token address.
-	AssetToken string `json:"asset_token,nullable" format:"eth_address"`
+	AssetToken string `json:"asset_token" api:"nullable" format:"eth_address"`
 	// Total amount of assets involved.
-	AssetTokenQuantity float64 `json:"asset_token_quantity,nullable"`
+	AssetTokenQuantity float64 `json:"asset_token_quantity" api:"nullable"`
 	// Transaction hash for cancellation of `Order`, if the `Order` was cancelled.
-	CancelTransactionHash string `json:"cancel_transaction_hash,nullable" format:"hex_string"`
+	CancelTransactionHash string `json:"cancel_transaction_hash" api:"nullable" format:"hex_string"`
 	// Customer-supplied unique identifier to map this `Order` to an order in the
 	// customer's systems.
-	ClientOrderID string `json:"client_order_id,nullable"`
+	ClientOrderID string `json:"client_order_id" api:"nullable"`
 	// Entity ID of the Order
-	EntityID string `json:"entity_id,nullable" format:"uuid"`
+	EntityID string `json:"entity_id" api:"nullable" format:"uuid"`
 	// Fee amount associated with `Order`.
-	Fee float64 `json:"fee,nullable"`
+	Fee float64 `json:"fee" api:"nullable"`
 	// For limit `Orders`, the price per asset, specified in the `Stock`'s native
 	// currency (USD for US equities and ETFs).
-	LimitPrice float64 `json:"limit_price,nullable"`
+	LimitPrice float64 `json:"limit_price" api:"nullable"`
 	// Order Request ID for the `Order`
-	OrderRequestID string `json:"order_request_id,nullable" format:"uuid"`
+	OrderRequestID string `json:"order_request_id" api:"nullable" format:"uuid"`
 	// Total amount of payment involved.
-	PaymentTokenQuantity float64 `json:"payment_token_quantity,nullable"`
+	PaymentTokenQuantity float64 `json:"payment_token_quantity" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                    respjson.Field
