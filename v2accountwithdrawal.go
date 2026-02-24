@@ -70,36 +70,36 @@ func (r *V2AccountWithdrawalService) List(ctx context.Context, accountID string,
 // Dinari-managed `Wallet`.
 type Withdrawal struct {
 	// ID of the `Withdrawal`.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// ID of the `Account` from which the `Withdrawal` is made.
-	AccountID string `json:"account_id,required" format:"uuid"`
+	AccountID string `json:"account_id" api:"required" format:"uuid"`
 	// CAIP-2 chain ID of the blockchain where the `Withdrawal` is made.
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
 	// "eip155:179202", "eip155:98865", "eip155:7887".
-	ChainID Chain `json:"chain_id,required"`
+	ChainID Chain `json:"chain_id" api:"required"`
 	// Address of USDC payment token that the `Withdrawal` will be received in.
-	PaymentTokenAddress string `json:"payment_token_address,required" format:"eth_address"`
+	PaymentTokenAddress string `json:"payment_token_address" api:"required" format:"eth_address"`
 	// Amount of USDC payment tokens to be withdrawn.
-	PaymentTokenAmount float64 `json:"payment_token_amount,required"`
+	PaymentTokenAmount float64 `json:"payment_token_amount" api:"required"`
 	// ID of the `Account` that will receive payment tokens from the `Withdrawal`. This
 	// `Account` must be connected to a non-managed `Wallet` and belong to the same
 	// `Entity`.
-	RecipientAccountID string `json:"recipient_account_id,required" format:"uuid"`
+	RecipientAccountID string `json:"recipient_account_id" api:"required" format:"uuid"`
 	// Status of the `Withdrawal`.
 	//
 	// Any of "PENDING_SUBMIT", "PENDING_CANCEL", "PENDING_ESCROW", "PENDING_FILL",
 	// "ESCROWED", "SUBMITTED", "CANCELLED", "FILLED", "REJECTED", "REQUIRING_CONTACT",
 	// "ERROR".
-	Status BrokerageOrderStatus `json:"status,required"`
+	Status BrokerageOrderStatus `json:"status" api:"required"`
 	// Datetime at which the `Withdrawal` was transacted. ISO 8601 timestamp.
-	TransactionDt time.Time `json:"transaction_dt,required" format:"date-time"`
+	TransactionDt time.Time `json:"transaction_dt" api:"required" format:"date-time"`
 	// Hash of the transaction for the `Withdrawal`.
-	TransactionHash string `json:"transaction_hash,required" format:"hex_string"`
+	TransactionHash string `json:"transaction_hash" api:"required" format:"hex_string"`
 	// ID of the `WithdrawalRequest` associated with this `Withdrawal`.
-	WithdrawalRequestID string `json:"withdrawal_request_id,required" format:"uuid"`
+	WithdrawalRequestID string `json:"withdrawal_request_id" api:"required" format:"uuid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                  respjson.Field
@@ -124,7 +124,7 @@ func (r *Withdrawal) UnmarshalJSON(data []byte) error {
 }
 
 type V2AccountWithdrawalGetParams struct {
-	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	AccountID string `path:"account_id" api:"required" format:"uuid" json:"-"`
 	paramObj
 }
 

@@ -116,36 +116,36 @@ func (r *V2MarketDataStockService) GetNews(ctx context.Context, stockID string, 
 // Information about stock available for trading.
 type V2MarketDataStockListResponse struct {
 	// ID of the `Stock`
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// Whether the `Stock` allows for fractional trading. If it is not fractionable,
 	// Dinari only supports limit orders for the `Stock`.
-	IsFractionable bool `json:"is_fractionable,required"`
+	IsFractionable bool `json:"is_fractionable" api:"required"`
 	// Whether the `Stock` is available for trading.
-	IsTradable bool `json:"is_tradable,required"`
+	IsTradable bool `json:"is_tradable" api:"required"`
 	// Company name
-	Name string `json:"name,required"`
+	Name string `json:"name" api:"required"`
 	// Ticker symbol
-	Symbol string `json:"symbol,required"`
+	Symbol string `json:"symbol" api:"required"`
 	// List of CAIP-10 formatted token addresses.
-	Tokens []string `json:"tokens,required"`
+	Tokens []string `json:"tokens" api:"required"`
 	// SEC Central Index Key. Refer to
 	// [this link](https://www.sec.gov/submit-filings/filer-support-resources/how-do-i-guides/understand-utilize-edgar-ciks-passphrases-access-codes)
 	// for more information.
-	Cik string `json:"cik,nullable"`
+	Cik string `json:"cik" api:"nullable"`
 	// Composite FIGI ID. Refer to [this link](https://www.openfigi.com/about/figi) for
 	// more information.
-	CompositeFigi string `json:"composite_figi,nullable"`
+	CompositeFigi string `json:"composite_figi" api:"nullable"`
 	// CUSIP ID. Refer to [this link](https://www.cusip.com/identifiers.html) for more
 	// information. A license agreement with CUSIP Global Services is required to
 	// receive this value.
-	Cusip string `json:"cusip,nullable"`
+	Cusip string `json:"cusip" api:"nullable"`
 	// Description of the company and their services.
-	Description string `json:"description,nullable"`
+	Description string `json:"description" api:"nullable"`
 	// Name of `Stock` for application display. If defined, this supercedes the `name`
 	// field for displaying the name.
-	DisplayName string `json:"display_name,nullable"`
+	DisplayName string `json:"display_name" api:"nullable"`
 	// URL of the company's logo. Supported formats are SVG and PNG.
-	LogoURL string `json:"logo_url,nullable"`
+	LogoURL string `json:"logo_url" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID             respjson.Field
@@ -173,32 +173,32 @@ func (r *V2MarketDataStockListResponse) UnmarshalJSON(data []byte) error {
 
 type V2MarketDataStockGetCurrentPriceResponse struct {
 	// The ask price.
-	Price float64 `json:"price,required"`
+	Price float64 `json:"price" api:"required"`
 	// ID of the `Stock`
-	StockID string `json:"stock_id,required" format:"uuid"`
+	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// When the Stock Quote was generated.
-	Timestamp time.Time `json:"timestamp,required" format:"date-time"`
+	Timestamp time.Time `json:"timestamp" api:"required" format:"date-time"`
 	// The change in price from the previous close.
-	Change float64 `json:"change,nullable"`
+	Change float64 `json:"change" api:"nullable"`
 	// The percentage change in price from the previous close.
-	ChangePercent float64 `json:"change_percent,nullable"`
+	ChangePercent float64 `json:"change_percent" api:"nullable"`
 	// The close price from the given time period.
-	Close float64 `json:"close,nullable"`
+	Close float64 `json:"close" api:"nullable"`
 	// The highest price from the given time period
-	High float64 `json:"high,nullable"`
+	High float64 `json:"high" api:"nullable"`
 	// The lowest price from the given time period.
-	Low float64 `json:"low,nullable"`
+	Low float64 `json:"low" api:"nullable"`
 	// The most recent close price of the ticker multiplied by weighted outstanding
 	// shares.
-	MarketCap int64 `json:"market_cap,nullable"`
+	MarketCap int64 `json:"market_cap" api:"nullable"`
 	// The open price from the given time period.
-	Open float64 `json:"open,nullable"`
+	Open float64 `json:"open" api:"nullable"`
 	// The close price for the `Stock` from the previous trading session.
-	PreviousClose float64 `json:"previous_close,nullable"`
+	PreviousClose float64 `json:"previous_close" api:"nullable"`
 	// The trading volume from the given time period.
-	Volume float64 `json:"volume,nullable"`
+	Volume float64 `json:"volume" api:"nullable"`
 	// The number of shares outstanding in the given time period.
-	WeightedSharesOutstanding int64 `json:"weighted_shares_outstanding,nullable"`
+	WeightedSharesOutstanding int64 `json:"weighted_shares_outstanding" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Price                     respjson.Field
@@ -227,17 +227,17 @@ func (r *V2MarketDataStockGetCurrentPriceResponse) UnmarshalJSON(data []byte) er
 
 type V2MarketDataStockGetCurrentQuoteResponse struct {
 	// The ask price.
-	AskPrice float64 `json:"ask_price,required"`
+	AskPrice float64 `json:"ask_price" api:"required"`
 	// The ask size.
-	AskSize float64 `json:"ask_size,required"`
+	AskSize float64 `json:"ask_size" api:"required"`
 	// The bid price.
-	BidPrice float64 `json:"bid_price,required"`
+	BidPrice float64 `json:"bid_price" api:"required"`
 	// The bid size.
-	BidSize float64 `json:"bid_size,required"`
+	BidSize float64 `json:"bid_size" api:"required"`
 	// ID of the `Stock`
-	StockID string `json:"stock_id,required" format:"uuid"`
+	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// When the Stock Quote was generated.
-	Timestamp time.Time `json:"timestamp,required" format:"date-time"`
+	Timestamp time.Time `json:"timestamp" api:"required" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AskPrice    respjson.Field
@@ -260,25 +260,25 @@ func (r *V2MarketDataStockGetCurrentQuoteResponse) UnmarshalJSON(data []byte) er
 // Information about a dividend announcement for a `Stock`.
 type V2MarketDataStockGetDividendsResponse struct {
 	// Cash amount of the dividend per share owned.
-	CashAmount float64 `json:"cash_amount,nullable"`
+	CashAmount float64 `json:"cash_amount" api:"nullable"`
 	// Currency in which the dividend is paid.
-	Currency string `json:"currency,nullable"`
+	Currency string `json:"currency" api:"nullable"`
 	// Type of dividend. Dividends that have been paid and/or are expected to be paid
 	// on consistent schedules are denoted as `CD`. Special Cash dividends that have
 	// been paid that are infrequent or unusual, and/or can not be expected to occur in
 	// the future are denoted as `SC`.
-	DividendType string `json:"dividend_type,nullable"`
+	DividendType string `json:"dividend_type" api:"nullable"`
 	// Date on or after which a `Stock` is traded without the right to receive the next
 	// dividend payment. If you purchase a `Stock` on or after the ex-dividend date,
 	// you will not receive the upcoming dividend. In ISO 8601 format, YYYY-MM-DD.
-	ExDividendDate time.Time `json:"ex_dividend_date,nullable" format:"date"`
+	ExDividendDate time.Time `json:"ex_dividend_date" api:"nullable" format:"date"`
 	// Date on which the dividend is paid out. In ISO 8601 format, YYYY-MM-DD.
-	PayDate time.Time `json:"pay_date,nullable" format:"date"`
+	PayDate time.Time `json:"pay_date" api:"nullable" format:"date"`
 	// Date that the shares must be held to receive the dividend; set by the company.
 	// In ISO 8601 format, YYYY-MM-DD.
-	RecordDate time.Time `json:"record_date,nullable" format:"date"`
+	RecordDate time.Time `json:"record_date" api:"nullable" format:"date"`
 	// Ticker symbol of the `Stock`.
-	Ticker string `json:"ticker,nullable"`
+	Ticker string `json:"ticker" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		CashAmount     respjson.Field
@@ -302,15 +302,15 @@ func (r *V2MarketDataStockGetDividendsResponse) UnmarshalJSON(data []byte) error
 // Datapoint of historical price data for a `Stock`.
 type V2MarketDataStockGetHistoricalPricesResponse struct {
 	// Close price from the given time period.
-	Close float64 `json:"close,required"`
+	Close float64 `json:"close" api:"required"`
 	// Highest price from the given time period.
-	High float64 `json:"high,required"`
+	High float64 `json:"high" api:"required"`
 	// Lowest price from the given time period.
-	Low float64 `json:"low,required"`
+	Low float64 `json:"low" api:"required"`
 	// Open price from the given time period.
-	Open float64 `json:"open,required"`
+	Open float64 `json:"open" api:"required"`
 	// The UNIX timestamp in seconds for the start of the aggregate window.
-	Timestamp int64 `json:"timestamp,required"`
+	Timestamp int64 `json:"timestamp" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Close       respjson.Field
@@ -333,18 +333,18 @@ func (r *V2MarketDataStockGetHistoricalPricesResponse) UnmarshalJSON(data []byte
 // a link to the original source.
 type V2MarketDataStockGetNewsResponse struct {
 	// URL of the news article
-	ArticleURL string `json:"article_url,required"`
+	ArticleURL string `json:"article_url" api:"required"`
 	// Description of the news article
-	Description string `json:"description,required"`
+	Description string `json:"description" api:"required"`
 	// URL of the image for the news article
-	ImageURL string `json:"image_url,required"`
+	ImageURL string `json:"image_url" api:"required"`
 	// Datetime when the article was published. ISO 8601 timestamp.
-	PublishedDt time.Time `json:"published_dt,required" format:"date-time"`
+	PublishedDt time.Time `json:"published_dt" api:"required" format:"date-time"`
 	// The publisher of the news article
-	Publisher string `json:"publisher,required"`
+	Publisher string `json:"publisher" api:"required"`
 	// Mobile-friendly Accelerated Mobile Page (AMP) URL of the news article, if
 	// available
-	AmpURL string `json:"amp_url,nullable"`
+	AmpURL string `json:"amp_url" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ArticleURL  respjson.Field
@@ -385,7 +385,7 @@ type V2MarketDataStockGetHistoricalPricesParams struct {
 	// The timespan of the historical prices to query.
 	//
 	// Any of "DAY", "WEEK", "MONTH", "YEAR".
-	Timespan V2MarketDataStockGetHistoricalPricesParamsTimespan `query:"timespan,omitzero,required" json:"-"`
+	Timespan V2MarketDataStockGetHistoricalPricesParamsTimespan `query:"timespan,omitzero" api:"required" json:"-"`
 	paramObj
 }
 

@@ -85,9 +85,9 @@ const (
 // Connection message to sign to prove ownership of the `Wallet`.
 type V2AccountWalletExternalGetNonceResponse struct {
 	// Message to be signed by the `Wallet`
-	Message string `json:"message,required"`
+	Message string `json:"message" api:"required"`
 	// Single-use identifier
-	Nonce string `json:"nonce,required"`
+	Nonce string `json:"nonce" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Message     respjson.Field
@@ -111,13 +111,13 @@ type V2AccountWalletExternalConnectParams struct {
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
 	// "eip155:179202", "eip155:98865", "eip155:7887".
-	ChainID WalletChainID `json:"chain_id,omitzero,required"`
+	ChainID WalletChainID `json:"chain_id,omitzero" api:"required"`
 	// Nonce contained within the connection message.
-	Nonce string `json:"nonce,required" format:"uuid"`
+	Nonce string `json:"nonce" api:"required" format:"uuid"`
 	// Signature payload from signing the connection message with the `Wallet`.
-	Signature string `json:"signature,required" format:"hex_string"`
+	Signature string `json:"signature" api:"required" format:"hex_string"`
 	// Address of the `Wallet`.
-	WalletAddress string `json:"wallet_address,required" format:"eth_address"`
+	WalletAddress string `json:"wallet_address" api:"required" format:"eth_address"`
 	paramObj
 }
 
@@ -137,9 +137,9 @@ type V2AccountWalletExternalGetNonceParams struct {
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
 	// "eip155:179202", "eip155:98865", "eip155:7887".
-	ChainID WalletChainID `query:"chain_id,omitzero,required" json:"-"`
+	ChainID WalletChainID `query:"chain_id,omitzero" api:"required" json:"-"`
 	// Address of the `Wallet` to connect.
-	WalletAddress string `query:"wallet_address,required" format:"eth_address" json:"-"`
+	WalletAddress string `query:"wallet_address" api:"required" format:"eth_address" json:"-"`
 	paramObj
 }
 

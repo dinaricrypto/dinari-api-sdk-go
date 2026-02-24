@@ -64,7 +64,7 @@ func (r *V2AccountWalletService) Get(ctx context.Context, accountID string, opts
 // Information about a blockchain `Wallet`.
 type Wallet struct {
 	// Address of the `Wallet`.
-	Address string `json:"address,required"`
+	Address string `json:"address" api:"required"`
 	// CAIP-2 formatted chain ID of the blockchain the `Wallet` is on. eip155:0 is used
 	// for EOA wallets
 	//
@@ -72,11 +72,11 @@ type Wallet struct {
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
 	// "eip155:179202", "eip155:98865", "eip155:7887".
-	ChainID WalletChainID `json:"chain_id,required"`
+	ChainID WalletChainID `json:"chain_id" api:"required"`
 	// Indicates whether the `Wallet` is flagged for AML violation.
-	IsAmlFlagged bool `json:"is_aml_flagged,required"`
+	IsAmlFlagged bool `json:"is_aml_flagged" api:"required"`
 	// Indicates whether the `Wallet` is a Dinari-managed wallet.
-	IsManagedWallet bool `json:"is_managed_wallet,required"`
+	IsManagedWallet bool `json:"is_managed_wallet" api:"required"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Address         respjson.Field
@@ -102,9 +102,9 @@ type V2AccountWalletConnectInternalParams struct {
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
 	// "eip155:179202", "eip155:98865", "eip155:7887".
-	ChainID WalletChainID `json:"chain_id,omitzero,required"`
+	ChainID WalletChainID `json:"chain_id,omitzero" api:"required"`
 	// Address of the `Wallet`.
-	WalletAddress string `json:"wallet_address,required" format:"eth_address"`
+	WalletAddress string `json:"wallet_address" api:"required" format:"eth_address"`
 	// Is the linked Wallet shared or not
 	IsShared param.Opt[bool] `json:"is_shared,omitzero"`
 	paramObj

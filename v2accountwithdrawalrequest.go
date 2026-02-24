@@ -86,23 +86,23 @@ func (r *V2AccountWithdrawalRequestService) List(ctx context.Context, accountID 
 // by a Dinari-managed `Wallet`.
 type WithdrawalRequest struct {
 	// ID of the `WithdrawalRequest`.
-	ID string `json:"id,required" format:"uuid"`
+	ID string `json:"id" api:"required" format:"uuid"`
 	// ID of the `Account` of the `WithdrawalRequest`.
-	AccountID string `json:"account_id,required" format:"uuid"`
+	AccountID string `json:"account_id" api:"required" format:"uuid"`
 	// Datetime at which the `WithdrawalRequest` was created. ISO 8601 timestamp.
-	CreatedDt time.Time `json:"created_dt,required" format:"date-time"`
+	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
 	// Amount of USD+ payment tokens submitted for withdrawal.
-	PaymentTokenAmount float64 `json:"payment_token_amount,required"`
+	PaymentTokenAmount float64 `json:"payment_token_amount" api:"required"`
 	// ID of the `Account` that will receive USDC payment tokens from the `Withdrawal`.
 	// This `Account` must be connected to a non-managed `Wallet` and belong to the
 	// same `Entity`.
-	RecipientAccountID string `json:"recipient_account_id,required" format:"uuid"`
+	RecipientAccountID string `json:"recipient_account_id" api:"required" format:"uuid"`
 	// Status of the `WithdrawalRequest`
 	//
 	// Any of "PENDING", "SUBMITTED", "ERROR", "CANCELLED".
-	Status WithdrawalRequestStatus `json:"status,required"`
+	Status WithdrawalRequestStatus `json:"status" api:"required"`
 	// Datetime at which the `WithdrawalRequest` was updated. ISO 8601 timestamp.
-	UpdatedDt time.Time `json:"updated_dt,required" format:"date-time"`
+	UpdatedDt time.Time `json:"updated_dt" api:"required" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                 respjson.Field
@@ -136,9 +136,9 @@ const (
 type V2AccountWithdrawalRequestNewParams struct {
 	// Amount of USD+ payment tokens to be withdrawn. Must be greater than 0 and have
 	// at most 6 decimal places.
-	PaymentTokenQuantity float64 `json:"payment_token_quantity,required"`
+	PaymentTokenQuantity float64 `json:"payment_token_quantity" api:"required"`
 	// ID of the `Account` that will receive payment tokens from the `Withdrawal`.
-	RecipientAccountID string `json:"recipient_account_id,required" format:"uuid"`
+	RecipientAccountID string `json:"recipient_account_id" api:"required" format:"uuid"`
 	paramObj
 }
 
@@ -151,7 +151,7 @@ func (r *V2AccountWithdrawalRequestNewParams) UnmarshalJSON(data []byte) error {
 }
 
 type V2AccountWithdrawalRequestGetParams struct {
-	AccountID string `path:"account_id,required" format:"uuid" json:"-"`
+	AccountID string `path:"account_id" api:"required" format:"uuid" json:"-"`
 	paramObj
 }
 
