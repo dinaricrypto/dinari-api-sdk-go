@@ -29,7 +29,12 @@ import (
 // the [NewV2AccountOrderRequestService] method instead.
 type V2AccountOrderRequestService struct {
 	Options []option.RequestOption
-	Eip155  V2AccountOrderRequestEip155Service
+	// **`Order Requests` represent requests for Dinari to create `Orders` on behalf of
+	// an `Account`.**
+	//
+	// `Order Requests` are created when placing **proxied orders** or **managed
+	// orders**. See their respective descriptions for more details.
+	Eip155 V2AccountOrderRequestEip155Service
 }
 
 // NewV2AccountOrderRequestService generates a new service that applies the given

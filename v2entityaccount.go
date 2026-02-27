@@ -19,6 +19,10 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
+// **`Accounts` represent the financial accounts of an `Entity`.**
+//
+// `Orders`, dividends, and other transactions are associated with an `Account`.
+//
 // V2EntityAccountService contains methods and other services that help with
 // interacting with the dinari API.
 //

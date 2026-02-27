@@ -27,7 +27,10 @@ import (
 // the [NewV2MarketDataStockService] method instead.
 type V2MarketDataStockService struct {
 	Options []option.RequestOption
-	Splits  V2MarketDataStockSplitService
+	// **Corporate actions are events that affect the ownership of a `Stock`.**
+	//
+	// Corporate actions include dividends and stock splits.
+	Splits V2MarketDataStockSplitService
 }
 
 // NewV2MarketDataStockService generates a new service that applies the given

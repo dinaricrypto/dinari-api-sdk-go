@@ -19,6 +19,12 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
+// **`Order Requests` represent requests for Dinari to create `Orders` on behalf of
+// an `Account`.**
+//
+// `Order Requests` are created when placing **proxied orders** or **managed
+// orders**. See their respective descriptions for more details.
+//
 // V2AccountOrderRequestEip155Service contains methods and other services that help
 // with interacting with the dinari API.
 //
