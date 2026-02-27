@@ -18,6 +18,13 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
+// **`Entities` represent a business or organization that uses the API, and their
+// customers.**
+//
+// Dinari Partners are represented as an organization `Entity` in the API, with
+// their own accounts. Individual customers of Partner `Entities` are also
+// represented as `Entities` in the API, which are managed by the Partner `Entity`.
+//
 // V2EntityService contains methods and other services that help with interacting
 // with the dinari API.
 //
@@ -25,9 +32,23 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewV2EntityService] method instead.
 type V2EntityService struct {
-	Options  []option.RequestOption
+	Options []option.RequestOption
+	// **`Accounts` represent the financial accounts of an `Entity`.**
+	//
+	// `Orders`, dividends, and other transactions are associated with an `Account`.
 	Accounts V2EntityAccountService
-	KYC      V2EntityKYCService
+	// **KYC (Know Your Customer) is a process of verifying the identity of customer
+	// `Entities`.**
+	//
+	// KYC is required for all customer `Entities` that transact on Dinari's platform.
+	//
+	// Dinari provides a managed KYC process for its Partners, which provides a
+	// convenient KYC flow URL to present to the end customer.
+	//
+	// For Dinari Partners that supply their own KYC data, the API provides a way to
+	// record a customer's KYC information using the Partner's KYC data. This requires
+	// an existing KYC agreement between Dinari and the Partner.
+	KYC V2EntityKYCService
 }
 
 // NewV2EntityService generates a new service that applies the given options to

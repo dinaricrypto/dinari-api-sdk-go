@@ -19,6 +19,10 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
+// **Corporate actions are events that affect the ownership of a `Stock`.**
+//
+// Corporate actions include dividends and stock splits.
+//
 // V2MarketDataStockSplitService contains methods and other services that help with
 // interacting with the dinari API.
 //

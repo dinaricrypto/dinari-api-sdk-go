@@ -18,6 +18,18 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
+// **KYC (Know Your Customer) is a process of verifying the identity of customer
+// `Entities`.**
+//
+// KYC is required for all customer `Entities` that transact on Dinari's platform.
+//
+// Dinari provides a managed KYC process for its Partners, which provides a
+// convenient KYC flow URL to present to the end customer.
+//
+// For Dinari Partners that supply their own KYC data, the API provides a way to
+// record a customer's KYC information using the Partner's KYC data. This requires
+// an existing KYC agreement between Dinari and the Partner.
+//
 // V2EntityKYCService contains methods and other services that help with
 // interacting with the dinari API.
 //
@@ -25,7 +37,18 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewV2EntityKYCService] method instead.
 type V2EntityKYCService struct {
-	Options  []option.RequestOption
+	Options []option.RequestOption
+	// **KYC (Know Your Customer) is a process of verifying the identity of customer
+	// `Entities`.**
+	//
+	// KYC is required for all customer `Entities` that transact on Dinari's platform.
+	//
+	// Dinari provides a managed KYC process for its Partners, which provides a
+	// convenient KYC flow URL to present to the end customer.
+	//
+	// For Dinari Partners that supply their own KYC data, the API provides a way to
+	// record a customer's KYC information using the Partner's KYC data. This requires
+	// an existing KYC agreement between Dinari and the Partner.
 	Document V2EntityKYCDocumentService
 }
 

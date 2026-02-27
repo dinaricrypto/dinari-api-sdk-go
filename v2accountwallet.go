@@ -16,6 +16,17 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
+// **`Wallets` represent the blockchain wallet that holds the assets of an
+// `Account`.**
+//
+// An `Account` may be connected to a single `Wallet`.
+//
+// Individual `Entities` can connect their self-custodied `Wallets` by proving
+// ownership of the `Wallet` address. For Dinari Partners, a Dinari-managed
+// `Wallet` can be created for the Partner `Entity` in the
+// [Dinari Partners Portal](https://Partners.dinari.com/). This may be used in
+// omnibus accounting for self-managing customers' assets.
+//
 // V2AccountWalletService contains methods and other services that help with
 // interacting with the dinari API.
 //
@@ -23,7 +34,17 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewV2AccountWalletService] method instead.
 type V2AccountWalletService struct {
-	Options  []option.RequestOption
+	Options []option.RequestOption
+	// **`Wallets` represent the blockchain wallet that holds the assets of an
+	// `Account`.**
+	//
+	// An `Account` may be connected to a single `Wallet`.
+	//
+	// Individual `Entities` can connect their self-custodied `Wallets` by proving
+	// ownership of the `Wallet` address. For Dinari Partners, a Dinari-managed
+	// `Wallet` can be created for the Partner `Entity` in the
+	// [Dinari Partners Portal](https://Partners.dinari.com/). This may be used in
+	// omnibus accounting for self-managing customers' assets.
 	External V2AccountWalletExternalService
 }
 

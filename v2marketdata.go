@@ -14,6 +14,12 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
+// **Dinari provides basic market data for `Stocks` that are available to transact
+// on.**
+//
+// This data is provided on a best-effort basis and we recommend using a dedicated
+// provider for more intensive market data needs.
+//
 // V2MarketDataService contains methods and other services that help with
 // interacting with the dinari API.
 //

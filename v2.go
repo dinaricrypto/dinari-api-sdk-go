@@ -17,6 +17,16 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
+// **`Orders` represent the buying and selling of assets under an `Account`.**
+//
+// For `Accounts` using self-custodied `Wallets`, `Orders` are created and
+// fulfilled by making calls to Dinari's smart contracts, or using the _Proxied
+// Orders_ methods.
+//
+// For `Accounts` using managed `Wallets`, `Orders` are created and fulfilled by
+// using the `Managed Orders` methods, which then create the corresponding
+// transactions on the blockchain.
+//
 // V2Service contains methods and other services that help with interacting with
 // the dinari API.
 //
@@ -24,10 +34,24 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewV2Service] method instead.
 type V2Service struct {
-	Options    []option.RequestOption
+	Options []option.RequestOption
+	// **Dinari provides basic market data for `Stocks` that are available to transact
+	// on.**
+	//
+	// This data is provided on a best-effort basis and we recommend using a dedicated
+	// provider for more intensive market data needs.
 	MarketData V2MarketDataService
-	Entities   V2EntityService
-	Accounts   V2AccountService
+	// **`Entities` represent a business or organization that uses the API, and their
+	// customers.**
+	//
+	// Dinari Partners are represented as an organization `Entity` in the API, with
+	// their own accounts. Individual customers of Partner `Entities` are also
+	// represented as `Entities` in the API, which are managed by the Partner `Entity`.
+	Entities V2EntityService
+	// **`Accounts` represent the financial accounts of an `Entity`.**
+	//
+	// `Orders`, dividends, and other transactions are associated with an `Account`.
+	Accounts V2AccountService
 }
 
 // NewV2Service generates a new service that applies the given options to each
