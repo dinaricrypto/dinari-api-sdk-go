@@ -19,6 +19,10 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
+// **`Accounts` represent the financial accounts of an `Entity`.**
+//
+// `Orders`, dividends, and other transactions are associated with an `Account`.
+//
 // V2AccountService contains methods and other services that help with interacting
 // with the dinari API.
 //
@@ -26,15 +30,75 @@ import (
 // automatically. You should not instantiate this service directly, and instead use
 // the [NewV2AccountService] method instead.
 type V2AccountService struct {
-	Options            []option.RequestOption
-	Wallet             V2AccountWalletService
-	Orders             V2AccountOrderService
-	OrderFulfillments  V2AccountOrderFulfillmentService
-	OrderRequests      V2AccountOrderRequestService
+	Options []option.RequestOption
+	// **`Wallets` represent the blockchain wallet that holds the assets of an
+	// `Account`.**
+	//
+	// An `Account` may be connected to a single `Wallet`.
+	//
+	// Individual `Entities` can connect their self-custodied `Wallets` by proving
+	// ownership of the `Wallet` address. For Dinari Partners, a Dinari-managed
+	// `Wallet` can be created for the Partner `Entity` in the
+	// [Dinari Partners Portal](https://Partners.dinari.com/). This may be used in
+	// omnibus accounting for self-managing customers' assets.
+	Wallet V2AccountWalletService
+	// **`Orders` represent the buying and selling of assets under an `Account`.**
+	//
+	// For `Accounts` using self-custodied `Wallets`, `Orders` are created and
+	// fulfilled by making calls to Dinari's smart contracts, or using the _Proxied
+	// Orders_ methods.
+	//
+	// For `Accounts` using managed `Wallets`, `Orders` are created and fulfilled by
+	// using the `Managed Orders` methods, which then create the corresponding
+	// transactions on the blockchain.
+	Orders V2AccountOrderService
+	// **`Orders` represent the buying and selling of assets under an `Account`.**
+	//
+	// For `Accounts` using self-custodied `Wallets`, `Orders` are created and
+	// fulfilled by making calls to Dinari's smart contracts, or using the _Proxied
+	// Orders_ methods.
+	//
+	// For `Accounts` using managed `Wallets`, `Orders` are created and fulfilled by
+	// using the `Managed Orders` methods, which then create the corresponding
+	// transactions on the blockchain.
+	OrderFulfillments V2AccountOrderFulfillmentService
+	OrderRequests     V2AccountOrderRequestService
+	// **`Withdrawals` represent the transfer of stablecoins from an `Account`
+	// connected to a managed `Wallet` to another `Account` that is owned by the
+	// `Entity`.**
+	//
+	// Since the `Account` is backed by a managed `Wallet`, the `Withdrawal` must be
+	// processed by Dinari and the corresponding transaction is submitted on chain.
+	//
+	// Upon requesting a withdrawal, a `WithdrawalRequest` is created, which is then
+	// submitted on chain by Dinari. Once the transfer is submitted on chain, the
+	// corresponding `Withdrawal` is created.
+	//
+	// Currently, withdrawals are made in USDC on the Arbitrum network (Chain ID
+	// `eip155:42161`).
 	WithdrawalRequests V2AccountWithdrawalRequestService
-	Withdrawals        V2AccountWithdrawalService
-	TokenTransfers     V2AccountTokenTransferService
-	Activities         V2AccountActivityService
+	// **`Withdrawals` represent the transfer of stablecoins from an `Account`
+	// connected to a managed `Wallet` to another `Account` that is owned by the
+	// `Entity`.**
+	//
+	// Since the `Account` is backed by a managed `Wallet`, the `Withdrawal` must be
+	// processed by Dinari and the corresponding transaction is submitted on chain.
+	//
+	// Upon requesting a withdrawal, a `WithdrawalRequest` is created, which is then
+	// submitted on chain by Dinari. Once the transfer is submitted on chain, the
+	// corresponding `Withdrawal` is created.
+	//
+	// Currently, withdrawals are made in USDC on the Arbitrum network (Chain ID
+	// `eip155:42161`).
+	Withdrawals V2AccountWithdrawalService
+	// **`Accounts` represent the financial accounts of an `Entity`.**
+	//
+	// `Orders`, dividends, and other transactions are associated with an `Account`.
+	TokenTransfers V2AccountTokenTransferService
+	// **`Accounts` represent the financial accounts of an `Entity`.**
+	//
+	// `Orders`, dividends, and other transactions are associated with an `Account`.
+	Activities V2AccountActivityService
 }
 
 // NewV2AccountService generates a new service that applies the given options to

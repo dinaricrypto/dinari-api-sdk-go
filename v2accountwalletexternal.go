@@ -18,6 +18,17 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
+// **`Wallets` represent the blockchain wallet that holds the assets of an
+// `Account`.**
+//
+// An `Account` may be connected to a single `Wallet`.
+//
+// Individual `Entities` can connect their self-custodied `Wallets` by proving
+// ownership of the `Wallet` address. For Dinari Partners, a Dinari-managed
+// `Wallet` can be created for the Partner `Entity` in the
+// [Dinari Partners Portal](https://Partners.dinari.com/). This may be used in
+// omnibus accounting for self-managing customers' assets.
+//
 // V2AccountWalletExternalService contains methods and other services that help
 // with interacting with the dinari API.
 //

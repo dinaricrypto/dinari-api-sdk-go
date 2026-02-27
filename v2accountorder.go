@@ -19,6 +19,16 @@ import (
 	"github.com/dinaricrypto/dinari-api-sdk-go/packages/respjson"
 )
 
+// **`Orders` represent the buying and selling of assets under an `Account`.**
+//
+// For `Accounts` using self-custodied `Wallets`, `Orders` are created and
+// fulfilled by making calls to Dinari's smart contracts, or using the _Proxied
+// Orders_ methods.
+//
+// For `Accounts` using managed `Wallets`, `Orders` are created and fulfilled by
+// using the `Managed Orders` methods, which then create the corresponding
+// transactions on the blockchain.
+//
 // V2AccountOrderService contains methods and other services that help with
 // interacting with the dinari API.
 //

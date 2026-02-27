@@ -17,7 +17,16 @@ import (
 // directly, and instead use the [NewClient] method instead.
 type Client struct {
 	Options []option.RequestOption
-	V2      V2Service
+	// **`Orders` represent the buying and selling of assets under an `Account`.**
+	//
+	// For `Accounts` using self-custodied `Wallets`, `Orders` are created and
+	// fulfilled by making calls to Dinari's smart contracts, or using the _Proxied
+	// Orders_ methods.
+	//
+	// For `Accounts` using managed `Wallets`, `Orders` are created and fulfilled by
+	// using the `Managed Orders` methods, which then create the corresponding
+	// transactions on the blockchain.
+	V2 V2Service
 }
 
 // DefaultClientOptions read from the environment (DINARI_API_SECRET_KEY,
