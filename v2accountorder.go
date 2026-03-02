@@ -151,6 +151,7 @@ const (
 	BrokerageOrderStatusEscrowed         BrokerageOrderStatus = "ESCROWED"
 	BrokerageOrderStatusSubmitted        BrokerageOrderStatus = "SUBMITTED"
 	BrokerageOrderStatusCancelled        BrokerageOrderStatus = "CANCELLED"
+	BrokerageOrderStatusPartiallyFilled  BrokerageOrderStatus = "PARTIALLY_FILLED"
 	BrokerageOrderStatusFilled           BrokerageOrderStatus = "FILLED"
 	BrokerageOrderStatusRejected         BrokerageOrderStatus = "REJECTED"
 	BrokerageOrderStatusRequiringContact BrokerageOrderStatus = "REQUIRING_CONTACT"
@@ -191,8 +192,8 @@ type Order struct {
 	// Status of the `Order`.
 	//
 	// Any of "PENDING_SUBMIT", "PENDING_CANCEL", "PENDING_ESCROW", "PENDING_FILL",
-	// "ESCROWED", "SUBMITTED", "CANCELLED", "FILLED", "REJECTED", "REQUIRING_CONTACT",
-	// "ERROR".
+	// "ESCROWED", "SUBMITTED", "CANCELLED", "PARTIALLY_FILLED", "FILLED", "REJECTED",
+	// "REQUIRING_CONTACT", "ERROR".
 	Status BrokerageOrderStatus `json:"status" api:"required"`
 	// The `Stock` ID associated with the `Order`
 	StockID string `json:"stock_id" api:"required" format:"uuid"`
