@@ -105,8 +105,8 @@ type Withdrawal struct {
 	// Status of the `Withdrawal`.
 	//
 	// Any of "PENDING_SUBMIT", "PENDING_CANCEL", "PENDING_ESCROW", "PENDING_FILL",
-	// "ESCROWED", "SUBMITTED", "CANCELLED", "FILLED", "REJECTED", "REQUIRING_CONTACT",
-	// "ERROR".
+	// "ESCROWED", "SUBMITTED", "CANCELLED", "PARTIALLY_FILLED", "FILLED", "REJECTED",
+	// "REQUIRING_CONTACT", "ERROR".
 	Status BrokerageOrderStatus `json:"status" api:"required"`
 	// Datetime at which the `Withdrawal` was transacted. ISO 8601 timestamp.
 	TransactionDt time.Time `json:"transaction_dt" api:"required" format:"date-time"`
