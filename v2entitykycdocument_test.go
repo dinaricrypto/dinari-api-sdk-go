@@ -65,7 +65,7 @@ func TestV2EntityKYCDocumentUpload(t *testing.T) {
 		dinariapisdkgo.V2EntityKYCDocumentUploadParams{
 			EntityID:     "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 			DocumentType: dinariapisdkgo.KYCDocumentTypeGovernmentID,
-			File:         io.Reader(bytes.NewBuffer([]byte("some file contents"))),
+			File:         io.Reader(bytes.NewBuffer([]byte("Example data"))),
 		},
 	)
 	if err != nil {
