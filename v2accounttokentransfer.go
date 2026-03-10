@@ -51,11 +51,11 @@ func (r *V2AccountTokenTransferService) New(ctx context.Context, accountID strin
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/token_transfers", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Get a specific `TokenTransfer` made from this `Account` by its ID.
@@ -67,15 +67,15 @@ func (r *V2AccountTokenTransferService) Get(ctx context.Context, transferID stri
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if transferID == "" {
 		err = errors.New("missing required transfer_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/token_transfers/%s", query.AccountID, transferID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get `TokenTransfer`s made from this `Account`.
@@ -87,11 +87,11 @@ func (r *V2AccountTokenTransferService) List(ctx context.Context, accountID stri
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/token_transfers", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Information about a token transfer between accounts.

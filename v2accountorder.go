@@ -53,15 +53,15 @@ func (r *V2AccountOrderService) Get(ctx context.Context, orderID string, query V
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if orderID == "" {
 		err = errors.New("missing required order_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s", query.AccountID, orderID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get a list of all `Orders` under the `Account`. Optionally `Orders` can be
@@ -70,11 +70,11 @@ func (r *V2AccountOrderService) List(ctx context.Context, accountID string, quer
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/orders", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Cancel multiple `Orders` by their IDs in a single request. Note that this
@@ -93,11 +93,11 @@ func (r *V2AccountOrderService) BatchCancel(ctx context.Context, accountID strin
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/orders/cancel", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Cancel an `Order` by its ID. Note that this requires the `Order` ID, not the
@@ -114,15 +114,15 @@ func (r *V2AccountOrderService) Cancel(ctx context.Context, orderID string, body
 	opts = slices.Concat(r.Options, opts)
 	if body.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if orderID == "" {
 		err = errors.New("missing required order_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s/cancel", body.AccountID, orderID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get `OrderFulfillments` for a specific `Order`.
@@ -130,15 +130,15 @@ func (r *V2AccountOrderService) GetFulfillments(ctx context.Context, orderID str
 	opts = slices.Concat(r.Options, opts)
 	if params.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if orderID == "" {
 		err = errors.New("missing required order_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/orders/%s/fulfillments", params.AccountID, orderID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 type BrokerageOrderStatus string

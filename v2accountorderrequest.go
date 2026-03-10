@@ -52,15 +52,15 @@ func (r *V2AccountOrderRequestService) Get(ctx context.Context, orderRequestID s
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if orderRequestID == "" {
 		err = errors.New("missing required order_request_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/%s", query.AccountID, orderRequestID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Lists `OrderRequests`. Optionally `OrderRequests` can be filtered by certain
@@ -69,11 +69,11 @@ func (r *V2AccountOrderRequestService) List(ctx context.Context, accountID strin
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_requests", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Create a managed `OrderRequest` to place a limit buy `Order`.
@@ -88,11 +88,11 @@ func (r *V2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accountI
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/limit_buy", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Create a managed `OrderRequest` to place a limit sell `Order`.
@@ -107,11 +107,11 @@ func (r *V2AccountOrderRequestService) NewLimitSell(ctx context.Context, account
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/limit_sell", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Create a managed `OrderRequest` to place a market buy `Order`.
@@ -126,11 +126,11 @@ func (r *V2AccountOrderRequestService) NewMarketBuy(ctx context.Context, account
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/market_buy", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Create a managed `OrderRequest` to place a market sell `Order`.
@@ -145,11 +145,11 @@ func (r *V2AccountOrderRequestService) NewMarketSell(ctx context.Context, accoun
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/market_sell", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Get fee quote data for an `Order Request`. This is provided primarily for
@@ -162,11 +162,11 @@ func (r *V2AccountOrderRequestService) GetFeeQuote(ctx context.Context, accountI
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/fee_quote", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Input parameters for creating a limit buy `OrderRequest`.

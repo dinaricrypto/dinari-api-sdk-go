@@ -53,15 +53,15 @@ func (r *V2AccountOrderFulfillmentService) Get(ctx context.Context, orderFulfill
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if orderFulfillmentID == "" {
 		err = errors.New("missing required order_fulfillment_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_fulfillments/%s", query.AccountID, orderFulfillmentID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Query `OrderFulfillments` under the `Account`.
@@ -69,11 +69,11 @@ func (r *V2AccountOrderFulfillmentService) Query(ctx context.Context, accountID 
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_fulfillments", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Information about a fulfillment of an `Order`. An order may be fulfilled in

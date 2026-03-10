@@ -72,7 +72,7 @@ func (r *V2Service) ListOrders(ctx context.Context, query V2ListOrdersParams, op
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/orders/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 type V2ListOrdersResponse struct {

@@ -123,11 +123,11 @@ func (r *V2AccountService) Get(ctx context.Context, accountID string, opts ...op
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Set the `Account` to be inactive. Inactive accounts cannot be used for trading.
@@ -135,11 +135,11 @@ func (r *V2AccountService) Deactivate(ctx context.Context, accountID string, opt
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/deactivate", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get the cash balances of the `Account`, including stablecoins and other cash
@@ -148,11 +148,11 @@ func (r *V2AccountService) GetCashBalances(ctx context.Context, accountID string
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/cash", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get dividend payments made to the `Account` from dividend-bearing stock
@@ -161,11 +161,11 @@ func (r *V2AccountService) GetDividendPayments(ctx context.Context, accountID st
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/dividend_payments", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Get interest payments made to the `Account` from yield-bearing cash holdings.
@@ -176,11 +176,11 @@ func (r *V2AccountService) GetInterestPayments(ctx context.Context, accountID st
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/interest_payments", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Get the portfolio of the `Account`, excluding cash equivalents such as
@@ -189,11 +189,11 @@ func (r *V2AccountService) GetPortfolio(ctx context.Context, accountID string, q
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/portfolio", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Mints 1,000 mockUSD sandbox payment tokens to the `Wallet` connected to the
@@ -205,11 +205,11 @@ func (r *V2AccountService) MintSandboxTokens(ctx context.Context, accountID stri
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/faucet", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, nil, opts...)
-	return
+	return err
 }
 
 type Chain string
