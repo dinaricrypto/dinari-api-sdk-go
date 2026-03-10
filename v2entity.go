@@ -68,7 +68,7 @@ func (r *V2EntityService) New(ctx context.Context, body V2EntityNewParams, opts 
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/entities/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Update a specific customer `Entity` of your organization.
@@ -76,11 +76,11 @@ func (r *V2EntityService) Update(ctx context.Context, entityID string, body V2En
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/entities/%s", entityID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPatch, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Get a list of direct `Entities` your organization manages. These `Entities`
@@ -89,7 +89,7 @@ func (r *V2EntityService) List(ctx context.Context, query V2EntityListParams, op
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/entities/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Get a specific customer `Entity` of your organization by their ID.
@@ -97,11 +97,11 @@ func (r *V2EntityService) GetByID(ctx context.Context, entityID string, opts ...
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/entities/%s", entityID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get the current authenticated `Entity`, which represents your organization.
@@ -109,7 +109,7 @@ func (r *V2EntityService) GetCurrent(ctx context.Context, opts ...option.Request
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/entities/me"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Information about an `Entity`, which can be either an individual or an

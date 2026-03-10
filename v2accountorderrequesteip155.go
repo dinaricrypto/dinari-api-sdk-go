@@ -56,11 +56,11 @@ func (r *V2AccountOrderRequestEip155Service) NewPermit(ctx context.Context, acco
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/eip155/permit", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Prepare a transaction to be placed on EVM. The returned structure contains the
@@ -69,11 +69,11 @@ func (r *V2AccountOrderRequestEip155Service) NewPermitTransaction(ctx context.Co
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/eip155/permit_transaction", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Submits a transaction for an EIP155 Order Request given the EIP155OrderRequest
@@ -84,11 +84,11 @@ func (r *V2AccountOrderRequestEip155Service) Submit(ctx context.Context, account
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/eip155", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Input parameters for creating a proxied `EIP155OrderRequestPermitTransaction`.

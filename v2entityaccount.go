@@ -48,11 +48,11 @@ func (r *V2EntityAccountService) New(ctx context.Context, entityID string, body 
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/entities/%s/accounts", entityID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // Get a list of all `Accounts` that belong to a specific `Entity`. This `Entity`
@@ -62,11 +62,11 @@ func (r *V2EntityAccountService) List(ctx context.Context, entityID string, quer
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/entities/%s/accounts", entityID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Information about an `Account` owned by an `Entity`.

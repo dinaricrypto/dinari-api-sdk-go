@@ -71,11 +71,11 @@ func (r *V2EntityKYCService) Get(ctx context.Context, entityID string, opts ...o
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/entities/%s/kyc", entityID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Create a Dinari-managed KYC Check and get a URL for your end customer to
@@ -88,11 +88,11 @@ func (r *V2EntityKYCService) NewManagedCheck(ctx context.Context, entityID strin
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/entities/%s/kyc/url", entityID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Submit KYC data directly, for partners that are provisioned to provide their own
@@ -104,11 +104,11 @@ func (r *V2EntityKYCService) Submit(ctx context.Context, entityID string, body V
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/entities/%s/kyc", entityID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return
+	return res, err
 }
 
 // KYC data for an `Entity` in the BASELINE jurisdiction.

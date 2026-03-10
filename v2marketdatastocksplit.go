@@ -56,7 +56,7 @@ func (r *V2MarketDataStockSplitService) List(ctx context.Context, query V2Market
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/market_data/stocks/splits"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Get a list of stock splits for a specific `Stock`. The splits are ordered by the
@@ -72,11 +72,11 @@ func (r *V2MarketDataStockSplitService) ListForStock(ctx context.Context, stockI
 	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/market_data/stocks/%s/splits", stockID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Information about a stock split, including the `Stock` ID, the number of shares
