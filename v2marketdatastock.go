@@ -48,7 +48,7 @@ func (r *V2MarketDataStockService) List(ctx context.Context, query V2MarketDataS
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/market_data/stocks/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Get current price for a specified `Stock`.
@@ -56,11 +56,11 @@ func (r *V2MarketDataStockService) GetCurrentPrice(ctx context.Context, stockID 
 	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/market_data/stocks/%s/current_price", stockID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get quote for a specified `Stock`.
@@ -68,11 +68,11 @@ func (r *V2MarketDataStockService) GetCurrentQuote(ctx context.Context, stockID 
 	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/market_data/stocks/%s/current_quote", stockID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get a list of announced stock dividend details for a specified `Stock`.
@@ -83,11 +83,11 @@ func (r *V2MarketDataStockService) GetDividends(ctx context.Context, stockID str
 	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/market_data/stocks/%s/dividends", stockID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get historical price data for a specified `Stock`. Each index in the array
@@ -96,11 +96,11 @@ func (r *V2MarketDataStockService) GetHistoricalPrices(ctx context.Context, stoc
 	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/market_data/stocks/%s/historical_prices/", stockID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Get the most recent news articles relating to a `Stock`, including a summary of
@@ -109,11 +109,11 @@ func (r *V2MarketDataStockService) GetNews(ctx context.Context, stockID string, 
 	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/market_data/stocks/%s/news", stockID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Information about stock available for trading.

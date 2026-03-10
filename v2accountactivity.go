@@ -48,11 +48,11 @@ func (r *V2AccountActivityService) GetBrokerage(ctx context.Context, accountID s
 	opts = append([]option.RequestOption{option.WithHeader("Accept", "*/*")}, opts...)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/activities/brokerage", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, nil, opts...)
-	return
+	return err
 }
 
 type V2AccountActivityGetBrokerageParams struct {

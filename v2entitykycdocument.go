@@ -57,15 +57,15 @@ func (r *V2EntityKYCDocumentService) Get(ctx context.Context, kycID string, quer
 	opts = slices.Concat(r.Options, opts)
 	if query.EntityID == "" {
 		err = errors.New("missing required entity_id parameter")
-		return
+		return nil, err
 	}
 	if kycID == "" {
 		err = errors.New("missing required kyc_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/entities/%s/kyc/%s/document", query.EntityID, kycID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Upload KYC-related documentation for partners that are provisioned to provide
@@ -74,15 +74,15 @@ func (r *V2EntityKYCDocumentService) Upload(ctx context.Context, kycID string, p
 	opts = slices.Concat(r.Options, opts)
 	if params.EntityID == "" {
 		err = errors.New("missing required entity_id parameter")
-		return
+		return nil, err
 	}
 	if kycID == "" {
 		err = errors.New("missing required kyc_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/entities/%s/kyc/%s/document", params.EntityID, kycID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, params, &res, opts...)
-	return
+	return res, err
 }
 
 // A document associated with KYC for an `Entity`.

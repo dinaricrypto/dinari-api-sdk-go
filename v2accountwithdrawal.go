@@ -57,15 +57,15 @@ func (r *V2AccountWithdrawalService) Get(ctx context.Context, withdrawalID strin
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	if withdrawalID == "" {
 		err = errors.New("missing required withdrawal_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/withdrawals/%s", query.AccountID, withdrawalID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 // Get a list of all `Withdrawals` under the `Account`, sorted by most recent.
@@ -73,11 +73,11 @@ func (r *V2AccountWithdrawalService) List(ctx context.Context, accountID string,
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
-		return
+		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/accounts/%s/withdrawals", accountID)
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
-	return
+	return res, err
 }
 
 // Information for a withdrawal of payment tokens from an `Account` backed by a

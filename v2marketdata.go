@@ -47,7 +47,7 @@ func (r *V2MarketDataService) GetMarketHours(ctx context.Context, opts ...option
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/market_data/market_hours/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
-	return
+	return res, err
 }
 
 type V2MarketDataGetMarketHoursResponse struct {
