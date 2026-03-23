@@ -1,5 +1,42 @@
 # Changelog
 
+## 0.12.0 (2026-03-23)
+
+Full Changelog: [v0.11.0...v0.12.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.11.0...v0.12.0)
+
+### Features
+
+* **api:** api update ([f96b025](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/f96b0258f55cc09ff6dfc94a438c28c338431120))
+* **api:** api update ([0ffcff5](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/0ffcff5a9df0d1c784b0b9557b73115e0c34d7b0))
+* **client:** add a convenient param.SetJSON helper ([4086075](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/408607589010991f9d5e316141df2cbab702abab))
+
+
+### Bug Fixes
+
+* allow canceling a request while it is waiting to retry ([9fb6708](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/9fb6708b213b69f6e594b905e7db53720cbfb921))
+* **docs:** add missing pointer prefix to api.md return types ([4d12377](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/4d12377fb316ee561e51c446430e7caccee50be5))
+* **docs:** fix mcp installation instructions for remote servers ([f35b7c5](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/f35b7c593c5cc213f06a168910dc6d8e23bcbcb9))
+* **encoder:** correctly serialize NullStruct ([b6343fc](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/b6343fcadef17baafc3fc1f6bc890f409fdf2f89))
+* fix request delays for retrying to be more respectful of high requested delays ([857ac42](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/857ac42b607bff8cc4ba42eba1050152573cfe99))
+
+
+### Chores
+
+* **ci:** add build step ([c6b4f1a](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/c6b4f1a77510d893622ba1e7e29859a4e6cd1145))
+* **ci:** skip uploading artifacts on stainless-internal branches ([ed5e9b3](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/ed5e9b39ace020af2385d04ceeabd22e273ca3b0))
+* configure new SDK language ([5c466a6](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/5c466a6cf65ac8212eb08e98d0a3dfcbe469dffa))
+* **docs:** add missing descriptions ([37e51e7](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/37e51e7b02503f3851acb894dba745f69cc95050))
+* **internal:** minor cleanup ([a0ddf69](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/a0ddf69c9375768485c3031cc43935ada62dc80d))
+* **internal:** move custom custom `json` tags to `api` ([3b44818](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/3b448186bb145d56fb5bd5e92c52d7e4dd33751a))
+* **internal:** remove mock server code ([a616183](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/a616183d3baa58437a1c3e04ad8a9bd31dd6d80f))
+* **internal:** tweak CI branches ([086397b](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/086397ba0571a65e6ea1b55c3fa794fcc7888c0f))
+* **internal:** update `actions/checkout` version ([8ef33bb](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/8ef33bbfbe0e9a1cfd87c421b5ba2984524ff2f4))
+* **internal:** update gitignore ([2900c21](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/2900c21192606c45de1547f123d28118da61a2ab))
+* **internal:** use explicit returns ([5708155](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/570815540cd0004b10aa2cc56e6a9648e7ef3e7e))
+* **internal:** use explicit returns in more places ([2803cda](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/2803cda486d3403990b590baf8a3dd226f446532))
+* update mock server docs ([d6506ff](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/d6506ff1d4a76c6bf85013ee45844b54fab17d78))
+* update placeholder string ([85177ca](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/85177caf86757647e0e4f25b2080bcedf1693e5f))
+
 ## 0.11.0 (2026-01-08)
 
 Full Changelog: [v0.10.0...v0.11.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.10.0...v0.11.0)
