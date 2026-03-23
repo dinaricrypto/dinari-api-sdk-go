@@ -171,7 +171,7 @@ func (r *V2AccountOrderRequestService) GetFeeQuote(ctx context.Context, accountI
 
 // Input parameters for creating a limit buy `OrderRequest`.
 //
-// The properties AssetQuantity, LimitPrice, StockID are required.
+// The properties AssetQuantity, LimitPrice are required.
 type CreateLimitBuyOrderInputParam struct {
 	// Amount of dShare asset involved. Required for limit `Order Requests` and market
 	// sell `Order Requests`. Must be a positive number with a precision of up to 4
@@ -180,13 +180,15 @@ type CreateLimitBuyOrderInputParam struct {
 	// Price at which to execute the order. Must be a positive number with a precision
 	// of up to 2 decimal places.
 	LimitPrice float64 `json:"limit_price" api:"required"`
-	// ID of `Stock`.
-	StockID string `json:"stock_id" api:"required" format:"uuid"`
+	// ID of `Alloy`.
+	AlloyID param.Opt[string] `json:"alloy_id,omitzero" format:"uuid"`
 	// Customer-supplied ID to map this order to an order in their own systems. Must be
 	// unique within the entity.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
 	// ID of `Account` to receive the `Order`.
 	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
+	// ID of `Stock`.
+	StockID param.Opt[string] `json:"stock_id,omitzero" format:"uuid"`
 	paramObj
 }
 
@@ -200,7 +202,7 @@ func (r *CreateLimitBuyOrderInputParam) UnmarshalJSON(data []byte) error {
 
 // Input parameters for creating a limit sell `OrderRequest`.
 //
-// The properties AssetQuantity, LimitPrice, StockID are required.
+// The properties AssetQuantity, LimitPrice are required.
 type CreateLimitSellOrderInputParam struct {
 	// Amount of dShare asset involved. Required for limit `Order Requests` and market
 	// sell `Order Requests`. Must be a positive number with a precision of up to 4
@@ -209,8 +211,8 @@ type CreateLimitSellOrderInputParam struct {
 	// Price at which to execute the order. Must be a positive number with a precision
 	// of up to 2 decimal places.
 	LimitPrice float64 `json:"limit_price" api:"required"`
-	// ID of `Stock`.
-	StockID string `json:"stock_id" api:"required" format:"uuid"`
+	// ID of `Alloy`.
+	AlloyID param.Opt[string] `json:"alloy_id,omitzero" format:"uuid"`
 	// Customer-supplied ID to map this order to an order in their own systems. Must be
 	// unique within the entity.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
@@ -220,6 +222,8 @@ type CreateLimitSellOrderInputParam struct {
 	PaymentTokenAddress param.Opt[string] `json:"payment_token_address,omitzero" format:"eth_address"`
 	// ID of `Account` to receive the `Order`.
 	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
+	// ID of `Stock`.
+	StockID param.Opt[string] `json:"stock_id,omitzero" format:"uuid"`
 	paramObj
 }
 
@@ -233,18 +237,20 @@ func (r *CreateLimitSellOrderInputParam) UnmarshalJSON(data []byte) error {
 
 // Input parameters for creating a market buy `OrderRequest`.
 //
-// The properties PaymentAmount, StockID are required.
+// The property PaymentAmount is required.
 type CreateMarketBuyOrderInputParam struct {
 	// Amount of currency (USD for US equities and ETFs) to pay for the order. Must be
 	// a positive number with a precision of up to 2 decimal places.
 	PaymentAmount float64 `json:"payment_amount" api:"required"`
-	// ID of `Stock`.
-	StockID string `json:"stock_id" api:"required" format:"uuid"`
+	// ID of `Alloy`.
+	AlloyID param.Opt[string] `json:"alloy_id,omitzero" format:"uuid"`
 	// Customer-supplied ID to map this order to an order in their own systems. Must be
 	// unique within the entity.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
 	// ID of `Account` to receive the `Order`.
 	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
+	// ID of `Stock`.
+	StockID param.Opt[string] `json:"stock_id,omitzero" format:"uuid"`
 	paramObj
 }
 
@@ -258,13 +264,13 @@ func (r *CreateMarketBuyOrderInputParam) UnmarshalJSON(data []byte) error {
 
 // Input parameters for creating a market sell `OrderRequest`.
 //
-// The properties AssetQuantity, StockID are required.
+// The property AssetQuantity is required.
 type CreateMarketSellOrderInputParam struct {
 	// Quantity of shares to trade. Must be a positive number with a precision of up to
 	// 6 decimal places.
 	AssetQuantity float64 `json:"asset_quantity" api:"required"`
-	// ID of `Stock`.
-	StockID string `json:"stock_id" api:"required" format:"uuid"`
+	// ID of `Alloy`.
+	AlloyID param.Opt[string] `json:"alloy_id,omitzero" format:"uuid"`
 	// Customer-supplied ID to map this order to an order in their own systems. Must be
 	// unique within the entity.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
@@ -274,6 +280,8 @@ type CreateMarketSellOrderInputParam struct {
 	PaymentTokenAddress param.Opt[string] `json:"payment_token_address,omitzero" format:"eth_address"`
 	// ID of `Account` to receive the `Order`.
 	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
+	// ID of `Stock`.
+	StockID param.Opt[string] `json:"stock_id,omitzero" format:"uuid"`
 	paramObj
 }
 
@@ -482,8 +490,8 @@ type V2AccountOrderRequestGetFeeQuoteParams struct {
 	//
 	// Any of "MARKET", "LIMIT".
 	OrderType OrderType `json:"order_type,omitzero" api:"required"`
-	// The Stock ID associated with the Order Request
-	StockID string `json:"stock_id" api:"required" format:"uuid"`
+	// The `Alloy` ID associated with the Order Request
+	AlloyID param.Opt[string] `json:"alloy_id,omitzero" format:"uuid"`
 	// Amount of dShare asset tokens involved. Required for limit `Order Requests` and
 	// market sell `Order Requests`. Must be a positive number with a precision of up
 	// to 4 decimal places for limit `Order Requests` or up to 6 decimal places for
@@ -497,6 +505,8 @@ type V2AccountOrderRequestGetFeeQuoteParams struct {
 	PaymentTokenAddress param.Opt[string] `json:"payment_token_address,omitzero" format:"eth_address"`
 	// Amount of payment tokens involved. Required for market buy `Order Requests`.
 	PaymentTokenQuantity param.Opt[float64] `json:"payment_token_quantity,omitzero"`
+	// The `Stock` ID associated with the Order Request
+	StockID param.Opt[string] `json:"stock_id,omitzero" format:"uuid"`
 	// CAIP-2 chain ID of the blockchain where the `Order Request` will be placed. If
 	// not provided, the default chain ID (eip155:42161) will be used.
 	//
