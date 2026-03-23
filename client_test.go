@@ -39,7 +39,7 @@ func TestUserAgentHeader(t *testing.T) {
 			},
 		}),
 	)
-	client.V2.MarketData.Stocks.List(context.Background(), dinariapisdkgo.V2MarketDataStockListParams{})
+	_, _ = client.V2.MarketData.Stocks.List(context.Background(), dinariapisdkgo.V2MarketDataStockListParams{})
 	if userAgent != fmt.Sprintf("Dinari/Go %s", internal.PackageVersion) {
 		t.Errorf("Expected User-Agent to be correct, but got: %#v", userAgent)
 	}
