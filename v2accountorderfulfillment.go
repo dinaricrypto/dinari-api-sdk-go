@@ -102,8 +102,12 @@ type Fulfillment struct {
 	TransactionDt time.Time `json:"transaction_dt" api:"required" format:"date-time"`
 	// Transaction hash for this fulfillment.
 	TransactionHash string `json:"transaction_hash" api:"required" format:"hex_string"`
+	// The `Alloy` ID associated with the `Order`
+	AlloyID string `json:"alloy_id" api:"nullable" format:"uuid"`
 	// Fee amount, in payment tokens.
 	PaymentTokenFee float64 `json:"payment_token_fee" api:"nullable"`
+	// The `Stock` ID associated with the `Order`
+	StockID string `json:"stock_id" api:"nullable" format:"uuid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                 respjson.Field
@@ -115,7 +119,9 @@ type Fulfillment struct {
 		PaymentTokenSpent  respjson.Field
 		TransactionDt      respjson.Field
 		TransactionHash    respjson.Field
+		AlloyID            respjson.Field
 		PaymentTokenFee    respjson.Field
+		StockID            respjson.Field
 		ExtraFields        map[string]respjson.Field
 		raw                string
 	} `json:"-"`

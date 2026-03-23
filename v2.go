@@ -112,10 +112,10 @@ type V2ListOrdersResponse struct {
 	// "ESCROWED", "SUBMITTED", "CANCELLED", "PARTIALLY_FILLED", "FILLED", "REJECTED",
 	// "REQUIRING_CONTACT", "ERROR".
 	Status BrokerageOrderStatus `json:"status" api:"required"`
-	// The `Stock` ID associated with the `Order`
-	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// Account ID the order was made for.
 	AccountID string `json:"account_id" api:"nullable" format:"uuid"`
+	// The `Alloy` ID associated with the `Order`
+	AlloyID string `json:"alloy_id" api:"nullable" format:"uuid"`
 	// The dShare asset token address.
 	AssetToken string `json:"asset_token" api:"nullable" format:"eth_address"`
 	// Total amount of assets involved.
@@ -136,6 +136,8 @@ type V2ListOrdersResponse struct {
 	OrderRequestID string `json:"order_request_id" api:"nullable" format:"uuid"`
 	// Total amount of payment involved.
 	PaymentTokenQuantity float64 `json:"payment_token_quantity" api:"nullable"`
+	// The `Stock` ID associated with the `Order`
+	StockID string `json:"stock_id" api:"nullable" format:"uuid"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		ID                    respjson.Field
@@ -148,8 +150,8 @@ type V2ListOrdersResponse struct {
 		OrderType             respjson.Field
 		PaymentToken          respjson.Field
 		Status                respjson.Field
-		StockID               respjson.Field
 		AccountID             respjson.Field
+		AlloyID               respjson.Field
 		AssetToken            respjson.Field
 		AssetTokenQuantity    respjson.Field
 		CancelTransactionHash respjson.Field
@@ -159,6 +161,7 @@ type V2ListOrdersResponse struct {
 		LimitPrice            respjson.Field
 		OrderRequestID        respjson.Field
 		PaymentTokenQuantity  respjson.Field
+		StockID               respjson.Field
 		ExtraFields           map[string]respjson.Field
 		raw                   string
 	} `json:"-"`

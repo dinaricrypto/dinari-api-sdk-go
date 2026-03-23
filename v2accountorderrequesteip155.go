@@ -262,6 +262,8 @@ type V2AccountOrderRequestEip155NewPermitParams struct {
 	OrderType OrderType `json:"order_type,omitzero" api:"required"`
 	// Address of payment token.
 	PaymentToken string `json:"payment_token" api:"required" format:"eth_address"`
+	// The ID of the `Alloy` for which the `Order` is being placed.
+	AlloyID param.Opt[string] `json:"alloy_id,omitzero" format:"uuid"`
 	// Amount of dShare asset tokens involved. Required for limit `Order Requests` and
 	// market sell `Order Requests`. Must be a positive number with a precision of up
 	// to 4 decimal places for limit `Order Requests` or up to 6 decimal places for
