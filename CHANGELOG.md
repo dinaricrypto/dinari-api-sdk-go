@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.13.0 (2026-03-26)
+
+Full Changelog: [v0.12.0...v0.13.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.12.0...v0.13.0)
+
+### Features
+
+* **api:** Add Historical and Current Price Enterprise API v2 endpoints for Alloy ([93da805](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/93da805b57f0acc141fe1c85c8979f31e85883ff))
+* **api:** api update ([46f8e74](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/46f8e74c81bda31f1cdd50d8266f2676d453476f))
+
+
+### Chores
+
+* **ci:** skip lint on metadata-only changes ([f83f965](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/f83f965f4539354d3b309e1cd715f6513033f5bd))
+* **client:** fix multipart serialisation of Default() fields ([a244d73](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/a244d73cab62d3c95e15f5a52ca04a7fa8ec79ae))
+* **internal:** support default value struct tag ([8dc0ba2](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/8dc0ba2fbab6406a40493bbe9e86af96784eaeef))
+
 ## 0.12.0 (2026-03-23)
 
 Full Changelog: [v0.11.0...v0.12.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.11.0...v0.12.0)
