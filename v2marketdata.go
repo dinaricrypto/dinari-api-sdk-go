@@ -29,6 +29,12 @@ import (
 type V2MarketDataService struct {
 	Options []option.RequestOption
 	Stocks  V2MarketDataStockService
+	// **Dinari provides basic market data for `Stocks` and `Alloys` that are available
+	// to transact on.**
+	//
+	// This data is provided on a best-effort basis and we recommend using a dedicated
+	// provider for more intensive market data needs.
+	Alloys V2MarketDataAlloyService
 }
 
 // NewV2MarketDataService generates a new service that applies the given options to
@@ -38,6 +44,7 @@ func NewV2MarketDataService(opts ...option.RequestOption) (r V2MarketDataService
 	r = V2MarketDataService{}
 	r.Options = opts
 	r.Stocks = NewV2MarketDataStockService(opts...)
+	r.Alloys = NewV2MarketDataAlloyService(opts...)
 	return
 }
 
