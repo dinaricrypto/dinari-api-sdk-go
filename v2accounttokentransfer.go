@@ -104,7 +104,7 @@ type TokenTransfer struct {
 	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
 	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
 	// "eip155:179202", "eip155:98865", "eip155:7887".
-	ChainID Chain `json:"chain_id" api:"required"`
+	ChainID TokenTransferChainID `json:"chain_id" api:"required"`
 	// Datetime at which the transfer was created. ISO 8601 timestamp.
 	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
 	// Quantity of the token being transferred.
@@ -146,6 +146,27 @@ func (r TokenTransfer) RawJSON() string { return r.JSON.raw }
 func (r *TokenTransfer) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// CAIP-2 chain ID of the blockchain that the transfer is made on.
+type TokenTransferChainID string
+
+const (
+	TokenTransferChainIDEip155_1         TokenTransferChainID = "eip155:1"
+	TokenTransferChainIDEip155_42161     TokenTransferChainID = "eip155:42161"
+	TokenTransferChainIDEip155_8453      TokenTransferChainID = "eip155:8453"
+	TokenTransferChainIDEip155_81457     TokenTransferChainID = "eip155:81457"
+	TokenTransferChainIDEip155_98866     TokenTransferChainID = "eip155:98866"
+	TokenTransferChainIDEip155_11155111  TokenTransferChainID = "eip155:11155111"
+	TokenTransferChainIDEip155_421614    TokenTransferChainID = "eip155:421614"
+	TokenTransferChainIDEip155_84532     TokenTransferChainID = "eip155:84532"
+	TokenTransferChainIDEip155_168587773 TokenTransferChainID = "eip155:168587773"
+	TokenTransferChainIDEip155_98867     TokenTransferChainID = "eip155:98867"
+	TokenTransferChainIDEip155_202110    TokenTransferChainID = "eip155:202110"
+	TokenTransferChainIDEip155_179205    TokenTransferChainID = "eip155:179205"
+	TokenTransferChainIDEip155_179202    TokenTransferChainID = "eip155:179202"
+	TokenTransferChainIDEip155_98865     TokenTransferChainID = "eip155:98865"
+	TokenTransferChainIDEip155_7887      TokenTransferChainID = "eip155:7887"
+)
 
 // Status of the token transfer.
 type TokenTransferStatus string
