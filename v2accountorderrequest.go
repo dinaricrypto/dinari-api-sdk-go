@@ -4,7 +4,6 @@ package dinariapisdkgo
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -439,7 +438,7 @@ func (r V2AccountOrderRequestNewLimitBuyParams) MarshalJSON() (data []byte, err 
 	return shimjson.Marshal(r.CreateLimitBuyOrderInput)
 }
 func (r *V2AccountOrderRequestNewLimitBuyParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.CreateLimitBuyOrderInput)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type V2AccountOrderRequestNewLimitSellParams struct {
@@ -452,7 +451,7 @@ func (r V2AccountOrderRequestNewLimitSellParams) MarshalJSON() (data []byte, err
 	return shimjson.Marshal(r.CreateLimitSellOrderInput)
 }
 func (r *V2AccountOrderRequestNewLimitSellParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.CreateLimitSellOrderInput)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type V2AccountOrderRequestNewMarketBuyParams struct {
@@ -465,7 +464,7 @@ func (r V2AccountOrderRequestNewMarketBuyParams) MarshalJSON() (data []byte, err
 	return shimjson.Marshal(r.CreateMarketBuyOrderInput)
 }
 func (r *V2AccountOrderRequestNewMarketBuyParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.CreateMarketBuyOrderInput)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type V2AccountOrderRequestNewMarketSellParams struct {
@@ -478,7 +477,7 @@ func (r V2AccountOrderRequestNewMarketSellParams) MarshalJSON() (data []byte, er
 	return shimjson.Marshal(r.CreateMarketSellOrderInput)
 }
 func (r *V2AccountOrderRequestNewMarketSellParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.CreateMarketSellOrderInput)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type V2AccountOrderRequestGetFeeQuoteParams struct {

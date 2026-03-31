@@ -4,7 +4,6 @@ package dinariapisdkgo
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -302,7 +301,7 @@ func (r V2AccountOrderRequestEip155NewPermitTransactionParams) MarshalJSON() (da
 	return shimjson.Marshal(r.Eip155OrderRequestPermitTransaction)
 }
 func (r *V2AccountOrderRequestEip155NewPermitTransactionParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.Eip155OrderRequestPermitTransaction)
+	return apijson.UnmarshalRoot(data, r)
 }
 
 type V2AccountOrderRequestEip155SubmitParams struct {
@@ -315,5 +314,5 @@ func (r V2AccountOrderRequestEip155SubmitParams) MarshalJSON() (data []byte, err
 	return shimjson.Marshal(r.Eip155OrderRequestPermitTransaction)
 }
 func (r *V2AccountOrderRequestEip155SubmitParams) UnmarshalJSON(data []byte) error {
-	return json.Unmarshal(data, &r.Eip155OrderRequestPermitTransaction)
+	return apijson.UnmarshalRoot(data, r)
 }
