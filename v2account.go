@@ -220,11 +220,13 @@ const (
 	ChainEip155_8453      Chain = "eip155:8453"
 	ChainEip155_81457     Chain = "eip155:81457"
 	ChainEip155_98866     Chain = "eip155:98866"
+	ChainEip155_999       Chain = "eip155:999"
 	ChainEip155_11155111  Chain = "eip155:11155111"
 	ChainEip155_421614    Chain = "eip155:421614"
 	ChainEip155_84532     Chain = "eip155:84532"
 	ChainEip155_168587773 Chain = "eip155:168587773"
 	ChainEip155_98867     Chain = "eip155:98867"
+	ChainEip155_998       Chain = "eip155:998"
 	ChainEip155_202110    Chain = "eip155:202110"
 	ChainEip155_179205    Chain = "eip155:179205"
 	ChainEip155_179202    Chain = "eip155:179202"
@@ -239,9 +241,10 @@ type V2AccountGetCashBalancesResponse struct {
 	// CAIP-2 chain ID of the payment token.
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
-	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
-	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
-	// "eip155:179202", "eip155:98865", "eip155:7887".
+	// "eip155:98866", "eip155:999", "eip155:11155111", "eip155:421614",
+	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:998",
+	// "eip155:202110", "eip155:179205", "eip155:179202", "eip155:98865",
+	// "eip155:7887".
 	ChainID Chain `json:"chain_id" api:"required"`
 	// Symbol of the payment token.
 	Symbol string `json:"symbol" api:"required"`
@@ -340,9 +343,10 @@ type V2AccountGetPortfolioResponseAsset struct {
 	// CAIP-2 chain ID of the blockchain where the dShare asset token exists.
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
-	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
-	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
-	// "eip155:179202", "eip155:98865", "eip155:7887".
+	// "eip155:98866", "eip155:999", "eip155:11155111", "eip155:421614",
+	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:998",
+	// "eip155:202110", "eip155:179205", "eip155:179202", "eip155:98865",
+	// "eip155:7887".
 	ChainID Chain `json:"chain_id" api:"required"`
 	// ID of the underlying `Stock` represented by the dShare asset token.
 	StockID string `json:"stock_id" api:"required" format:"uuid"`
@@ -431,9 +435,10 @@ type V2AccountMintSandboxTokensParams struct {
 	// Dinari-managed `Wallet`, only eip155:42161 is allowed.
 	//
 	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
-	// "eip155:98866", "eip155:11155111", "eip155:421614", "eip155:84532",
-	// "eip155:168587773", "eip155:98867", "eip155:202110", "eip155:179205",
-	// "eip155:179202", "eip155:98865", "eip155:7887".
+	// "eip155:98866", "eip155:999", "eip155:11155111", "eip155:421614",
+	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:998",
+	// "eip155:202110", "eip155:179205", "eip155:179202", "eip155:98865",
+	// "eip155:7887".
 	ChainID Chain `json:"chain_id,omitzero"`
 	paramObj
 }
