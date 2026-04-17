@@ -106,8 +106,12 @@ func TestV2AccountGetDividendPaymentsWithOptionalParams(t *testing.T) {
 		dinariapisdkgo.V2AccountGetDividendPaymentsParams{
 			EndDate:   time.Now(),
 			StartDate: time.Now(),
+			Limit:     dinariapisdkgo.Int(20),
+			Next:      dinariapisdkgo.String("next"),
+			Order:     dinariapisdkgo.V2AccountGetDividendPaymentsParamsOrderAsc,
 			Page:      dinariapisdkgo.Int(1),
 			PageSize:  dinariapisdkgo.Int(1),
+			Previous:  dinariapisdkgo.String("previous"),
 			StockID:   dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		},
 	)
@@ -140,8 +144,12 @@ func TestV2AccountGetInterestPaymentsWithOptionalParams(t *testing.T) {
 		dinariapisdkgo.V2AccountGetInterestPaymentsParams{
 			EndDate:   time.Now(),
 			StartDate: time.Now(),
+			Limit:     dinariapisdkgo.Int(20),
+			Next:      dinariapisdkgo.String("next"),
+			Order:     dinariapisdkgo.V2AccountGetInterestPaymentsParamsOrderAsc,
 			Page:      dinariapisdkgo.Int(1),
 			PageSize:  dinariapisdkgo.Int(1),
+			Previous:  dinariapisdkgo.String("previous"),
 		},
 	)
 	if err != nil {

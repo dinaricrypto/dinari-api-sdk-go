@@ -61,11 +61,15 @@ func TestV2AccountOrderListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderListParams{
-			ChainID:              dinariapisdkgo.ChainEip155_1,
+			ChainID:              dinariapisdkgo.String("chain_id"),
 			ClientOrderID:        dinariapisdkgo.String("client_order_id"),
+			Limit:                dinariapisdkgo.Int(20),
+			Next:                 dinariapisdkgo.String("next"),
+			Order:                dinariapisdkgo.V2AccountOrderListParamsOrderAsc,
 			OrderTransactionHash: dinariapisdkgo.String("order_transaction_hash"),
 			Page:                 dinariapisdkgo.Int(1),
 			PageSize:             dinariapisdkgo.Int(1),
+			Previous:             dinariapisdkgo.String("previous"),
 		},
 	)
 	if err != nil {
@@ -156,8 +160,12 @@ func TestV2AccountOrderGetFulfillmentsWithOptionalParams(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderGetFulfillmentsParams{
 			AccountID: "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+			Limit:     dinariapisdkgo.Int(20),
+			Next:      dinariapisdkgo.String("next"),
+			Order:     dinariapisdkgo.V2AccountOrderGetFulfillmentsParamsOrderAsc,
 			Page:      dinariapisdkgo.Int(1),
 			PageSize:  dinariapisdkgo.Int(1),
+			Previous:  dinariapisdkgo.String("previous"),
 		},
 	)
 	if err != nil {

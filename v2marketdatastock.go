@@ -4,6 +4,7 @@ package dinariapisdkgo
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -44,7 +45,7 @@ func NewV2MarketDataStockService(opts ...option.RequestOption) (r V2MarketDataSt
 }
 
 // Get a list of `Stocks`.
-func (r *V2MarketDataStockService) List(ctx context.Context, query V2MarketDataStockListParams, opts ...option.RequestOption) (res *[]V2MarketDataStockListResponse, err error) {
+func (r *V2MarketDataStockService) List(ctx context.Context, query V2MarketDataStockListParams, opts ...option.RequestOption) (res *V2MarketDataStockListResponseUnion, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/market_data/stocks/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
@@ -116,8 +117,55 @@ func (r *V2MarketDataStockService) GetNews(ctx context.Context, stockID string, 
 	return res, err
 }
 
+// V2MarketDataStockListResponseUnion contains all possible properties and values
+// from [[]V2MarketDataStockListResponseArrayItem],
+// [V2MarketDataStockListResponsePaginatedStockResponse].
+//
+// Use the methods beginning with 'As' to cast the union to one of its variants.
+//
+// If the underlying value is not a json object, one of the following properties
+// will be valid: OfV2MarketDataStockListResponseArray]
+type V2MarketDataStockListResponseUnion struct {
+	// This field will be present if the value is a
+	// [[]V2MarketDataStockListResponseArrayItem] instead of an object.
+	OfV2MarketDataStockListResponseArray []V2MarketDataStockListResponseArrayItem `json:",inline"`
+	// This field is from variant
+	// [V2MarketDataStockListResponsePaginatedStockResponse].
+	Data []V2MarketDataStockListResponsePaginatedStockResponseData `json:"data"`
+	// This field is from variant
+	// [V2MarketDataStockListResponsePaginatedStockResponse].
+	PaginationMetadata V2MarketDataStockListResponsePaginatedStockResponsePaginationMetadata `json:"pagination_metadata"`
+	// This field is from variant
+	// [V2MarketDataStockListResponsePaginatedStockResponse].
+	Sv   string `json:"_sv"`
+	JSON struct {
+		OfV2MarketDataStockListResponseArray respjson.Field
+		Data                                 respjson.Field
+		PaginationMetadata                   respjson.Field
+		Sv                                   respjson.Field
+		raw                                  string
+	} `json:"-"`
+}
+
+func (u V2MarketDataStockListResponseUnion) AsV2MarketDataStockListResponseArray() (v []V2MarketDataStockListResponseArrayItem) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u V2MarketDataStockListResponseUnion) AsV2MarketDataStockListResponsePaginatedStockResponse() (v V2MarketDataStockListResponsePaginatedStockResponse) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+// Returns the unmodified JSON received from the API
+func (u V2MarketDataStockListResponseUnion) RawJSON() string { return u.JSON.raw }
+
+func (r *V2MarketDataStockListResponseUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Information about stock available for trading.
-type V2MarketDataStockListResponse struct {
+type V2MarketDataStockListResponseArrayItem struct {
 	// ID of the `Stock`
 	ID string `json:"id" api:"required" format:"uuid"`
 	// Whether the `Stock` allows for fractional trading. If it is not fractionable,
@@ -169,8 +217,114 @@ type V2MarketDataStockListResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2MarketDataStockListResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2MarketDataStockListResponse) UnmarshalJSON(data []byte) error {
+func (r V2MarketDataStockListResponseArrayItem) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockListResponseArrayItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2MarketDataStockListResponsePaginatedStockResponse struct {
+	// List of Stock
+	Data []V2MarketDataStockListResponsePaginatedStockResponseData `json:"data" api:"required"`
+	// Pagination metadata
+	PaginationMetadata V2MarketDataStockListResponsePaginatedStockResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	// Version
+	//
+	// Any of "PaginatedStockResponse:v1".
+	Sv string `json:"_sv"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Data               respjson.Field
+		PaginationMetadata respjson.Field
+		Sv                 respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2MarketDataStockListResponsePaginatedStockResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockListResponsePaginatedStockResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Information about stock available for trading.
+type V2MarketDataStockListResponsePaginatedStockResponseData struct {
+	// ID of the `Stock`
+	ID string `json:"id" api:"required" format:"uuid"`
+	// Whether the `Stock` allows for fractional trading. If it is not fractionable,
+	// Dinari only supports limit orders for the `Stock`.
+	IsFractionable bool `json:"is_fractionable" api:"required"`
+	// Whether the `Stock` is available for trading.
+	IsTradable bool `json:"is_tradable" api:"required"`
+	// Company name
+	Name string `json:"name" api:"required"`
+	// Ticker symbol
+	Symbol string `json:"symbol" api:"required"`
+	// List of CAIP-10 formatted token addresses.
+	Tokens []string `json:"tokens" api:"required"`
+	// SEC Central Index Key. Refer to
+	// [this link](https://www.sec.gov/submit-filings/filer-support-resources/how-do-i-guides/understand-utilize-edgar-ciks-passphrases-access-codes)
+	// for more information.
+	Cik string `json:"cik" api:"nullable"`
+	// Composite FIGI ID. Refer to [this link](https://www.openfigi.com/about/figi) for
+	// more information.
+	CompositeFigi string `json:"composite_figi" api:"nullable"`
+	// CUSIP ID. Refer to [this link](https://www.cusip.com/identifiers.html) for more
+	// information. A license agreement with CUSIP Global Services is required to
+	// receive this value.
+	Cusip string `json:"cusip" api:"nullable"`
+	// Description of the company and their services.
+	Description string `json:"description" api:"nullable"`
+	// Name of `Stock` for application display. If defined, this supercedes the `name`
+	// field for displaying the name.
+	DisplayName string `json:"display_name" api:"nullable"`
+	// URL of the company's logo. Supported formats are SVG and PNG.
+	LogoURL string `json:"logo_url" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID             respjson.Field
+		IsFractionable respjson.Field
+		IsTradable     respjson.Field
+		Name           respjson.Field
+		Symbol         respjson.Field
+		Tokens         respjson.Field
+		Cik            respjson.Field
+		CompositeFigi  respjson.Field
+		Cusip          respjson.Field
+		Description    respjson.Field
+		DisplayName    respjson.Field
+		LogoURL        respjson.Field
+		ExtraFields    map[string]respjson.Field
+		raw            string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2MarketDataStockListResponsePaginatedStockResponseData) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockListResponsePaginatedStockResponseData) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Pagination metadata
+type V2MarketDataStockListResponsePaginatedStockResponsePaginationMetadata struct {
+	// Cursor for next page
+	Next string `json:"next"`
+	// Cursor for previous page
+	Previous string `json:"previous"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Next        respjson.Field
+		Previous    respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2MarketDataStockListResponsePaginatedStockResponsePaginationMetadata) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2MarketDataStockListResponsePaginatedStockResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -368,8 +522,18 @@ func (r *V2MarketDataStockGetNewsResponse) UnmarshalJSON(data []byte) error {
 }
 
 type V2MarketDataStockListParams struct {
+	// Cursor for next page
+	Next param.Opt[string] `query:"next,omitzero" json:"-"`
+	// Cursor for previous page
+	Previous param.Opt[string] `query:"previous,omitzero" json:"-"`
+	// Number of results to return
+	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	// Sort order
+	//
+	// Any of "asc", "desc".
+	Order V2MarketDataStockListParamsOrder `query:"order,omitzero" json:"-"`
 	// List of `Stock` symbols to query. If not provided, all `Stocks` are returned.
 	Symbols []string `query:"symbols,omitzero" json:"-"`
 	paramObj
@@ -383,6 +547,14 @@ func (r V2MarketDataStockListParams) URLQuery() (v url.Values, err error) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
+
+// Sort order
+type V2MarketDataStockListParamsOrder string
+
+const (
+	V2MarketDataStockListParamsOrderAsc  V2MarketDataStockListParamsOrder = "asc"
+	V2MarketDataStockListParamsOrderDesc V2MarketDataStockListParamsOrder = "desc"
+)
 
 type V2MarketDataStockGetHistoricalPricesParams struct {
 	// The timespan of the historical prices to query.
