@@ -4,6 +4,7 @@ package dinariapisdkgo
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -52,7 +53,7 @@ func NewV2MarketDataStockSplitService(opts ...option.RequestOption) (r V2MarketD
 // disruptions. Each share of stock owned by a shareholder will then be converted
 // into 10 shares, and the split becomes `COMPLETE` as trading resumes on the
 // `ex_date` with new split-adjusted prices.
-func (r *V2MarketDataStockSplitService) List(ctx context.Context, query V2MarketDataStockSplitListParams, opts ...option.RequestOption) (res *[]StockSplit, err error) {
+func (r *V2MarketDataStockSplitService) List(ctx context.Context, query V2MarketDataStockSplitListParams, opts ...option.RequestOption) (res *V2MarketDataStockSplitListResponseUnion, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/market_data/stocks/splits"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
@@ -68,7 +69,7 @@ func (r *V2MarketDataStockSplitService) List(ctx context.Context, query V2Market
 // disruptions. Each share of stock owned by a shareholder will then be converted
 // into 10 shares, and the split becomes `COMPLETE` as trading resumes on the
 // `ex_date` with new split-adjusted prices.
-func (r *V2MarketDataStockSplitService) ListForStock(ctx context.Context, stockID string, query V2MarketDataStockSplitListForStockParams, opts ...option.RequestOption) (res *[]StockSplit, err error) {
+func (r *V2MarketDataStockSplitService) ListForStock(ctx context.Context, stockID string, query V2MarketDataStockSplitListForStockParams, opts ...option.RequestOption) (res *V2MarketDataStockSplitListForStockResponseUnion, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
@@ -141,9 +142,213 @@ const (
 	StockSplitStatusComplete   StockSplitStatus = "COMPLETE"
 )
 
+// V2MarketDataStockSplitListResponseUnion contains all possible properties and
+// values from [[]StockSplit],
+// [V2MarketDataStockSplitListResponsePaginatedStockSplitResponse].
+//
+// Use the methods beginning with 'As' to cast the union to one of its variants.
+//
+// If the underlying value is not a json object, one of the following properties
+// will be valid: OfStockSplitArray]
+type V2MarketDataStockSplitListResponseUnion struct {
+	// This field will be present if the value is a [[]StockSplit] instead of an
+	// object.
+	OfStockSplitArray []StockSplit `json:",inline"`
+	// This field is from variant
+	// [V2MarketDataStockSplitListResponsePaginatedStockSplitResponse].
+	Data []StockSplit `json:"data"`
+	// This field is from variant
+	// [V2MarketDataStockSplitListResponsePaginatedStockSplitResponse].
+	PaginationMetadata V2MarketDataStockSplitListResponsePaginatedStockSplitResponsePaginationMetadata `json:"pagination_metadata"`
+	// This field is from variant
+	// [V2MarketDataStockSplitListResponsePaginatedStockSplitResponse].
+	Sv   string `json:"_sv"`
+	JSON struct {
+		OfStockSplitArray  respjson.Field
+		Data               respjson.Field
+		PaginationMetadata respjson.Field
+		Sv                 respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+func (u V2MarketDataStockSplitListResponseUnion) AsStockSplitArray() (v []StockSplit) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u V2MarketDataStockSplitListResponseUnion) AsV2MarketDataStockSplitListResponsePaginatedStockSplitResponse() (v V2MarketDataStockSplitListResponsePaginatedStockSplitResponse) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+// Returns the unmodified JSON received from the API
+func (u V2MarketDataStockSplitListResponseUnion) RawJSON() string { return u.JSON.raw }
+
+func (r *V2MarketDataStockSplitListResponseUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2MarketDataStockSplitListResponsePaginatedStockSplitResponse struct {
+	// List of StockSplit
+	Data []StockSplit `json:"data" api:"required"`
+	// Pagination metadata
+	PaginationMetadata V2MarketDataStockSplitListResponsePaginatedStockSplitResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	// Version
+	//
+	// Any of "PaginatedStockSplitResponse:v1".
+	Sv string `json:"_sv"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Data               respjson.Field
+		PaginationMetadata respjson.Field
+		Sv                 respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2MarketDataStockSplitListResponsePaginatedStockSplitResponse) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2MarketDataStockSplitListResponsePaginatedStockSplitResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Pagination metadata
+type V2MarketDataStockSplitListResponsePaginatedStockSplitResponsePaginationMetadata struct {
+	// Cursor for next page
+	Next string `json:"next"`
+	// Cursor for previous page
+	Previous string `json:"previous"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Next        respjson.Field
+		Previous    respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2MarketDataStockSplitListResponsePaginatedStockSplitResponsePaginationMetadata) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2MarketDataStockSplitListResponsePaginatedStockSplitResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// V2MarketDataStockSplitListForStockResponseUnion contains all possible properties
+// and values from [[]StockSplit],
+// [V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponse].
+//
+// Use the methods beginning with 'As' to cast the union to one of its variants.
+//
+// If the underlying value is not a json object, one of the following properties
+// will be valid: OfStockSplitArray]
+type V2MarketDataStockSplitListForStockResponseUnion struct {
+	// This field will be present if the value is a [[]StockSplit] instead of an
+	// object.
+	OfStockSplitArray []StockSplit `json:",inline"`
+	// This field is from variant
+	// [V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponse].
+	Data []StockSplit `json:"data"`
+	// This field is from variant
+	// [V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponse].
+	PaginationMetadata V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponsePaginationMetadata `json:"pagination_metadata"`
+	// This field is from variant
+	// [V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponse].
+	Sv   string `json:"_sv"`
+	JSON struct {
+		OfStockSplitArray  respjson.Field
+		Data               respjson.Field
+		PaginationMetadata respjson.Field
+		Sv                 respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+func (u V2MarketDataStockSplitListForStockResponseUnion) AsStockSplitArray() (v []StockSplit) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u V2MarketDataStockSplitListForStockResponseUnion) AsV2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponse() (v V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponse) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+// Returns the unmodified JSON received from the API
+func (u V2MarketDataStockSplitListForStockResponseUnion) RawJSON() string { return u.JSON.raw }
+
+func (r *V2MarketDataStockSplitListForStockResponseUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponse struct {
+	// List of StockSplit
+	Data []StockSplit `json:"data" api:"required"`
+	// Pagination metadata
+	PaginationMetadata V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	// Version
+	//
+	// Any of "PaginatedStockSplitResponse:v1".
+	Sv string `json:"_sv"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Data               respjson.Field
+		PaginationMetadata respjson.Field
+		Sv                 respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponse) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Pagination metadata
+type V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponsePaginationMetadata struct {
+	// Cursor for next page
+	Next string `json:"next"`
+	// Cursor for previous page
+	Previous string `json:"previous"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Next        respjson.Field
+		Previous    respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponsePaginationMetadata) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2MarketDataStockSplitListForStockResponsePaginatedStockSplitResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type V2MarketDataStockSplitListParams struct {
+	// Cursor for next page
+	Next param.Opt[string] `query:"next,omitzero" json:"-"`
+	// Cursor for previous page
+	Previous param.Opt[string] `query:"previous,omitzero" json:"-"`
+	// Number of results to return
+	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	// Sort order
+	//
+	// Any of "asc", "desc".
+	Order V2MarketDataStockSplitListParamsOrder `query:"order,omitzero" json:"-"`
 	paramObj
 }
 
@@ -156,9 +361,27 @@ func (r V2MarketDataStockSplitListParams) URLQuery() (v url.Values, err error) {
 	})
 }
 
+// Sort order
+type V2MarketDataStockSplitListParamsOrder string
+
+const (
+	V2MarketDataStockSplitListParamsOrderAsc  V2MarketDataStockSplitListParamsOrder = "asc"
+	V2MarketDataStockSplitListParamsOrderDesc V2MarketDataStockSplitListParamsOrder = "desc"
+)
+
 type V2MarketDataStockSplitListForStockParams struct {
+	// Cursor for next page
+	Next param.Opt[string] `query:"next,omitzero" json:"-"`
+	// Cursor for previous page
+	Previous param.Opt[string] `query:"previous,omitzero" json:"-"`
+	// Number of results to return
+	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	// Sort order
+	//
+	// Any of "asc", "desc".
+	Order V2MarketDataStockSplitListForStockParamsOrder `query:"order,omitzero" json:"-"`
 	paramObj
 }
 
@@ -170,3 +393,11 @@ func (r V2MarketDataStockSplitListForStockParams) URLQuery() (v url.Values, err 
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
+
+// Sort order
+type V2MarketDataStockSplitListForStockParamsOrder string
+
+const (
+	V2MarketDataStockSplitListForStockParamsOrderAsc  V2MarketDataStockSplitListForStockParamsOrder = "asc"
+	V2MarketDataStockSplitListForStockParamsOrderDesc V2MarketDataStockSplitListForStockParamsOrder = "desc"
+)

@@ -4,6 +4,7 @@ package dinariapisdkgo
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -64,7 +65,7 @@ func (r *V2AccountOrderRequestService) Get(ctx context.Context, orderRequestID s
 
 // Lists `OrderRequests`. Optionally `OrderRequests` can be filtered by certain
 // parameters.
-func (r *V2AccountOrderRequestService) List(ctx context.Context, accountID string, query V2AccountOrderRequestListParams, opts ...option.RequestOption) (res *[]OrderRequest, err error) {
+func (r *V2AccountOrderRequestService) List(ctx context.Context, accountID string, query V2AccountOrderRequestListParams, opts ...option.RequestOption) (res *V2AccountOrderRequestListResponseUnion, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -383,6 +384,261 @@ const (
 	OrderRequestStatusRejected      OrderRequestStatus = "REJECTED"
 )
 
+// V2AccountOrderRequestListResponseUnion contains all possible properties and
+// values from [[]V2AccountOrderRequestListResponseArrayItem],
+// [V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponse].
+//
+// Use the methods beginning with 'As' to cast the union to one of its variants.
+//
+// If the underlying value is not a json object, one of the following properties
+// will be valid: OfV2AccountOrderRequestListResponseArray]
+type V2AccountOrderRequestListResponseUnion struct {
+	// This field will be present if the value is a
+	// [[]V2AccountOrderRequestListResponseArrayItem] instead of an object.
+	OfV2AccountOrderRequestListResponseArray []V2AccountOrderRequestListResponseArrayItem `json:",inline"`
+	// This field is from variant
+	// [V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponse].
+	Data []V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponseData `json:"data"`
+	// This field is from variant
+	// [V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponse].
+	PaginationMetadata V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponsePaginationMetadata `json:"pagination_metadata"`
+	// This field is from variant
+	// [V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponse].
+	Sv   string `json:"_sv"`
+	JSON struct {
+		OfV2AccountOrderRequestListResponseArray respjson.Field
+		Data                                     respjson.Field
+		PaginationMetadata                       respjson.Field
+		Sv                                       respjson.Field
+		raw                                      string
+	} `json:"-"`
+}
+
+func (u V2AccountOrderRequestListResponseUnion) AsV2AccountOrderRequestListResponseArray() (v []V2AccountOrderRequestListResponseArrayItem) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u V2AccountOrderRequestListResponseUnion) AsV2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponse() (v V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponse) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+// Returns the unmodified JSON received from the API
+func (u V2AccountOrderRequestListResponseUnion) RawJSON() string { return u.JSON.raw }
+
+func (r *V2AccountOrderRequestListResponseUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A request to create an `Order`.
+//
+// An `OrderRequest` is created when a user places an order through the Dinari API.
+// The `OrderRequest` is then fulfilled by creating an `Order` on-chain.
+//
+// The `OrderRequest` is a record of the user's intent to place an order, while the
+// `Order` is the actual transaction that occurs on the blockchain.
+type V2AccountOrderRequestListResponseArrayItem struct {
+	// ID of `OrderRequest`. This is the primary identifier for the `/order_requests`
+	// routes.
+	ID string `json:"id" api:"required" format:"uuid"`
+	// ID of `Account` placing the `OrderRequest`.
+	AccountID string `json:"account_id" api:"required" format:"uuid"`
+	// Datetime at which the `OrderRequest` was created. ISO 8601 timestamp.
+	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
+	// Indicates whether `Order` is a buy or sell.
+	//
+	// Any of "BUY", "SELL".
+	OrderSide string `json:"order_side" api:"required"`
+	// Indicates how long `Order` is valid for.
+	//
+	// Any of "DAY", "GTC", "IOC", "FOK".
+	OrderTif string `json:"order_tif" api:"required"`
+	// Type of `Order`.
+	//
+	// Any of "MARKET", "LIMIT".
+	OrderType string `json:"order_type" api:"required"`
+	// Status of `OrderRequest`. Possible values:
+	//
+	// - `QUOTED`: Order request created with fee quote provided, ready for processing
+	// - `PENDING`: Order request is being prepared for submission
+	// - `PENDING_BRIDGE`: Order is waiting for bridge transaction to complete
+	// - `SUBMITTED`: Order has been successfully submitted to the order book
+	// - `ERROR`: An error occurred during order processing
+	// - `CANCELLED`: Order request was cancelled
+	// - `EXPIRED`: Order request expired due to deadline passing
+	// - `REJECTED`: Order request was rejected
+	//
+	// Any of "QUOTED", "PENDING", "PENDING_BRIDGE", "SUBMITTED", "ERROR", "CANCELLED",
+	// "EXPIRED", "REJECTED".
+	Status string `json:"status" api:"required"`
+	// Reason for the order cancellation if the order status is CANCELLED
+	CancelMessage string `json:"cancel_message" api:"nullable"`
+	// Customer-supplied ID to map this `OrderRequest` to an order in their own
+	// systems.
+	ClientOrderID string `json:"client_order_id" api:"nullable"`
+	// ID of `Order` created from the `OrderRequest`. This is the primary identifier
+	// for the `/orders` routes.
+	OrderID string `json:"order_id" api:"nullable" format:"uuid"`
+	// ID of recipient `Account`.
+	RecipientAccountID string `json:"recipient_account_id" api:"nullable" format:"uuid"`
+	// Reason for the order rejection if the order status is REJECTED
+	RejectMessage string `json:"reject_message" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID                 respjson.Field
+		AccountID          respjson.Field
+		CreatedDt          respjson.Field
+		OrderSide          respjson.Field
+		OrderTif           respjson.Field
+		OrderType          respjson.Field
+		Status             respjson.Field
+		CancelMessage      respjson.Field
+		ClientOrderID      respjson.Field
+		OrderID            respjson.Field
+		RecipientAccountID respjson.Field
+		RejectMessage      respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountOrderRequestListResponseArrayItem) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountOrderRequestListResponseArrayItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponse struct {
+	// List of AccountOrder
+	Data []V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponseData `json:"data" api:"required"`
+	// Pagination metadata
+	PaginationMetadata V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	// Version
+	//
+	// Any of "PaginatedAccountOrderRequestResponse:v1".
+	Sv string `json:"_sv"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Data               respjson.Field
+		PaginationMetadata respjson.Field
+		Sv                 respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponse) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// A request to create an `Order`.
+//
+// An `OrderRequest` is created when a user places an order through the Dinari API.
+// The `OrderRequest` is then fulfilled by creating an `Order` on-chain.
+//
+// The `OrderRequest` is a record of the user's intent to place an order, while the
+// `Order` is the actual transaction that occurs on the blockchain.
+type V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponseData struct {
+	// ID of `OrderRequest`. This is the primary identifier for the `/order_requests`
+	// routes.
+	ID string `json:"id" api:"required" format:"uuid"`
+	// ID of `Account` placing the `OrderRequest`.
+	AccountID string `json:"account_id" api:"required" format:"uuid"`
+	// Datetime at which the `OrderRequest` was created. ISO 8601 timestamp.
+	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
+	// Indicates whether `Order` is a buy or sell.
+	//
+	// Any of "BUY", "SELL".
+	OrderSide string `json:"order_side" api:"required"`
+	// Indicates how long `Order` is valid for.
+	//
+	// Any of "DAY", "GTC", "IOC", "FOK".
+	OrderTif string `json:"order_tif" api:"required"`
+	// Type of `Order`.
+	//
+	// Any of "MARKET", "LIMIT".
+	OrderType string `json:"order_type" api:"required"`
+	// Status of `OrderRequest`. Possible values:
+	//
+	// - `QUOTED`: Order request created with fee quote provided, ready for processing
+	// - `PENDING`: Order request is being prepared for submission
+	// - `PENDING_BRIDGE`: Order is waiting for bridge transaction to complete
+	// - `SUBMITTED`: Order has been successfully submitted to the order book
+	// - `ERROR`: An error occurred during order processing
+	// - `CANCELLED`: Order request was cancelled
+	// - `EXPIRED`: Order request expired due to deadline passing
+	// - `REJECTED`: Order request was rejected
+	//
+	// Any of "QUOTED", "PENDING", "PENDING_BRIDGE", "SUBMITTED", "ERROR", "CANCELLED",
+	// "EXPIRED", "REJECTED".
+	Status string `json:"status" api:"required"`
+	// Reason for the order cancellation if the order status is CANCELLED
+	CancelMessage string `json:"cancel_message" api:"nullable"`
+	// Customer-supplied ID to map this `OrderRequest` to an order in their own
+	// systems.
+	ClientOrderID string `json:"client_order_id" api:"nullable"`
+	// ID of `Order` created from the `OrderRequest`. This is the primary identifier
+	// for the `/orders` routes.
+	OrderID string `json:"order_id" api:"nullable" format:"uuid"`
+	// ID of recipient `Account`.
+	RecipientAccountID string `json:"recipient_account_id" api:"nullable" format:"uuid"`
+	// Reason for the order rejection if the order status is REJECTED
+	RejectMessage string `json:"reject_message" api:"nullable"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID                 respjson.Field
+		AccountID          respjson.Field
+		CreatedDt          respjson.Field
+		OrderSide          respjson.Field
+		OrderTif           respjson.Field
+		OrderType          respjson.Field
+		Status             respjson.Field
+		CancelMessage      respjson.Field
+		ClientOrderID      respjson.Field
+		OrderID            respjson.Field
+		RecipientAccountID respjson.Field
+		RejectMessage      respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponseData) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponseData) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Pagination metadata
+type V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponsePaginationMetadata struct {
+	// Cursor for next page
+	Next string `json:"next"`
+	// Cursor for previous page
+	Previous string `json:"previous"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Next        respjson.Field
+		Previous    respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponsePaginationMetadata) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // A preview of the fee that would be collected when placing an Order Request.
 type V2AccountOrderRequestGetFeeQuoteResponse struct {
 	// Cash amount in USD paid for fees for the Order Request.
@@ -410,12 +666,22 @@ type V2AccountOrderRequestListParams struct {
 	// Customer-supplied ID to map this `OrderRequest` to an order in their own
 	// systems.
 	ClientOrderID param.Opt[string] `query:"client_order_id,omitzero" json:"-"`
+	// Cursor for next page
+	Next param.Opt[string] `query:"next,omitzero" json:"-"`
 	// Order ID for the `OrderRequest`
 	OrderID param.Opt[string] `query:"order_id,omitzero" format:"uuid" json:"-"`
 	// Order Request ID for the `OrderRequest`
 	OrderRequestID param.Opt[string] `query:"order_request_id,omitzero" format:"uuid" json:"-"`
-	Page           param.Opt[int64]  `query:"page,omitzero" json:"-"`
-	PageSize       param.Opt[int64]  `query:"page_size,omitzero" json:"-"`
+	// Cursor for previous page
+	Previous param.Opt[string] `query:"previous,omitzero" json:"-"`
+	// Number of results to return
+	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
+	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
+	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	// Sort order
+	//
+	// Any of "asc", "desc".
+	Order V2AccountOrderRequestListParamsOrder `query:"order,omitzero" json:"-"`
 	paramObj
 }
 
@@ -427,6 +693,14 @@ func (r V2AccountOrderRequestListParams) URLQuery() (v url.Values, err error) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
+
+// Sort order
+type V2AccountOrderRequestListParamsOrder string
+
+const (
+	V2AccountOrderRequestListParamsOrderAsc  V2AccountOrderRequestListParamsOrder = "asc"
+	V2AccountOrderRequestListParamsOrderDesc V2AccountOrderRequestListParamsOrder = "desc"
+)
 
 type V2AccountOrderRequestNewLimitBuyParams struct {
 	// Input parameters for creating a limit buy `OrderRequest`.

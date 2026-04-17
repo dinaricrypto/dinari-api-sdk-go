@@ -62,10 +62,14 @@ func TestV2AccountOrderRequestListWithOptionalParams(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestListParams{
 			ClientOrderID:  dinariapisdkgo.String("client_order_id"),
+			Limit:          dinariapisdkgo.Int(20),
+			Next:           dinariapisdkgo.String("next"),
+			Order:          dinariapisdkgo.V2AccountOrderRequestListParamsOrderAsc,
 			OrderID:        dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			OrderRequestID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			Page:           dinariapisdkgo.Int(1),
 			PageSize:       dinariapisdkgo.Int(1),
+			Previous:       dinariapisdkgo.String("previous"),
 		},
 	)
 	if err != nil {

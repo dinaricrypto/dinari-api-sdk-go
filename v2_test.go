@@ -28,12 +28,16 @@ func TestV2ListOrdersWithOptionalParams(t *testing.T) {
 		option.WithAPISecretKey("My API Secret Key"),
 	)
 	_, err := client.V2.ListOrders(context.TODO(), dinariapisdkgo.V2ListOrdersParams{
-		ChainID:                         dinariapisdkgo.ChainEip155_1,
+		ChainID:                         dinariapisdkgo.String("chain_id"),
+		Limit:                           dinariapisdkgo.Int(20),
+		Next:                            dinariapisdkgo.String("next"),
+		Order:                           dinariapisdkgo.V2ListOrdersParamsOrderAsc,
 		OrderFulfillmentTransactionHash: dinariapisdkgo.String("order_fulfillment_transaction_hash"),
 		OrderRequestID:                  dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		OrderTransactionHash:            dinariapisdkgo.String("order_transaction_hash"),
 		Page:                            dinariapisdkgo.Int(1),
 		PageSize:                        dinariapisdkgo.Int(1),
+		Previous:                        dinariapisdkgo.String("previous"),
 	})
 	if err != nil {
 		var apierr *dinariapisdkgo.Error

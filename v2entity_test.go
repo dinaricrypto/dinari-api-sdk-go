@@ -85,8 +85,12 @@ func TestV2EntityListWithOptionalParams(t *testing.T) {
 		option.WithAPISecretKey("My API Secret Key"),
 	)
 	_, err := client.V2.Entities.List(context.TODO(), dinariapisdkgo.V2EntityListParams{
+		Limit:       dinariapisdkgo.Int(20),
+		Next:        dinariapisdkgo.String("next"),
+		Order:       dinariapisdkgo.V2EntityListParamsOrderAsc,
 		Page:        dinariapisdkgo.Int(1),
 		PageSize:    dinariapisdkgo.Int(1),
+		Previous:    dinariapisdkgo.String("previous"),
 		ReferenceID: dinariapisdkgo.String("x"),
 	})
 	if err != nil {

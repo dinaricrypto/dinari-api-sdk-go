@@ -28,8 +28,12 @@ func TestV2MarketDataStockListWithOptionalParams(t *testing.T) {
 		option.WithAPISecretKey("My API Secret Key"),
 	)
 	_, err := client.V2.MarketData.Stocks.List(context.TODO(), dinariapisdkgo.V2MarketDataStockListParams{
+		Limit:    dinariapisdkgo.Int(20),
+		Next:     dinariapisdkgo.String("next"),
+		Order:    dinariapisdkgo.V2MarketDataStockListParamsOrderAsc,
 		Page:     dinariapisdkgo.Int(1),
 		PageSize: dinariapisdkgo.Int(1),
+		Previous: dinariapisdkgo.String("previous"),
 		Symbols:  []string{"string"},
 	})
 	if err != nil {
