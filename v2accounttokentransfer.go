@@ -4,6 +4,7 @@ package dinariapisdkgo
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -83,7 +84,7 @@ func (r *V2AccountTokenTransferService) Get(ctx context.Context, transferID stri
 // A `TokenTransfer` represents a transfer of tokens through the Dinari platform
 // from one `Account` to another. As such, only `Account`s that are connected to
 // Dinari-managed `Wallet`s can initiate `TokenTransfer`s.
-func (r *V2AccountTokenTransferService) List(ctx context.Context, accountID string, query V2AccountTokenTransferListParams, opts ...option.RequestOption) (res *[]TokenTransfer, err error) {
+func (r *V2AccountTokenTransferService) List(ctx context.Context, accountID string, query V2AccountTokenTransferListParams, opts ...option.RequestOption) (res *V2AccountTokenTransferListResponseUnion, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -181,6 +182,103 @@ const (
 	TokenTransferStatusFailed     TokenTransferStatus = "FAILED"
 )
 
+// V2AccountTokenTransferListResponseUnion contains all possible properties and
+// values from [[]TokenTransfer],
+// [V2AccountTokenTransferListResponsePaginatedTokenTransferResponse].
+//
+// Use the methods beginning with 'As' to cast the union to one of its variants.
+//
+// If the underlying value is not a json object, one of the following properties
+// will be valid: OfTokenTransferArray]
+type V2AccountTokenTransferListResponseUnion struct {
+	// This field will be present if the value is a [[]TokenTransfer] instead of an
+	// object.
+	OfTokenTransferArray []TokenTransfer `json:",inline"`
+	// This field is from variant
+	// [V2AccountTokenTransferListResponsePaginatedTokenTransferResponse].
+	Data []TokenTransfer `json:"data"`
+	// This field is from variant
+	// [V2AccountTokenTransferListResponsePaginatedTokenTransferResponse].
+	PaginationMetadata V2AccountTokenTransferListResponsePaginatedTokenTransferResponsePaginationMetadata `json:"pagination_metadata"`
+	// This field is from variant
+	// [V2AccountTokenTransferListResponsePaginatedTokenTransferResponse].
+	Sv   string `json:"_sv"`
+	JSON struct {
+		OfTokenTransferArray respjson.Field
+		Data                 respjson.Field
+		PaginationMetadata   respjson.Field
+		Sv                   respjson.Field
+		raw                  string
+	} `json:"-"`
+}
+
+func (u V2AccountTokenTransferListResponseUnion) AsTokenTransferArray() (v []TokenTransfer) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u V2AccountTokenTransferListResponseUnion) AsV2AccountTokenTransferListResponsePaginatedTokenTransferResponse() (v V2AccountTokenTransferListResponsePaginatedTokenTransferResponse) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+// Returns the unmodified JSON received from the API
+func (u V2AccountTokenTransferListResponseUnion) RawJSON() string { return u.JSON.raw }
+
+func (r *V2AccountTokenTransferListResponseUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2AccountTokenTransferListResponsePaginatedTokenTransferResponse struct {
+	// List of TokenTransfer
+	Data []TokenTransfer `json:"data" api:"required"`
+	// Pagination metadata
+	PaginationMetadata V2AccountTokenTransferListResponsePaginatedTokenTransferResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	// Version
+	//
+	// Any of "PaginatedTokenTransferResponse:v1".
+	Sv string `json:"_sv"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Data               respjson.Field
+		PaginationMetadata respjson.Field
+		Sv                 respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountTokenTransferListResponsePaginatedTokenTransferResponse) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2AccountTokenTransferListResponsePaginatedTokenTransferResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Pagination metadata
+type V2AccountTokenTransferListResponsePaginatedTokenTransferResponsePaginationMetadata struct {
+	// Cursor for next page
+	Next string `json:"next"`
+	// Cursor for previous page
+	Previous string `json:"previous"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Next        respjson.Field
+		Previous    respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountTokenTransferListResponsePaginatedTokenTransferResponsePaginationMetadata) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2AccountTokenTransferListResponsePaginatedTokenTransferResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type V2AccountTokenTransferNewParams struct {
 	// Quantity of the token to transfer.
 	Quantity float64 `json:"quantity" api:"required"`
@@ -205,8 +303,18 @@ type V2AccountTokenTransferGetParams struct {
 }
 
 type V2AccountTokenTransferListParams struct {
+	// Cursor for next page
+	Next param.Opt[string] `query:"next,omitzero" json:"-"`
+	// Cursor for previous page
+	Previous param.Opt[string] `query:"previous,omitzero" json:"-"`
+	// Number of results to return
+	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	// Sort order
+	//
+	// Any of "asc", "desc".
+	Order V2AccountTokenTransferListParamsOrder `query:"order,omitzero" json:"-"`
 	paramObj
 }
 
@@ -218,3 +326,11 @@ func (r V2AccountTokenTransferListParams) URLQuery() (v url.Values, err error) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
+
+// Sort order
+type V2AccountTokenTransferListParamsOrder string
+
+const (
+	V2AccountTokenTransferListParamsOrderAsc  V2AccountTokenTransferListParamsOrder = "asc"
+	V2AccountTokenTransferListParamsOrderDesc V2AccountTokenTransferListParamsOrder = "desc"
+)

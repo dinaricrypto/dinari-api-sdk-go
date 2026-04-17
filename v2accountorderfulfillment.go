@@ -4,6 +4,7 @@ package dinariapisdkgo
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -65,7 +66,7 @@ func (r *V2AccountOrderFulfillmentService) Get(ctx context.Context, orderFulfill
 }
 
 // Query `OrderFulfillments` under the `Account`.
-func (r *V2AccountOrderFulfillmentService) Query(ctx context.Context, accountID string, query V2AccountOrderFulfillmentQueryParams, opts ...option.RequestOption) (res *[]Fulfillment, err error) {
+func (r *V2AccountOrderFulfillmentService) Query(ctx context.Context, accountID string, query V2AccountOrderFulfillmentQueryParams, opts ...option.RequestOption) (res *V2AccountOrderFulfillmentQueryResponseUnion, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -134,15 +135,228 @@ func (r *Fulfillment) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// V2AccountOrderFulfillmentQueryResponseUnion contains all possible properties and
+// values from [[]V2AccountOrderFulfillmentQueryResponseArrayItem],
+// [V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponse].
+//
+// Use the methods beginning with 'As' to cast the union to one of its variants.
+//
+// If the underlying value is not a json object, one of the following properties
+// will be valid: OfV2AccountOrderFulfillmentQueryResponseArray]
+type V2AccountOrderFulfillmentQueryResponseUnion struct {
+	// This field will be present if the value is a
+	// [[]V2AccountOrderFulfillmentQueryResponseArrayItem] instead of an object.
+	OfV2AccountOrderFulfillmentQueryResponseArray []V2AccountOrderFulfillmentQueryResponseArrayItem `json:",inline"`
+	// This field is from variant
+	// [V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponse].
+	Data []V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponseData `json:"data"`
+	// This field is from variant
+	// [V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponse].
+	PaginationMetadata V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponsePaginationMetadata `json:"pagination_metadata"`
+	// This field is from variant
+	// [V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponse].
+	Sv   string `json:"_sv"`
+	JSON struct {
+		OfV2AccountOrderFulfillmentQueryResponseArray respjson.Field
+		Data                                          respjson.Field
+		PaginationMetadata                            respjson.Field
+		Sv                                            respjson.Field
+		raw                                           string
+	} `json:"-"`
+}
+
+func (u V2AccountOrderFulfillmentQueryResponseUnion) AsV2AccountOrderFulfillmentQueryResponseArray() (v []V2AccountOrderFulfillmentQueryResponseArrayItem) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u V2AccountOrderFulfillmentQueryResponseUnion) AsV2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponse() (v V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponse) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+// Returns the unmodified JSON received from the API
+func (u V2AccountOrderFulfillmentQueryResponseUnion) RawJSON() string { return u.JSON.raw }
+
+func (r *V2AccountOrderFulfillmentQueryResponseUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Information about a fulfillment of an `Order`. An order may be fulfilled in
+// multiple transactions.
+type V2AccountOrderFulfillmentQueryResponseArrayItem struct {
+	// ID of the `OrderFulfillment`.
+	ID string `json:"id" api:"required" format:"uuid"`
+	// Amount of dShare asset token filled for `BUY` orders.
+	AssetTokenFilled float64 `json:"asset_token_filled" api:"required"`
+	// Amount of dShare asset token spent for `SELL` orders.
+	AssetTokenSpent float64 `json:"asset_token_spent" api:"required"`
+	// Blockchain that the transaction was run on.
+	ChainID string `json:"chain_id" api:"required"`
+	// ID of the `Order` this `OrderFulfillment` is for.
+	OrderID string `json:"order_id" api:"required" format:"uuid"`
+	// Amount of payment token filled for `SELL` orders.
+	PaymentTokenFilled float64 `json:"payment_token_filled" api:"required"`
+	// Amount of payment token spent for `BUY` orders.
+	PaymentTokenSpent float64 `json:"payment_token_spent" api:"required"`
+	// Time when transaction occurred.
+	TransactionDt time.Time `json:"transaction_dt" api:"required" format:"date-time"`
+	// Transaction hash for this fulfillment.
+	TransactionHash string `json:"transaction_hash" api:"required" format:"hex_string"`
+	// The `Alloy` ID associated with the `Order`
+	AlloyID string `json:"alloy_id" api:"nullable" format:"uuid"`
+	// Fee amount, in payment tokens.
+	PaymentTokenFee float64 `json:"payment_token_fee" api:"nullable"`
+	// The `Stock` ID associated with the `Order`
+	StockID string `json:"stock_id" api:"nullable" format:"uuid"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID                 respjson.Field
+		AssetTokenFilled   respjson.Field
+		AssetTokenSpent    respjson.Field
+		ChainID            respjson.Field
+		OrderID            respjson.Field
+		PaymentTokenFilled respjson.Field
+		PaymentTokenSpent  respjson.Field
+		TransactionDt      respjson.Field
+		TransactionHash    respjson.Field
+		AlloyID            respjson.Field
+		PaymentTokenFee    respjson.Field
+		StockID            respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountOrderFulfillmentQueryResponseArrayItem) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountOrderFulfillmentQueryResponseArrayItem) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponse struct {
+	// List of AccountOrderFulfillment
+	Data []V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponseData `json:"data" api:"required"`
+	// Pagination metadata
+	PaginationMetadata V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	// Version
+	//
+	// Any of "PaginatedAccountOrderFulfillmentResponse:v1".
+	Sv string `json:"_sv"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Data               respjson.Field
+		PaginationMetadata respjson.Field
+		Sv                 respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponse) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Information about a fulfillment of an `Order`. An order may be fulfilled in
+// multiple transactions.
+type V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponseData struct {
+	// ID of the `OrderFulfillment`.
+	ID string `json:"id" api:"required" format:"uuid"`
+	// Amount of dShare asset token filled for `BUY` orders.
+	AssetTokenFilled float64 `json:"asset_token_filled" api:"required"`
+	// Amount of dShare asset token spent for `SELL` orders.
+	AssetTokenSpent float64 `json:"asset_token_spent" api:"required"`
+	// Blockchain that the transaction was run on.
+	ChainID string `json:"chain_id" api:"required"`
+	// ID of the `Order` this `OrderFulfillment` is for.
+	OrderID string `json:"order_id" api:"required" format:"uuid"`
+	// Amount of payment token filled for `SELL` orders.
+	PaymentTokenFilled float64 `json:"payment_token_filled" api:"required"`
+	// Amount of payment token spent for `BUY` orders.
+	PaymentTokenSpent float64 `json:"payment_token_spent" api:"required"`
+	// Time when transaction occurred.
+	TransactionDt time.Time `json:"transaction_dt" api:"required" format:"date-time"`
+	// Transaction hash for this fulfillment.
+	TransactionHash string `json:"transaction_hash" api:"required" format:"hex_string"`
+	// The `Alloy` ID associated with the `Order`
+	AlloyID string `json:"alloy_id" api:"nullable" format:"uuid"`
+	// Fee amount, in payment tokens.
+	PaymentTokenFee float64 `json:"payment_token_fee" api:"nullable"`
+	// The `Stock` ID associated with the `Order`
+	StockID string `json:"stock_id" api:"nullable" format:"uuid"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID                 respjson.Field
+		AssetTokenFilled   respjson.Field
+		AssetTokenSpent    respjson.Field
+		ChainID            respjson.Field
+		OrderID            respjson.Field
+		PaymentTokenFilled respjson.Field
+		PaymentTokenSpent  respjson.Field
+		TransactionDt      respjson.Field
+		TransactionHash    respjson.Field
+		AlloyID            respjson.Field
+		PaymentTokenFee    respjson.Field
+		StockID            respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponseData) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponseData) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Pagination metadata
+type V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponsePaginationMetadata struct {
+	// Cursor for next page
+	Next string `json:"next"`
+	// Cursor for previous page
+	Previous string `json:"previous"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Next        respjson.Field
+		Previous    respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponsePaginationMetadata) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2AccountOrderFulfillmentQueryResponsePaginatedAccountOrderFulfillmentResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 type V2AccountOrderFulfillmentGetParams struct {
 	AccountID string `path:"account_id" api:"required" format:"uuid" json:"-"`
 	paramObj
 }
 
 type V2AccountOrderFulfillmentQueryParams struct {
+	// Cursor for next page
+	Next param.Opt[string] `query:"next,omitzero" json:"-"`
+	// Cursor for previous page
+	Previous param.Opt[string] `query:"previous,omitzero" json:"-"`
+	// Number of results to return
+	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
 	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
-	// List of `Order` IDs to query `OrderFulfillments` for.
+	// Sort order
+	//
+	// Any of "asc", "desc".
+	Order V2AccountOrderFulfillmentQueryParamsOrder `query:"order,omitzero" json:"-"`
+	// List of `Order` IDs to query `AccountOrderFulfillment` for.
 	OrderIDs []string `query:"order_ids,omitzero" format:"uuid" json:"-"`
 	paramObj
 }
@@ -155,3 +369,11 @@ func (r V2AccountOrderFulfillmentQueryParams) URLQuery() (v url.Values, err erro
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
+
+// Sort order
+type V2AccountOrderFulfillmentQueryParamsOrder string
+
+const (
+	V2AccountOrderFulfillmentQueryParamsOrderAsc  V2AccountOrderFulfillmentQueryParamsOrder = "asc"
+	V2AccountOrderFulfillmentQueryParamsOrderDesc V2AccountOrderFulfillmentQueryParamsOrder = "desc"
+)

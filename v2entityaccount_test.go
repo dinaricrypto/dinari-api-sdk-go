@@ -61,8 +61,12 @@ func TestV2EntityAccountListWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2EntityAccountListParams{
+			Limit:    dinariapisdkgo.Int(20),
+			Next:     dinariapisdkgo.String("next"),
+			Order:    dinariapisdkgo.V2EntityAccountListParamsOrderAsc,
 			Page:     dinariapisdkgo.Int(1),
 			PageSize: dinariapisdkgo.Int(1),
+			Previous: dinariapisdkgo.String("previous"),
 		},
 	)
 	if err != nil {

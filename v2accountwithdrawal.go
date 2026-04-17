@@ -4,6 +4,7 @@ package dinariapisdkgo
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -53,7 +54,7 @@ func NewV2AccountWithdrawalService(opts ...option.RequestOption) (r V2AccountWit
 }
 
 // Get a specific `Withdrawal` by its ID.
-func (r *V2AccountWithdrawalService) Get(ctx context.Context, withdrawalID string, query V2AccountWithdrawalGetParams, opts ...option.RequestOption) (res *Withdrawal, err error) {
+func (r *V2AccountWithdrawalService) Get(ctx context.Context, withdrawalID string, query V2AccountWithdrawalGetParams, opts ...option.RequestOption) (res *V2AccountWithdrawalGetResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -69,7 +70,7 @@ func (r *V2AccountWithdrawalService) Get(ctx context.Context, withdrawalID strin
 }
 
 // Get a list of all `Withdrawals` under the `Account`, sorted by most recent.
-func (r *V2AccountWithdrawalService) List(ctx context.Context, accountID string, query V2AccountWithdrawalListParams, opts ...option.RequestOption) (res *[]Withdrawal, err error) {
+func (r *V2AccountWithdrawalService) List(ctx context.Context, accountID string, query V2AccountWithdrawalListParams, opts ...option.RequestOption) (res *V2AccountWithdrawalListResponseUnion, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -83,6 +84,76 @@ func (r *V2AccountWithdrawalService) List(ctx context.Context, accountID string,
 // Information for a withdrawal of payment tokens from an `Account` backed by a
 // Dinari-managed `Wallet`.
 type Withdrawal struct {
+	// ID of the `Withdrawal`.
+	ID string `json:"id" api:"required" format:"uuid"`
+	// ID of the `Account` from which the `Withdrawal` is made.
+	AccountID string `json:"account_id" api:"required" format:"uuid"`
+	// CAIP-2 chain ID of the blockchain where the `Withdrawal` is made.
+	ChainID string `json:"chain_id" api:"required"`
+	// Address of USDC payment token that the `Withdrawal` will be received in.
+	PaymentTokenAddress string `json:"payment_token_address" api:"required" format:"eth_address"`
+	// Amount of USDC payment tokens to be withdrawn.
+	PaymentTokenAmount float64 `json:"payment_token_amount" api:"required"`
+	// ID of the `Account` that will receive payment tokens from the `Withdrawal`. This
+	// `Account` must be connected to a non-managed `Wallet` and belong to the same
+	// `Entity`.
+	RecipientAccountID string `json:"recipient_account_id" api:"required" format:"uuid"`
+	// Status of the `Withdrawal`.
+	//
+	// Any of "PENDING_SUBMIT", "PENDING_CANCEL", "PENDING_ESCROW", "PENDING_FILL",
+	// "ESCROWED", "SUBMITTED", "CANCELLED", "PARTIALLY_FILLED", "FILLED", "REJECTED",
+	// "REQUIRING_CONTACT", "ERROR".
+	Status WithdrawalStatus `json:"status" api:"required"`
+	// Datetime at which the `Withdrawal` was transacted. ISO 8601 timestamp.
+	TransactionDt time.Time `json:"transaction_dt" api:"required" format:"date-time"`
+	// Hash of the transaction for the `Withdrawal`.
+	TransactionHash string `json:"transaction_hash" api:"required" format:"hex_string"`
+	// ID of the `WithdrawalRequest` associated with this `Withdrawal`.
+	WithdrawalRequestID string `json:"withdrawal_request_id" api:"required" format:"uuid"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		ID                  respjson.Field
+		AccountID           respjson.Field
+		ChainID             respjson.Field
+		PaymentTokenAddress respjson.Field
+		PaymentTokenAmount  respjson.Field
+		RecipientAccountID  respjson.Field
+		Status              respjson.Field
+		TransactionDt       respjson.Field
+		TransactionHash     respjson.Field
+		WithdrawalRequestID respjson.Field
+		ExtraFields         map[string]respjson.Field
+		raw                 string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r Withdrawal) RawJSON() string { return r.JSON.raw }
+func (r *Withdrawal) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Status of the `Withdrawal`.
+type WithdrawalStatus string
+
+const (
+	WithdrawalStatusPendingSubmit    WithdrawalStatus = "PENDING_SUBMIT"
+	WithdrawalStatusPendingCancel    WithdrawalStatus = "PENDING_CANCEL"
+	WithdrawalStatusPendingEscrow    WithdrawalStatus = "PENDING_ESCROW"
+	WithdrawalStatusPendingFill      WithdrawalStatus = "PENDING_FILL"
+	WithdrawalStatusEscrowed         WithdrawalStatus = "ESCROWED"
+	WithdrawalStatusSubmitted        WithdrawalStatus = "SUBMITTED"
+	WithdrawalStatusCancelled        WithdrawalStatus = "CANCELLED"
+	WithdrawalStatusPartiallyFilled  WithdrawalStatus = "PARTIALLY_FILLED"
+	WithdrawalStatusFilled           WithdrawalStatus = "FILLED"
+	WithdrawalStatusRejected         WithdrawalStatus = "REJECTED"
+	WithdrawalStatusRequiringContact WithdrawalStatus = "REQUIRING_CONTACT"
+	WithdrawalStatusError            WithdrawalStatus = "ERROR"
+)
+
+// Information for a withdrawal of payment tokens from an `Account` backed by a
+// Dinari-managed `Wallet`.
+type V2AccountWithdrawalGetResponse struct {
 	// ID of the `Withdrawal`.
 	ID string `json:"id" api:"required" format:"uuid"`
 	// ID of the `Account` from which the `Withdrawal` is made.
@@ -133,8 +204,105 @@ type Withdrawal struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r Withdrawal) RawJSON() string { return r.JSON.raw }
-func (r *Withdrawal) UnmarshalJSON(data []byte) error {
+func (r V2AccountWithdrawalGetResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountWithdrawalGetResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// V2AccountWithdrawalListResponseUnion contains all possible properties and values
+// from [[]Withdrawal],
+// [V2AccountWithdrawalListResponsePaginatedWithdrawalResponse].
+//
+// Use the methods beginning with 'As' to cast the union to one of its variants.
+//
+// If the underlying value is not a json object, one of the following properties
+// will be valid: OfWithdrawalArray]
+type V2AccountWithdrawalListResponseUnion struct {
+	// This field will be present if the value is a [[]Withdrawal] instead of an
+	// object.
+	OfWithdrawalArray []Withdrawal `json:",inline"`
+	// This field is from variant
+	// [V2AccountWithdrawalListResponsePaginatedWithdrawalResponse].
+	Data []Withdrawal `json:"data"`
+	// This field is from variant
+	// [V2AccountWithdrawalListResponsePaginatedWithdrawalResponse].
+	PaginationMetadata V2AccountWithdrawalListResponsePaginatedWithdrawalResponsePaginationMetadata `json:"pagination_metadata"`
+	// This field is from variant
+	// [V2AccountWithdrawalListResponsePaginatedWithdrawalResponse].
+	Sv   string `json:"_sv"`
+	JSON struct {
+		OfWithdrawalArray  respjson.Field
+		Data               respjson.Field
+		PaginationMetadata respjson.Field
+		Sv                 respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+func (u V2AccountWithdrawalListResponseUnion) AsWithdrawalArray() (v []Withdrawal) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+func (u V2AccountWithdrawalListResponseUnion) AsV2AccountWithdrawalListResponsePaginatedWithdrawalResponse() (v V2AccountWithdrawalListResponsePaginatedWithdrawalResponse) {
+	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
+	return
+}
+
+// Returns the unmodified JSON received from the API
+func (u V2AccountWithdrawalListResponseUnion) RawJSON() string { return u.JSON.raw }
+
+func (r *V2AccountWithdrawalListResponseUnion) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2AccountWithdrawalListResponsePaginatedWithdrawalResponse struct {
+	// List of Withdrawal
+	Data []Withdrawal `json:"data" api:"required"`
+	// Pagination metadata
+	PaginationMetadata V2AccountWithdrawalListResponsePaginatedWithdrawalResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	// Version
+	//
+	// Any of "PaginatedWithdrawalResponse:v1".
+	Sv string `json:"_sv"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Data               respjson.Field
+		PaginationMetadata respjson.Field
+		Sv                 respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountWithdrawalListResponsePaginatedWithdrawalResponse) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2AccountWithdrawalListResponsePaginatedWithdrawalResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Pagination metadata
+type V2AccountWithdrawalListResponsePaginatedWithdrawalResponsePaginationMetadata struct {
+	// Cursor for next page
+	Next string `json:"next"`
+	// Cursor for previous page
+	Previous string `json:"previous"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Next        respjson.Field
+		Previous    respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r V2AccountWithdrawalListResponsePaginatedWithdrawalResponsePaginationMetadata) RawJSON() string {
+	return r.JSON.raw
+}
+func (r *V2AccountWithdrawalListResponsePaginatedWithdrawalResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -144,10 +312,20 @@ type V2AccountWithdrawalGetParams struct {
 }
 
 type V2AccountWithdrawalListParams struct {
+	// Cursor for next page
+	Next param.Opt[string] `query:"next,omitzero" json:"-"`
+	// Cursor for previous page
+	Previous param.Opt[string] `query:"previous,omitzero" json:"-"`
 	// ID of the `WithdrawalRequest` to find `Withdrawals` for.
 	WithdrawalRequestID param.Opt[string] `query:"withdrawal_request_id,omitzero" format:"uuid" json:"-"`
-	Page                param.Opt[int64]  `query:"page,omitzero" json:"-"`
-	PageSize            param.Opt[int64]  `query:"page_size,omitzero" json:"-"`
+	// Number of results to return
+	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
+	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
+	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	// Sort order
+	//
+	// Any of "asc", "desc".
+	Order V2AccountWithdrawalListParamsOrder `query:"order,omitzero" json:"-"`
 	paramObj
 }
 
@@ -159,3 +337,11 @@ func (r V2AccountWithdrawalListParams) URLQuery() (v url.Values, err error) {
 		NestedFormat: apiquery.NestedQueryFormatBrackets,
 	})
 }
+
+// Sort order
+type V2AccountWithdrawalListParamsOrder string
+
+const (
+	V2AccountWithdrawalListParamsOrderAsc  V2AccountWithdrawalListParamsOrder = "asc"
+	V2AccountWithdrawalListParamsOrderDesc V2AccountWithdrawalListParamsOrder = "desc"
+)

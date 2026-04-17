@@ -28,8 +28,12 @@ func TestV2MarketDataStockSplitListWithOptionalParams(t *testing.T) {
 		option.WithAPISecretKey("My API Secret Key"),
 	)
 	_, err := client.V2.MarketData.Stocks.Splits.List(context.TODO(), dinariapisdkgo.V2MarketDataStockSplitListParams{
+		Limit:    dinariapisdkgo.Int(20),
+		Next:     dinariapisdkgo.String("next"),
+		Order:    dinariapisdkgo.V2MarketDataStockSplitListParamsOrderAsc,
 		Page:     dinariapisdkgo.Int(1),
 		PageSize: dinariapisdkgo.Int(1),
+		Previous: dinariapisdkgo.String("previous"),
 	})
 	if err != nil {
 		var apierr *dinariapisdkgo.Error
@@ -58,8 +62,12 @@ func TestV2MarketDataStockSplitListForStockWithOptionalParams(t *testing.T) {
 		context.TODO(),
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2MarketDataStockSplitListForStockParams{
+			Limit:    dinariapisdkgo.Int(20),
+			Next:     dinariapisdkgo.String("next"),
+			Order:    dinariapisdkgo.V2MarketDataStockSplitListForStockParamsOrderAsc,
 			Page:     dinariapisdkgo.Int(1),
 			PageSize: dinariapisdkgo.Int(1),
+			Previous: dinariapisdkgo.String("previous"),
 		},
 	)
 	if err != nil {
