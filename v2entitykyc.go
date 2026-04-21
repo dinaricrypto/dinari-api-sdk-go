@@ -1327,7 +1327,7 @@ func (r *V2EntityKYCSubmitParams) UnmarshalJSON(data []byte) error {
 //
 // The properties Data, ProviderName are required.
 type V2EntityKYCSubmitParamsBodyBaseline struct {
-	// KYC data for an `Entity` in the BASELINE jurisdiction.
+	// KYC data of the `Entity`.
 	Data BaselineKYCCheckDataParam `json:"data,omitzero" api:"required"`
 	// Name of the KYC provider that provided the KYC information.
 	ProviderName string `json:"provider_name" api:"required"`
@@ -1357,7 +1357,7 @@ func init() {
 //
 // The properties Data, ProviderName are required.
 type V2EntityKYCSubmitParamsBodyUs struct {
-	// KYC data for an `Entity` in the US jurisdiction.
+	// KYC data of the `Entity`.
 	Data UsKYCCheckDataParam `json:"data,omitzero" api:"required"`
 	// Name of the KYC provider that provided the KYC information.
 	ProviderName string `json:"provider_name" api:"required"`
