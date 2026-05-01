@@ -78,9 +78,8 @@ func (r *V2AccountOrderRequestService) List(ctx context.Context, accountID strin
 
 // Create a managed `OrderRequest` to place a limit buy `Order`.
 //
-// Fees for the `Order` are included in the transaction. Refer to our
-// [Fee Quote API](https://docs.dinari.com/reference/createproxiedorderfeequote#/)
-// for fee estimation.
+// Fees for the `Order` can optionally be specified in the `OrderRequest` for DFN
+// orders in USD, supporting up to 6 decimal places
 //
 // If an `OrderRequest` with the same `client_order_id` already exists for the
 // given account, the creation call will fail.
@@ -97,9 +96,8 @@ func (r *V2AccountOrderRequestService) NewLimitBuy(ctx context.Context, accountI
 
 // Create a managed `OrderRequest` to place a limit sell `Order`.
 //
-// Fees for the `Order` are included in the transaction. Refer to our
-// [Fee Quote API](https://docs.dinari.com/reference/createproxiedorderfeequote#/)
-// for fee estimation.
+// Fees for the `Order` can optionally be specified in the `OrderRequest` for DFN
+// orders in USD, supporting up to 6 decimal places
 //
 // If an `OrderRequest` with the same `client_order_id` already exists for the
 // given account, the creation call will fail.
@@ -116,9 +114,8 @@ func (r *V2AccountOrderRequestService) NewLimitSell(ctx context.Context, account
 
 // Create a managed `OrderRequest` to place a market buy `Order`.
 //
-// Fees for the `Order` are included in the transaction. Refer to our
-// [Fee Quote API](https://docs.dinari.com/reference/createproxiedorderfeequote#/)
-// for fee estimation.
+// Fees for the `Order` can optionally be specified in the `OrderRequest` for DFN
+// orders in USD, supporting up to 6 decimal places
 //
 // If an `OrderRequest` with the same `client_order_id` already exists for the
 // given account, the creation call will fail.
@@ -135,9 +132,8 @@ func (r *V2AccountOrderRequestService) NewMarketBuy(ctx context.Context, account
 
 // Create a managed `OrderRequest` to place a market sell `Order`.
 //
-// Fees for the `Order` are included in the transaction. Refer to our
-// [Fee Quote API](https://docs.dinari.com/reference/createproxiedorderfeequote#/)
-// for fee estimation.
+// Fees for the `Order` can optionally be specified in the `OrderRequest` for DFN
+// orders in USD, supporting up to 6 decimal places
 //
 // If an `OrderRequest` with the same `client_order_id` already exists for the
 // given account, the creation call will fail.
@@ -152,6 +148,9 @@ func (r *V2AccountOrderRequestService) NewMarketSell(ctx context.Context, accoun
 	return res, err
 }
 
+// **DEPRECATED:** This endpoint is deprecated and will be removed on May
+// 14th, 2026.
+//
 // Get fee quote data for an `Order Request`. This is provided primarily for
 // informational purposes.
 //
@@ -185,6 +184,9 @@ type CreateLimitBuyOrderInputParam struct {
 	// Customer-supplied ID to map this order to an order in their own systems. Must be
 	// unique within the entity.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
+	// Optional fee amount associated with `Order` in USD for DFN orders. Must be a
+	// positive number with a precision of up to 6 decimal places.
+	Fee param.Opt[float64] `json:"fee,omitzero"`
 	// ID of `Account` to receive the `Order`.
 	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
 	// ID of `Stock`.
@@ -216,6 +218,9 @@ type CreateLimitSellOrderInputParam struct {
 	// Customer-supplied ID to map this order to an order in their own systems. Must be
 	// unique within the entity.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
+	// Optional fee amount associated with `Order` in USD for DFN orders. Must be a
+	// positive number with a precision of up to 6 decimal places.
+	Fee param.Opt[float64] `json:"fee,omitzero"`
 	// Address of the payment token to be used for the sell order. If not provided, the
 	// default payment token (USD+) will be used. Should only be specified if
 	// `recipient_account_id` for a non-managed wallet account is also provided.
@@ -247,6 +252,9 @@ type CreateMarketBuyOrderInputParam struct {
 	// Customer-supplied ID to map this order to an order in their own systems. Must be
 	// unique within the entity.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
+	// Optional fee amount associated with `Order` in USD for DFN orders. Must be a
+	// positive number with a precision of up to 6 decimal places.
+	Fee param.Opt[float64] `json:"fee,omitzero"`
 	// ID of `Account` to receive the `Order`.
 	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
 	// ID of `Stock`.
@@ -274,6 +282,9 @@ type CreateMarketSellOrderInputParam struct {
 	// Customer-supplied ID to map this order to an order in their own systems. Must be
 	// unique within the entity.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
+	// Optional fee amount associated with `Order` in USD for DFN orders. Must be a
+	// positive number with a precision of up to 6 decimal places.
+	Fee param.Opt[float64] `json:"fee,omitzero"`
 	// Address of the payment token to be used for the sell order. If not provided, the
 	// default payment token (USD+) will be used. Should only be specified if
 	// `recipient_account_id` for a non-managed wallet account is also provided.
