@@ -39,6 +39,7 @@ func TestV2AccountOrderRequestEip155NewPermitWithOptionalParams(t *testing.T) {
 			AlloyID:              dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			AssetTokenQuantity:   dinariapisdkgo.Float(0),
 			ClientOrderID:        dinariapisdkgo.String("client_order_id"),
+			Fee:                  dinariapisdkgo.Float(0),
 			LimitPrice:           dinariapisdkgo.Float(0),
 			PaymentTokenQuantity: dinariapisdkgo.Float(0),
 			StockID:              dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
