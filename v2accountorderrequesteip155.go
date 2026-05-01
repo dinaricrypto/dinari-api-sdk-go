@@ -51,6 +51,9 @@ func NewV2AccountOrderRequestEip155Service(opts ...option.RequestOption) (r V2Ac
 // can be sent to the EVM network to create the order. Note that the fee quote is
 // already included in the transactions, so no additional fee quote lookup is
 // needed.
+//
+// Fees for the `Order` can optionally be specified in the `OrderRequest` for DFN
+// orders in USD, supporting up to 6 decimal places.
 func (r *V2AccountOrderRequestEip155Service) NewPermit(ctx context.Context, accountID string, body V2AccountOrderRequestEip155NewPermitParams, opts ...option.RequestOption) (res *V2AccountOrderRequestEip155NewPermitResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
@@ -272,6 +275,9 @@ type V2AccountOrderRequestEip155NewPermitParams struct {
 	// Customer-supplied unique identifier to map this `Order` to an order in the
 	// customer's systems.
 	ClientOrderID param.Opt[string] `json:"client_order_id,omitzero"`
+	// Optional fee amount associated with `Order` in USD for DFN orders. Must be a
+	// positive number with a precision of up to 6 decimal places.
+	Fee param.Opt[float64] `json:"fee,omitzero"`
 	// Price per asset in the asset's native currency. USD for US equities and ETFs.
 	// Required for limit `Orders`.
 	LimitPrice param.Opt[float64] `json:"limit_price,omitzero"`
