@@ -329,11 +329,11 @@ func (r *V2MarketDataStockListResponsePaginatedStockResponsePaginationMetadata) 
 }
 
 type V2MarketDataStockGetCurrentPriceResponse struct {
-	// The ask price.
+	// The price (fair market value) of the asset at the given time period.
 	Price float64 `json:"price" api:"required"`
 	// ID of the `Stock`
 	StockID string `json:"stock_id" api:"required" format:"uuid"`
-	// When the Stock Quote was generated.
+	// When the `StockPrice` was generated.
 	Timestamp time.Time `json:"timestamp" api:"required" format:"date-time"`
 	// The change in price from the previous close.
 	Change float64 `json:"change" api:"nullable"`
@@ -345,14 +345,14 @@ type V2MarketDataStockGetCurrentPriceResponse struct {
 	High float64 `json:"high" api:"nullable"`
 	// The lowest price from the given time period.
 	Low float64 `json:"low" api:"nullable"`
-	// The most recent close price of the ticker multiplied by weighted outstanding
-	// shares.
+	// The market capitalization of the `Stock` calculated at the most recent close
+	// price.
 	MarketCap int64 `json:"market_cap" api:"nullable"`
 	// The open price from the given time period.
 	Open float64 `json:"open" api:"nullable"`
 	// The close price for the `Stock` from the previous trading session.
 	PreviousClose float64 `json:"previous_close" api:"nullable"`
-	// The trading volume from the given time period.
+	// The trading volume in shares from the given time period.
 	Volume float64 `json:"volume" api:"nullable"`
 	// The number of shares outstanding in the given time period.
 	WeightedSharesOutstanding int64 `json:"weighted_shares_outstanding" api:"nullable"`
@@ -382,19 +382,24 @@ func (r *V2MarketDataStockGetCurrentPriceResponse) UnmarshalJSON(data []byte) er
 	return apijson.UnmarshalRoot(data, r)
 }
 
+// Stock Quote
 type V2MarketDataStockGetCurrentQuoteResponse struct {
-	// The ask price.
+	// The ask price. 0 if there is no active ask.
 	AskPrice float64 `json:"ask_price" api:"required"`
-	// The ask size.
+	// The ask size in shares.
 	AskSize float64 `json:"ask_size" api:"required"`
-	// The bid price.
+	// The bid price. 0 if there is no active bid.
 	BidPrice float64 `json:"bid_price" api:"required"`
-	// The bid size.
+	// The bid size in shares.
 	BidSize float64 `json:"bid_size" api:"required"`
 	// ID of the `Stock`
 	StockID string `json:"stock_id" api:"required" format:"uuid"`
-	// When the Stock Quote was generated.
+	// When the `StockQuote` was generated.
 	Timestamp time.Time `json:"timestamp" api:"required" format:"date-time"`
+	// Schema version
+	//
+	// Any of "StockQuote:v1".
+	Sv V2MarketDataStockGetCurrentQuoteResponse_Sv `json:"_sv"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AskPrice    respjson.Field
@@ -403,6 +408,7 @@ type V2MarketDataStockGetCurrentQuoteResponse struct {
 		BidSize     respjson.Field
 		StockID     respjson.Field
 		Timestamp   respjson.Field
+		Sv          respjson.Field
 		ExtraFields map[string]respjson.Field
 		raw         string
 	} `json:"-"`
@@ -413,6 +419,13 @@ func (r V2MarketDataStockGetCurrentQuoteResponse) RawJSON() string { return r.JS
 func (r *V2MarketDataStockGetCurrentQuoteResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Schema version
+type V2MarketDataStockGetCurrentQuoteResponse_Sv string
+
+const (
+	V2MarketDataStockGetCurrentQuoteResponse_SvStockQuoteV1 V2MarketDataStockGetCurrentQuoteResponse_Sv = "StockQuote:v1"
+)
 
 // Information about a dividend announcement for a `Stock`.
 type V2MarketDataStockGetDividendsResponse struct {
