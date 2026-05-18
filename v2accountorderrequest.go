@@ -148,26 +148,6 @@ func (r *V2AccountOrderRequestService) NewMarketSell(ctx context.Context, accoun
 	return res, err
 }
 
-// **DEPRECATED:** This endpoint is deprecated and will be removed on May
-// 14th, 2026.
-//
-// Get fee quote data for an `Order Request`. This is provided primarily for
-// informational purposes.
-//
-// For market buy orders, the notional amount of the order includes the fees. For
-// market and limit sell orders, fees are deducted from the proceeds of the sale.
-// For limit buy orders, the fees are added to the total cost of the order.
-func (r *V2AccountOrderRequestService) GetFeeQuote(ctx context.Context, accountID string, body V2AccountOrderRequestGetFeeQuoteParams, opts ...option.RequestOption) (res *V2AccountOrderRequestGetFeeQuoteResponse, err error) {
-	opts = slices.Concat(r.Options, opts)
-	if accountID == "" {
-		err = errors.New("missing required account_id parameter")
-		return nil, err
-	}
-	path := fmt.Sprintf("api/v2/accounts/%s/order_requests/fee_quote", accountID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
-	return res, err
-}
-
 // Input parameters for creating a limit buy `OrderRequest`.
 //
 // The properties AssetQuantity, LimitPrice are required.
@@ -650,24 +630,6 @@ func (r *V2AccountOrderRequestListResponsePaginatedAccountOrderRequestResponsePa
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// A preview of the fee that would be collected when placing an Order Request.
-type V2AccountOrderRequestGetFeeQuoteResponse struct {
-	// Cash amount in USD paid for fees for the Order Request.
-	Fee float64 `json:"fee" api:"required"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Fee         respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountOrderRequestGetFeeQuoteResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountOrderRequestGetFeeQuoteResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type V2AccountOrderRequestGetParams struct {
 	AccountID string `path:"account_id" api:"required" format:"uuid" json:"-"`
 	paramObj
@@ -762,51 +724,5 @@ func (r V2AccountOrderRequestNewMarketSellParams) MarshalJSON() (data []byte, er
 	return shimjson.Marshal(r.CreateMarketSellOrderInput)
 }
 func (r *V2AccountOrderRequestNewMarketSellParams) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2AccountOrderRequestGetFeeQuoteParams struct {
-	// Indicates whether `Order Request` is a buy or sell.
-	//
-	// Any of "BUY", "SELL".
-	OrderSide OrderSide `json:"order_side,omitzero" api:"required"`
-	// Type of `Order Request`.
-	//
-	// Any of "MARKET", "LIMIT".
-	OrderType OrderType `json:"order_type,omitzero" api:"required"`
-	// The `Alloy` ID associated with the Order Request
-	AlloyID param.Opt[string] `json:"alloy_id,omitzero" format:"uuid"`
-	// Amount of dShare asset tokens involved. Required for limit `Order Requests` and
-	// market sell `Order Requests`. Must be a positive number with a precision of up
-	// to 4 decimal places for limit `Order Requests` or up to 6 decimal places for
-	// market sell `Order Requests`.
-	AssetTokenQuantity param.Opt[float64] `json:"asset_token_quantity,omitzero"`
-	// Price per asset in the asset's native currency. USD for US equities and ETFs.
-	// Required for limit `Order Requests`.
-	LimitPrice param.Opt[float64] `json:"limit_price,omitzero"`
-	// Address of the payment token to be used for an order. If not provided, the
-	// default payment token (USD+) will be used.
-	PaymentTokenAddress param.Opt[string] `json:"payment_token_address,omitzero" format:"eth_address"`
-	// Amount of payment tokens involved. Required for market buy `Order Requests`.
-	PaymentTokenQuantity param.Opt[float64] `json:"payment_token_quantity,omitzero"`
-	// The `Stock` ID associated with the Order Request
-	StockID param.Opt[string] `json:"stock_id,omitzero" format:"uuid"`
-	// CAIP-2 chain ID of the blockchain where the `Order Request` will be placed. If
-	// not provided, the default chain ID (eip155:42161) will be used.
-	//
-	// Any of "eip155:1", "eip155:42161", "eip155:8453", "eip155:81457",
-	// "eip155:98866", "eip155:999", "eip155:11155111", "eip155:421614",
-	// "eip155:84532", "eip155:168587773", "eip155:98867", "eip155:998",
-	// "eip155:202110", "eip155:179205", "eip155:179202", "eip155:98865",
-	// "eip155:7887".
-	ChainID Chain `json:"chain_id,omitzero"`
-	paramObj
-}
-
-func (r V2AccountOrderRequestGetFeeQuoteParams) MarshalJSON() (data []byte, err error) {
-	type shadow V2AccountOrderRequestGetFeeQuoteParams
-	return param.MarshalObject(r, (*shadow)(&r))
-}
-func (r *V2AccountOrderRequestGetFeeQuoteParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
