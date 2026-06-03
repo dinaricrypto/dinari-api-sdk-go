@@ -69,7 +69,7 @@ func TestV2MarketDataStockGetCurrentPrice(t *testing.T) {
 	}
 }
 
-func TestV2MarketDataStockGetCurrentQuote(t *testing.T) {
+func TestV2MarketDataStockGetCurrentQuoteWithOptionalParams(t *testing.T) {
 	t.Skip("Mock server tests are disabled")
 	baseURL := "http://localhost:4010"
 	if envURL, ok := os.LookupEnv("TEST_API_BASE_URL"); ok {
@@ -83,7 +83,14 @@ func TestV2MarketDataStockGetCurrentQuote(t *testing.T) {
 		option.WithAPIKeyID("My API Key ID"),
 		option.WithAPISecretKey("My API Secret Key"),
 	)
-	_, err := client.V2.MarketData.Stocks.GetCurrentQuote(context.TODO(), "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+	_, err := client.V2.MarketData.Stocks.GetCurrentQuote(
+		context.TODO(),
+		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
+		dinariapisdkgo.V2MarketDataStockGetCurrentQuoteParams{
+			Feed:        dinariapisdkgo.V2MarketDataStockGetCurrentQuoteParamsFeedSip,
+			XAPIVersion: dinariapisdkgo.String("X-API-Version"),
+		},
+	)
 	if err != nil {
 		var apierr *dinariapisdkgo.Error
 		if errors.As(err, &apierr) {
