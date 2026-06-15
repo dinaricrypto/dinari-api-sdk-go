@@ -263,7 +263,8 @@ type V2AccountOrderRequestEip155NewPermitParams struct {
 	//
 	// Any of "MARKET", "LIMIT".
 	OrderType OrderType `json:"order_type,omitzero" api:"required"`
-	// Address of payment token.
+	// Address of payment token. Required for Accounts outside of US jurisdiction.
+	// Accounts inside US jurisdiction must use USDC.
 	PaymentToken string `json:"payment_token" api:"required" format:"eth_address"`
 	// The ID of the `Alloy` for which the `Order` is being placed.
 	AlloyID param.Opt[string] `json:"alloy_id,omitzero" format:"uuid"`
