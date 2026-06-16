@@ -100,13 +100,14 @@ func TestV2AccountOrderRequestNewLimitBuyWithOptionalParams(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestNewLimitBuyParams{
 			CreateLimitBuyOrderInput: dinariapisdkgo.CreateLimitBuyOrderInputParam{
-				AssetQuantity:      0,
-				LimitPrice:         0,
-				AlloyID:            dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-				ClientOrderID:      dinariapisdkgo.String("client_order_id"),
-				Fee:                dinariapisdkgo.Float(0),
-				RecipientAccountID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-				StockID:            dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				AssetQuantity:       0,
+				LimitPrice:          0,
+				AlloyID:             dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				ClientOrderID:       dinariapisdkgo.String("client_order_id"),
+				Fee:                 dinariapisdkgo.Float(0),
+				PaymentTokenAddress: dinariapisdkgo.String("payment_token_address"),
+				RecipientAccountID:  dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				StockID:             dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			},
 		},
 	)
@@ -177,12 +178,13 @@ func TestV2AccountOrderRequestNewMarketBuyWithOptionalParams(t *testing.T) {
 		"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
 		dinariapisdkgo.V2AccountOrderRequestNewMarketBuyParams{
 			CreateMarketBuyOrderInput: dinariapisdkgo.CreateMarketBuyOrderInputParam{
-				PaymentAmount:      0,
-				AlloyID:            dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-				ClientOrderID:      dinariapisdkgo.String("client_order_id"),
-				Fee:                dinariapisdkgo.Float(0),
-				RecipientAccountID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
-				StockID:            dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				PaymentAmount:       0,
+				AlloyID:             dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				ClientOrderID:       dinariapisdkgo.String("client_order_id"),
+				Fee:                 dinariapisdkgo.Float(0),
+				PaymentTokenAddress: dinariapisdkgo.String("payment_token_address"),
+				RecipientAccountID:  dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
+				StockID:             dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 			},
 		},
 	)
