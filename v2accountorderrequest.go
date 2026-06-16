@@ -167,6 +167,9 @@ type CreateLimitBuyOrderInputParam struct {
 	// Optional fee amount associated with `Order` in USD for DFN orders. Must be a
 	// positive number with a precision of up to 6 decimal places.
 	Fee param.Opt[float64] `json:"fee,omitzero"`
+	// Address of the payment token to be used for the payment of the order. If not
+	// provided, the default payment token (USD+) will be used.
+	PaymentTokenAddress param.Opt[string] `json:"payment_token_address,omitzero" format:"eth_address"`
 	// ID of `Account` to receive the `Order`.
 	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
 	// ID of `Stock`.
@@ -235,6 +238,9 @@ type CreateMarketBuyOrderInputParam struct {
 	// Optional fee amount associated with `Order` in USD for DFN orders. Must be a
 	// positive number with a precision of up to 6 decimal places.
 	Fee param.Opt[float64] `json:"fee,omitzero"`
+	// Address of the payment token to be used for the payment of the order. If not
+	// provided, the default payment token (USD+) will be used.
+	PaymentTokenAddress param.Opt[string] `json:"payment_token_address,omitzero" format:"eth_address"`
 	// ID of `Account` to receive the `Order`.
 	RecipientAccountID param.Opt[string] `json:"recipient_account_id,omitzero" format:"uuid"`
 	// ID of `Stock`.
