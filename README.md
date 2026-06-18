@@ -71,7 +71,7 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Printf("%+v\n", stocks)
+	fmt.Printf("%+v\n", stocks.Data)
 }
 
 ```

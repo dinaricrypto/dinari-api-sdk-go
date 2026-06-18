@@ -88,8 +88,6 @@ func TestV2EntityListWithOptionalParams(t *testing.T) {
 		Limit:       dinariapisdkgo.Int(20),
 		Next:        dinariapisdkgo.String("next"),
 		Order:       dinariapisdkgo.V2EntityListParamsOrderAsc,
-		Page:        dinariapisdkgo.Int(1),
-		PageSize:    dinariapisdkgo.Int(1),
 		Previous:    dinariapisdkgo.String("previous"),
 		ReferenceID: dinariapisdkgo.String("x"),
 	})

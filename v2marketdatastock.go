@@ -4,7 +4,6 @@ package dinariapisdkgo
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -45,7 +44,7 @@ func NewV2MarketDataStockService(opts ...option.RequestOption) (r V2MarketDataSt
 }
 
 // Get a list of `Stocks`.
-func (r *V2MarketDataStockService) List(ctx context.Context, query V2MarketDataStockListParams, opts ...option.RequestOption) (res *V2MarketDataStockListResponseUnion, err error) {
+func (r *V2MarketDataStockService) List(ctx context.Context, query V2MarketDataStockListParams, opts ...option.RequestOption) (res *V2MarketDataStockListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/market_data/stocks/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
@@ -65,17 +64,14 @@ func (r *V2MarketDataStockService) GetCurrentPrice(ctx context.Context, stockID 
 }
 
 // Get quote for a specified `Stock`.
-func (r *V2MarketDataStockService) GetCurrentQuote(ctx context.Context, stockID string, params V2MarketDataStockGetCurrentQuoteParams, opts ...option.RequestOption) (res *V2MarketDataStockGetCurrentQuoteResponseUnion, err error) {
-	if !param.IsOmitted(params.XAPIVersion) {
-		opts = append(opts, option.WithHeader("X-API-Version", fmt.Sprintf("%v", params.XAPIVersion.Value)))
-	}
+func (r *V2MarketDataStockService) GetCurrentQuote(ctx context.Context, stockID string, opts ...option.RequestOption) (res *V2MarketDataStockGetCurrentQuoteResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
 		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/market_data/stocks/%s/current_quote", stockID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, params, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
 	return res, err
 }
 
@@ -120,120 +116,15 @@ func (r *V2MarketDataStockService) GetNews(ctx context.Context, stockID string, 
 	return res, err
 }
 
-// V2MarketDataStockListResponseUnion contains all possible properties and values
-// from [[]V2MarketDataStockListResponseArrayItem],
-// [V2MarketDataStockListResponsePaginatedStockResponse].
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-//
-// If the underlying value is not a json object, one of the following properties
-// will be valid: OfV2MarketDataStockListResponseArray]
-type V2MarketDataStockListResponseUnion struct {
-	// This field will be present if the value is a
-	// [[]V2MarketDataStockListResponseArrayItem] instead of an object.
-	OfV2MarketDataStockListResponseArray []V2MarketDataStockListResponseArrayItem `json:",inline"`
-	// This field is from variant
-	// [V2MarketDataStockListResponsePaginatedStockResponse].
-	Data []V2MarketDataStockListResponsePaginatedStockResponseData `json:"data"`
-	// This field is from variant
-	// [V2MarketDataStockListResponsePaginatedStockResponse].
-	PaginationMetadata V2MarketDataStockListResponsePaginatedStockResponsePaginationMetadata `json:"pagination_metadata"`
-	// This field is from variant
-	// [V2MarketDataStockListResponsePaginatedStockResponse].
-	Sv   string `json:"_sv"`
-	JSON struct {
-		OfV2MarketDataStockListResponseArray respjson.Field
-		Data                                 respjson.Field
-		PaginationMetadata                   respjson.Field
-		Sv                                   respjson.Field
-		raw                                  string
-	} `json:"-"`
-}
-
-func (u V2MarketDataStockListResponseUnion) AsV2MarketDataStockListResponseArray() (v []V2MarketDataStockListResponseArrayItem) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u V2MarketDataStockListResponseUnion) AsV2MarketDataStockListResponsePaginatedStockResponse() (v V2MarketDataStockListResponsePaginatedStockResponse) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-// Returns the unmodified JSON received from the API
-func (u V2MarketDataStockListResponseUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *V2MarketDataStockListResponseUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Information about stock available for trading.
-type V2MarketDataStockListResponseArrayItem struct {
-	// ID of the `Stock`
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Whether the `Stock` allows for fractional trading. If it is not fractionable,
-	// Dinari only supports limit orders for the `Stock`.
-	IsFractionable bool `json:"is_fractionable" api:"required"`
-	// Whether the `Stock` is available for trading.
-	IsTradable bool `json:"is_tradable" api:"required"`
-	// Company name
-	Name string `json:"name" api:"required"`
-	// Ticker symbol
-	Symbol string `json:"symbol" api:"required"`
-	// List of CAIP-10 formatted token addresses.
-	Tokens []string `json:"tokens" api:"required"`
-	// SEC Central Index Key. Refer to
-	// [this link](https://www.sec.gov/submit-filings/filer-support-resources/how-do-i-guides/understand-utilize-edgar-ciks-passphrases-access-codes)
-	// for more information.
-	Cik string `json:"cik" api:"nullable"`
-	// Composite FIGI ID. Refer to [this link](https://www.openfigi.com/about/figi) for
-	// more information.
-	CompositeFigi string `json:"composite_figi" api:"nullable"`
-	// CUSIP ID. Refer to [this link](https://www.cusip.com/identifiers.html) for more
-	// information. A license agreement with CUSIP Global Services is required to
-	// receive this value.
-	Cusip string `json:"cusip" api:"nullable"`
-	// Description of the company and their services.
-	Description string `json:"description" api:"nullable"`
-	// Name of `Stock` for application display. If defined, this supercedes the `name`
-	// field for displaying the name.
-	DisplayName string `json:"display_name" api:"nullable"`
-	// URL of the company's logo. Supported formats are SVG and PNG.
-	LogoURL string `json:"logo_url" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID             respjson.Field
-		IsFractionable respjson.Field
-		IsTradable     respjson.Field
-		Name           respjson.Field
-		Symbol         respjson.Field
-		Tokens         respjson.Field
-		Cik            respjson.Field
-		CompositeFigi  respjson.Field
-		Cusip          respjson.Field
-		Description    respjson.Field
-		DisplayName    respjson.Field
-		LogoURL        respjson.Field
-		ExtraFields    map[string]respjson.Field
-		raw            string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2MarketDataStockListResponseArrayItem) RawJSON() string { return r.JSON.raw }
-func (r *V2MarketDataStockListResponseArrayItem) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2MarketDataStockListResponsePaginatedStockResponse struct {
+type V2MarketDataStockListResponse struct {
 	// List of Stock
-	Data []V2MarketDataStockListResponsePaginatedStockResponseData `json:"data" api:"required"`
+	Data []V2MarketDataStockListResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2MarketDataStockListResponsePaginatedStockResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata V2MarketDataStockListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedStockResponse:v1".
-	Sv string `json:"_sv"`
+	Sv V2MarketDataStockListResponse_Sv `json:"_sv"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Data               respjson.Field
@@ -245,13 +136,13 @@ type V2MarketDataStockListResponsePaginatedStockResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2MarketDataStockListResponsePaginatedStockResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2MarketDataStockListResponsePaginatedStockResponse) UnmarshalJSON(data []byte) error {
+func (r V2MarketDataStockListResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Information about stock available for trading.
-type V2MarketDataStockListResponsePaginatedStockResponseData struct {
+type V2MarketDataStockListResponseData struct {
 	// ID of the `Stock`
 	ID string `json:"id" api:"required" format:"uuid"`
 	// Whether the `Stock` allows for fractional trading. If it is not fractionable,
@@ -303,13 +194,13 @@ type V2MarketDataStockListResponsePaginatedStockResponseData struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2MarketDataStockListResponsePaginatedStockResponseData) RawJSON() string { return r.JSON.raw }
-func (r *V2MarketDataStockListResponsePaginatedStockResponseData) UnmarshalJSON(data []byte) error {
+func (r V2MarketDataStockListResponseData) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockListResponseData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Pagination metadata
-type V2MarketDataStockListResponsePaginatedStockResponsePaginationMetadata struct {
+type V2MarketDataStockListResponsePaginationMetadata struct {
 	// Cursor for next page
 	Next string `json:"next"`
 	// Cursor for previous page
@@ -324,12 +215,17 @@ type V2MarketDataStockListResponsePaginatedStockResponsePaginationMetadata struc
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2MarketDataStockListResponsePaginatedStockResponsePaginationMetadata) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2MarketDataStockListResponsePaginatedStockResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+func (r V2MarketDataStockListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Version
+type V2MarketDataStockListResponse_Sv string
+
+const (
+	V2MarketDataStockListResponse_SvPaginatedStockResponseV1 V2MarketDataStockListResponse_Sv = "PaginatedStockResponse:v1"
+)
 
 type V2MarketDataStockGetCurrentPriceResponse struct {
 	// The price (fair market value) of the asset at the given time period.
@@ -385,92 +281,8 @@ func (r *V2MarketDataStockGetCurrentPriceResponse) UnmarshalJSON(data []byte) er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// V2MarketDataStockGetCurrentQuoteResponseUnion contains all possible properties
-// and values from [V2MarketDataStockGetCurrentQuoteResponseStockQuoteV1],
-// [V2MarketDataStockGetCurrentQuoteResponseStockQuoteV2].
-//
-// Use the [V2MarketDataStockGetCurrentQuoteResponseUnion.AsAny] method to switch
-// on the variant.
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-type V2MarketDataStockGetCurrentQuoteResponseUnion struct {
-	AskPrice  float64   `json:"ask_price"`
-	AskSize   float64   `json:"ask_size"`
-	BidPrice  float64   `json:"bid_price"`
-	BidSize   float64   `json:"bid_size"`
-	StockID   string    `json:"stock_id"`
-	Timestamp time.Time `json:"timestamp"`
-	// Any of "StockQuote:v1", "StockQuote:v2".
-	Sv string `json:"_sv"`
-	// This field is from variant
-	// [V2MarketDataStockGetCurrentQuoteResponseStockQuoteV2].
-	AskExchange string `json:"ask_exchange"`
-	// This field is from variant
-	// [V2MarketDataStockGetCurrentQuoteResponseStockQuoteV2].
-	BidExchange string `json:"bid_exchange"`
-	JSON        struct {
-		AskPrice    respjson.Field
-		AskSize     respjson.Field
-		BidPrice    respjson.Field
-		BidSize     respjson.Field
-		StockID     respjson.Field
-		Timestamp   respjson.Field
-		Sv          respjson.Field
-		AskExchange respjson.Field
-		BidExchange respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// anyV2MarketDataStockGetCurrentQuoteResponse is implemented by each variant of
-// [V2MarketDataStockGetCurrentQuoteResponseUnion] to add type safety for the
-// return type of [V2MarketDataStockGetCurrentQuoteResponseUnion.AsAny]
-type anyV2MarketDataStockGetCurrentQuoteResponse interface {
-	implV2MarketDataStockGetCurrentQuoteResponseUnion()
-}
-
-func (V2MarketDataStockGetCurrentQuoteResponseStockQuoteV1) implV2MarketDataStockGetCurrentQuoteResponseUnion() {
-}
-func (V2MarketDataStockGetCurrentQuoteResponseStockQuoteV2) implV2MarketDataStockGetCurrentQuoteResponseUnion() {
-}
-
-// Use the following switch statement to find the correct variant
-//
-//	switch variant := V2MarketDataStockGetCurrentQuoteResponseUnion.AsAny().(type) {
-//	case dinariapisdkgo.V2MarketDataStockGetCurrentQuoteResponseStockQuoteV1:
-//	case dinariapisdkgo.V2MarketDataStockGetCurrentQuoteResponseStockQuoteV2:
-//	default:
-//	  fmt.Errorf("no variant present")
-//	}
-func (u V2MarketDataStockGetCurrentQuoteResponseUnion) AsAny() anyV2MarketDataStockGetCurrentQuoteResponse {
-	switch u.Sv {
-	case "StockQuote:v1":
-		return u.AsStockQuoteV1()
-	case "StockQuote:v2":
-		return u.AsStockQuoteV2()
-	}
-	return nil
-}
-
-func (u V2MarketDataStockGetCurrentQuoteResponseUnion) AsStockQuoteV1() (v V2MarketDataStockGetCurrentQuoteResponseStockQuoteV1) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u V2MarketDataStockGetCurrentQuoteResponseUnion) AsStockQuoteV2() (v V2MarketDataStockGetCurrentQuoteResponseStockQuoteV2) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-// Returns the unmodified JSON received from the API
-func (u V2MarketDataStockGetCurrentQuoteResponseUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *V2MarketDataStockGetCurrentQuoteResponseUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Stock Quote
-type V2MarketDataStockGetCurrentQuoteResponseStockQuoteV1 struct {
+type V2MarketDataStockGetCurrentQuoteResponse struct {
 	// The ask price. 0 if there is no active ask.
 	AskPrice float64 `json:"ask_price" api:"required"`
 	// The ask size in shares.
@@ -486,7 +298,7 @@ type V2MarketDataStockGetCurrentQuoteResponseStockQuoteV1 struct {
 	// Schema version
 	//
 	// Any of "StockQuote:v1".
-	Sv string `json:"_sv"`
+	Sv V2MarketDataStockGetCurrentQuoteResponse_Sv `json:"_sv"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		AskPrice    respjson.Field
@@ -502,54 +314,17 @@ type V2MarketDataStockGetCurrentQuoteResponseStockQuoteV1 struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2MarketDataStockGetCurrentQuoteResponseStockQuoteV1) RawJSON() string { return r.JSON.raw }
-func (r *V2MarketDataStockGetCurrentQuoteResponseStockQuoteV1) UnmarshalJSON(data []byte) error {
+func (r V2MarketDataStockGetCurrentQuoteResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2MarketDataStockGetCurrentQuoteResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Stock Quote
-type V2MarketDataStockGetCurrentQuoteResponseStockQuoteV2 struct {
-	// The ask price. 0 if there is no active ask.
-	AskPrice float64 `json:"ask_price" api:"required"`
-	// The ask size in shares.
-	AskSize float64 `json:"ask_size" api:"required"`
-	// The bid price. 0 if there is no active bid.
-	BidPrice float64 `json:"bid_price" api:"required"`
-	// The bid size in shares.
-	BidSize float64 `json:"bid_size" api:"required"`
-	// ID of the `Stock`
-	StockID string `json:"stock_id" api:"required" format:"uuid"`
-	// When the `StockQuote` was generated.
-	Timestamp time.Time `json:"timestamp" api:"required" format:"date-time"`
-	// Schema version
-	//
-	// Any of "StockQuote:v2".
-	Sv string `json:"_sv"`
-	// The ask exchange.
-	AskExchange string `json:"ask_exchange" api:"nullable"`
-	// The bid exchange.
-	BidExchange string `json:"bid_exchange" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		AskPrice    respjson.Field
-		AskSize     respjson.Field
-		BidPrice    respjson.Field
-		BidSize     respjson.Field
-		StockID     respjson.Field
-		Timestamp   respjson.Field
-		Sv          respjson.Field
-		AskExchange respjson.Field
-		BidExchange respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
+// Schema version
+type V2MarketDataStockGetCurrentQuoteResponse_Sv string
 
-// Returns the unmodified JSON received from the API
-func (r V2MarketDataStockGetCurrentQuoteResponseStockQuoteV2) RawJSON() string { return r.JSON.raw }
-func (r *V2MarketDataStockGetCurrentQuoteResponseStockQuoteV2) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
+const (
+	V2MarketDataStockGetCurrentQuoteResponse_SvStockQuoteV1 V2MarketDataStockGetCurrentQuoteResponse_Sv = "StockQuote:v1"
+)
 
 // Information about a dividend announcement for a `Stock`.
 type V2MarketDataStockGetDividendsResponse struct {
@@ -664,9 +439,7 @@ type V2MarketDataStockListParams struct {
 	// Cursor for previous page
 	Previous param.Opt[string] `query:"previous,omitzero" json:"-"`
 	// Number of results to return
-	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
-	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Sort order
 	//
 	// Any of "asc", "desc".
@@ -691,41 +464,6 @@ type V2MarketDataStockListParamsOrder string
 const (
 	V2MarketDataStockListParamsOrderAsc  V2MarketDataStockListParamsOrder = "asc"
 	V2MarketDataStockListParamsOrderDesc V2MarketDataStockListParamsOrder = "desc"
-)
-
-type V2MarketDataStockGetCurrentQuoteParams struct {
-	XAPIVersion param.Opt[string] `header:"X-API-Version,omitzero" json:"-"`
-	// Requested data source for the quote. Only applies when using x-api-version: 2.
-	// Allowed values:
-	//
-	//   - `null`: (default) Selects the highest quality available free data source.
-	//   - `sip`: Consolidated quote from all U.S. exchanges (NBBO). This is a paid data
-	//     source and incurs usage-based billing.
-	//
-	// Any of "sip".
-	Feed V2MarketDataStockGetCurrentQuoteParamsFeed `query:"feed,omitzero" json:"-"`
-	paramObj
-}
-
-// URLQuery serializes [V2MarketDataStockGetCurrentQuoteParams]'s query parameters
-// as `url.Values`.
-func (r V2MarketDataStockGetCurrentQuoteParams) URLQuery() (v url.Values, err error) {
-	return apiquery.MarshalWithSettings(r, apiquery.QuerySettings{
-		ArrayFormat:  apiquery.ArrayQueryFormatRepeat,
-		NestedFormat: apiquery.NestedQueryFormatBrackets,
-	})
-}
-
-// Requested data source for the quote. Only applies when using x-api-version: 2.
-// Allowed values:
-//
-//   - `null`: (default) Selects the highest quality available free data source.
-//   - `sip`: Consolidated quote from all U.S. exchanges (NBBO). This is a paid data
-//     source and incurs usage-based billing.
-type V2MarketDataStockGetCurrentQuoteParamsFeed string
-
-const (
-	V2MarketDataStockGetCurrentQuoteParamsFeedSip V2MarketDataStockGetCurrentQuoteParamsFeed = "sip"
 )
 
 type V2MarketDataStockGetHistoricalPricesParams struct {

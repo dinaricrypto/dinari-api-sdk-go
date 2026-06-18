@@ -4,7 +4,6 @@ package dinariapisdkgo
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -86,7 +85,7 @@ func (r *V2EntityService) Update(ctx context.Context, entityID string, body V2En
 
 // Get a list of direct `Entities` your organization manages. These `Entities`
 // represent individual customers of your organization.
-func (r *V2EntityService) List(ctx context.Context, query V2EntityListParams, opts ...option.RequestOption) (res *V2EntityListResponseUnion, err error) {
+func (r *V2EntityService) List(ctx context.Context, query V2EntityListParams, opts ...option.RequestOption) (res *V2EntityListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/entities/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
@@ -254,57 +253,15 @@ const (
 	V2EntityUpdateResponseEntityTypeOrganization V2EntityUpdateResponseEntityType = "ORGANIZATION"
 )
 
-// V2EntityListResponseUnion contains all possible properties and values from
-// [[]Entity], [V2EntityListResponsePaginatedEntityResponse].
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-//
-// If the underlying value is not a json object, one of the following properties
-// will be valid: OfEntityArray]
-type V2EntityListResponseUnion struct {
-	// This field will be present if the value is a [[]Entity] instead of an object.
-	OfEntityArray []Entity `json:",inline"`
-	// This field is from variant [V2EntityListResponsePaginatedEntityResponse].
-	Data []Entity `json:"data"`
-	// This field is from variant [V2EntityListResponsePaginatedEntityResponse].
-	PaginationMetadata V2EntityListResponsePaginatedEntityResponsePaginationMetadata `json:"pagination_metadata"`
-	// This field is from variant [V2EntityListResponsePaginatedEntityResponse].
-	Sv   string `json:"_sv"`
-	JSON struct {
-		OfEntityArray      respjson.Field
-		Data               respjson.Field
-		PaginationMetadata respjson.Field
-		Sv                 respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-func (u V2EntityListResponseUnion) AsEntityArray() (v []Entity) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u V2EntityListResponseUnion) AsV2EntityListResponsePaginatedEntityResponse() (v V2EntityListResponsePaginatedEntityResponse) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-// Returns the unmodified JSON received from the API
-func (u V2EntityListResponseUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *V2EntityListResponseUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2EntityListResponsePaginatedEntityResponse struct {
+type V2EntityListResponse struct {
 	// List of Entity
 	Data []Entity `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2EntityListResponsePaginatedEntityResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata V2EntityListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedEntityResponse:v1".
-	Sv string `json:"_sv"`
+	Sv V2EntityListResponse_Sv `json:"_sv"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Data               respjson.Field
@@ -316,13 +273,13 @@ type V2EntityListResponsePaginatedEntityResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2EntityListResponsePaginatedEntityResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2EntityListResponsePaginatedEntityResponse) UnmarshalJSON(data []byte) error {
+func (r V2EntityListResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2EntityListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Pagination metadata
-type V2EntityListResponsePaginatedEntityResponsePaginationMetadata struct {
+type V2EntityListResponsePaginationMetadata struct {
 	// Cursor for next page
 	Next string `json:"next"`
 	// Cursor for previous page
@@ -337,12 +294,17 @@ type V2EntityListResponsePaginatedEntityResponsePaginationMetadata struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2EntityListResponsePaginatedEntityResponsePaginationMetadata) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2EntityListResponsePaginatedEntityResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+func (r V2EntityListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
+func (r *V2EntityListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Version
+type V2EntityListResponse_Sv string
+
+const (
+	V2EntityListResponse_SvPaginatedEntityResponseV1 V2EntityListResponse_Sv = "PaginatedEntityResponse:v1"
+)
 
 // Information about an `Entity`, which can be either an individual or an
 // organization.
@@ -478,9 +440,7 @@ type V2EntityListParams struct {
 	// Case sensitive unique reference ID for the `Entity`.
 	ReferenceID param.Opt[string] `query:"reference_id,omitzero" json:"-"`
 	// Number of results to return
-	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
-	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Sort order
 	//
 	// Any of "asc", "desc".

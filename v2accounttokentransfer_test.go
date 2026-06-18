@@ -96,8 +96,6 @@ func TestV2AccountTokenTransferListWithOptionalParams(t *testing.T) {
 			Limit:    dinariapisdkgo.Int(20),
 			Next:     dinariapisdkgo.String("next"),
 			Order:    dinariapisdkgo.V2AccountTokenTransferListParamsOrderAsc,
-			Page:     dinariapisdkgo.Int(1),
-			PageSize: dinariapisdkgo.Int(1),
 			Previous: dinariapisdkgo.String("previous"),
 		},
 	)
