@@ -4,7 +4,6 @@ package dinariapisdkgo
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -84,7 +83,7 @@ func (r *V2AccountTokenTransferService) Get(ctx context.Context, transferID stri
 // A `TokenTransfer` represents a transfer of tokens through the Dinari platform
 // from one `Account` to another. As such, only `Account`s that are connected to
 // Dinari-managed `Wallet`s can initiate `TokenTransfer`s.
-func (r *V2AccountTokenTransferService) List(ctx context.Context, accountID string, query V2AccountTokenTransferListParams, opts ...option.RequestOption) (res *V2AccountTokenTransferListResponseUnion, err error) {
+func (r *V2AccountTokenTransferService) List(ctx context.Context, accountID string, query V2AccountTokenTransferListParams, opts ...option.RequestOption) (res *V2AccountTokenTransferListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -184,62 +183,15 @@ const (
 	TokenTransferStatusFailed     TokenTransferStatus = "FAILED"
 )
 
-// V2AccountTokenTransferListResponseUnion contains all possible properties and
-// values from [[]TokenTransfer],
-// [V2AccountTokenTransferListResponsePaginatedTokenTransferResponse].
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-//
-// If the underlying value is not a json object, one of the following properties
-// will be valid: OfTokenTransferArray]
-type V2AccountTokenTransferListResponseUnion struct {
-	// This field will be present if the value is a [[]TokenTransfer] instead of an
-	// object.
-	OfTokenTransferArray []TokenTransfer `json:",inline"`
-	// This field is from variant
-	// [V2AccountTokenTransferListResponsePaginatedTokenTransferResponse].
-	Data []TokenTransfer `json:"data"`
-	// This field is from variant
-	// [V2AccountTokenTransferListResponsePaginatedTokenTransferResponse].
-	PaginationMetadata V2AccountTokenTransferListResponsePaginatedTokenTransferResponsePaginationMetadata `json:"pagination_metadata"`
-	// This field is from variant
-	// [V2AccountTokenTransferListResponsePaginatedTokenTransferResponse].
-	Sv   string `json:"_sv"`
-	JSON struct {
-		OfTokenTransferArray respjson.Field
-		Data                 respjson.Field
-		PaginationMetadata   respjson.Field
-		Sv                   respjson.Field
-		raw                  string
-	} `json:"-"`
-}
-
-func (u V2AccountTokenTransferListResponseUnion) AsTokenTransferArray() (v []TokenTransfer) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u V2AccountTokenTransferListResponseUnion) AsV2AccountTokenTransferListResponsePaginatedTokenTransferResponse() (v V2AccountTokenTransferListResponsePaginatedTokenTransferResponse) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-// Returns the unmodified JSON received from the API
-func (u V2AccountTokenTransferListResponseUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *V2AccountTokenTransferListResponseUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2AccountTokenTransferListResponsePaginatedTokenTransferResponse struct {
+type V2AccountTokenTransferListResponse struct {
 	// List of TokenTransfer
 	Data []TokenTransfer `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2AccountTokenTransferListResponsePaginatedTokenTransferResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata V2AccountTokenTransferListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedTokenTransferResponse:v1".
-	Sv string `json:"_sv"`
+	Sv V2AccountTokenTransferListResponse_Sv `json:"_sv"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Data               respjson.Field
@@ -251,15 +203,13 @@ type V2AccountTokenTransferListResponsePaginatedTokenTransferResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountTokenTransferListResponsePaginatedTokenTransferResponse) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountTokenTransferListResponsePaginatedTokenTransferResponse) UnmarshalJSON(data []byte) error {
+func (r V2AccountTokenTransferListResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountTokenTransferListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Pagination metadata
-type V2AccountTokenTransferListResponsePaginatedTokenTransferResponsePaginationMetadata struct {
+type V2AccountTokenTransferListResponsePaginationMetadata struct {
 	// Cursor for next page
 	Next string `json:"next"`
 	// Cursor for previous page
@@ -274,12 +224,17 @@ type V2AccountTokenTransferListResponsePaginatedTokenTransferResponsePaginationM
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountTokenTransferListResponsePaginatedTokenTransferResponsePaginationMetadata) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountTokenTransferListResponsePaginatedTokenTransferResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+func (r V2AccountTokenTransferListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountTokenTransferListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Version
+type V2AccountTokenTransferListResponse_Sv string
+
+const (
+	V2AccountTokenTransferListResponse_SvPaginatedTokenTransferResponseV1 V2AccountTokenTransferListResponse_Sv = "PaginatedTokenTransferResponse:v1"
+)
 
 type V2AccountTokenTransferNewParams struct {
 	// Quantity of the token to transfer.
@@ -310,9 +265,7 @@ type V2AccountTokenTransferListParams struct {
 	// Cursor for previous page
 	Previous param.Opt[string] `query:"previous,omitzero" json:"-"`
 	// Number of results to return
-	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
-	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Sort order
 	//
 	// Any of "asc", "desc".

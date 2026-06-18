@@ -30,5 +30,5 @@ func TestUsage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("err should be nil: %s", err.Error())
 	}
-	t.Logf("%+v\n", stocks)
+	t.Logf("%+v\n", stocks.Data)
 }

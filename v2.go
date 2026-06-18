@@ -4,7 +4,6 @@ package dinariapisdkgo
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 	"net/url"
 	"slices"
@@ -69,156 +68,22 @@ func NewV2Service(opts ...option.RequestOption) (r V2Service) {
 
 // Get a list of all `Orders` under the `Entity`. Optionally `Orders` can be
 // transaction hash or fulfillment transaction hash.
-func (r *V2Service) ListOrders(ctx context.Context, query V2ListOrdersParams, opts ...option.RequestOption) (res *V2ListOrdersResponseUnion, err error) {
+func (r *V2Service) ListOrders(ctx context.Context, query V2ListOrdersParams, opts ...option.RequestOption) (res *V2ListOrdersResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/orders/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return res, err
 }
 
-// V2ListOrdersResponseUnion contains all possible properties and values from
-// [[]V2ListOrdersResponseArrayItem],
-// [V2ListOrdersResponsePaginatedEntityOrderResponse].
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-//
-// If the underlying value is not a json object, one of the following properties
-// will be valid: OfV2ListOrdersResponseArray]
-type V2ListOrdersResponseUnion struct {
-	// This field will be present if the value is a [[]V2ListOrdersResponseArrayItem]
-	// instead of an object.
-	OfV2ListOrdersResponseArray []V2ListOrdersResponseArrayItem `json:",inline"`
-	// This field is from variant [V2ListOrdersResponsePaginatedEntityOrderResponse].
-	Data []V2ListOrdersResponsePaginatedEntityOrderResponseData `json:"data"`
-	// This field is from variant [V2ListOrdersResponsePaginatedEntityOrderResponse].
-	PaginationMetadata V2ListOrdersResponsePaginatedEntityOrderResponsePaginationMetadata `json:"pagination_metadata"`
-	// This field is from variant [V2ListOrdersResponsePaginatedEntityOrderResponse].
-	Sv   string `json:"_sv"`
-	JSON struct {
-		OfV2ListOrdersResponseArray respjson.Field
-		Data                        respjson.Field
-		PaginationMetadata          respjson.Field
-		Sv                          respjson.Field
-		raw                         string
-	} `json:"-"`
-}
-
-func (u V2ListOrdersResponseUnion) AsV2ListOrdersResponseArray() (v []V2ListOrdersResponseArrayItem) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u V2ListOrdersResponseUnion) AsV2ListOrdersResponsePaginatedEntityOrderResponse() (v V2ListOrdersResponsePaginatedEntityOrderResponse) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-// Returns the unmodified JSON received from the API
-func (u V2ListOrdersResponseUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *V2ListOrdersResponseUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2ListOrdersResponseArrayItem struct {
-	// ID of the `Order`.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// CAIP-2 formatted chain ID of the blockchain that the `Order` transaction was run
-	// on.
-	ChainID string `json:"chain_id" api:"required"`
-	// Datetime at which the `Order` was created. ISO 8601 timestamp.
-	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
-	// Smart contract address that `Order` was created from.
-	OrderContractAddress string `json:"order_contract_address" api:"required" format:"eth_address"`
-	// Indicates whether `Order` is a buy or sell.
-	//
-	// Any of "BUY", "SELL".
-	OrderSide string `json:"order_side" api:"required"`
-	// Time in force. Indicates how long `Order` is valid for.
-	//
-	// Any of "DAY", "GTC", "IOC", "FOK".
-	OrderTif string `json:"order_tif" api:"required"`
-	// Transaction hash for the `Order` creation.
-	OrderTransactionHash string `json:"order_transaction_hash" api:"required" format:"hex_string"`
-	// Type of `Order`.
-	//
-	// Any of "MARKET", "LIMIT".
-	OrderType string `json:"order_type" api:"required"`
-	// The payment token (stablecoin) address.
-	PaymentToken string `json:"payment_token" api:"required" format:"eth_address"`
-	// Status of the `Order`.
-	//
-	// Any of "PENDING_SUBMIT", "PENDING_CANCEL", "PENDING_ESCROW", "PENDING_FILL",
-	// "ESCROWED", "SUBMITTED", "CANCELLED", "PARTIALLY_FILLED", "FILLED", "REJECTED",
-	// "REQUIRING_CONTACT", "ERROR".
-	Status string `json:"status" api:"required"`
-	// The `Stock` ID associated with the `Order`
-	StockID string `json:"stock_id" api:"required" format:"uuid"`
-	// Account ID the order was made for.
-	AccountID string `json:"account_id" api:"nullable" format:"uuid"`
-	// The dShare asset token address.
-	AssetToken string `json:"asset_token" api:"nullable" format:"eth_address"`
-	// Total amount of assets involved.
-	AssetTokenQuantity float64 `json:"asset_token_quantity" api:"nullable"`
-	// Transaction hash for cancellation of `Order`, if the `Order` was cancelled.
-	CancelTransactionHash string `json:"cancel_transaction_hash" api:"nullable" format:"hex_string"`
-	// Customer-supplied unique identifier to map this `Order` to an order in the
-	// customer's systems.
-	ClientOrderID string `json:"client_order_id" api:"nullable"`
-	// Entity ID of the Order
-	EntityID string `json:"entity_id" api:"nullable" format:"uuid"`
-	// Fee amount associated with `Order`.
-	Fee float64 `json:"fee" api:"nullable"`
-	// For limit `Orders`, the price per asset, specified in the `Stock`'s native
-	// currency (USD for US equities and ETFs).
-	LimitPrice float64 `json:"limit_price" api:"nullable"`
-	// Order Request ID for the `Order`
-	OrderRequestID string `json:"order_request_id" api:"nullable" format:"uuid"`
-	// Total amount of payment involved.
-	PaymentTokenQuantity float64 `json:"payment_token_quantity" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID                    respjson.Field
-		ChainID               respjson.Field
-		CreatedDt             respjson.Field
-		OrderContractAddress  respjson.Field
-		OrderSide             respjson.Field
-		OrderTif              respjson.Field
-		OrderTransactionHash  respjson.Field
-		OrderType             respjson.Field
-		PaymentToken          respjson.Field
-		Status                respjson.Field
-		StockID               respjson.Field
-		AccountID             respjson.Field
-		AssetToken            respjson.Field
-		AssetTokenQuantity    respjson.Field
-		CancelTransactionHash respjson.Field
-		ClientOrderID         respjson.Field
-		EntityID              respjson.Field
-		Fee                   respjson.Field
-		LimitPrice            respjson.Field
-		OrderRequestID        respjson.Field
-		PaymentTokenQuantity  respjson.Field
-		ExtraFields           map[string]respjson.Field
-		raw                   string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2ListOrdersResponseArrayItem) RawJSON() string { return r.JSON.raw }
-func (r *V2ListOrdersResponseArrayItem) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2ListOrdersResponsePaginatedEntityOrderResponse struct {
+type V2ListOrdersResponse struct {
 	// List of EntityOrder
-	Data []V2ListOrdersResponsePaginatedEntityOrderResponseData `json:"data" api:"required"`
+	Data []V2ListOrdersResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2ListOrdersResponsePaginatedEntityOrderResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata V2ListOrdersResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedEntityOrderResponse:v1".
-	Sv string `json:"_sv"`
+	Sv V2ListOrdersResponse_Sv `json:"_sv"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Data               respjson.Field
@@ -230,12 +95,12 @@ type V2ListOrdersResponsePaginatedEntityOrderResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2ListOrdersResponsePaginatedEntityOrderResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2ListOrdersResponsePaginatedEntityOrderResponse) UnmarshalJSON(data []byte) error {
+func (r V2ListOrdersResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2ListOrdersResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type V2ListOrdersResponsePaginatedEntityOrderResponseData struct {
+type V2ListOrdersResponseData struct {
 	// ID of the `Order`.
 	ID string `json:"id" api:"required" format:"uuid"`
 	// CAIP-2 formatted chain ID of the blockchain that the `Order` transaction was run
@@ -320,13 +185,13 @@ type V2ListOrdersResponsePaginatedEntityOrderResponseData struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2ListOrdersResponsePaginatedEntityOrderResponseData) RawJSON() string { return r.JSON.raw }
-func (r *V2ListOrdersResponsePaginatedEntityOrderResponseData) UnmarshalJSON(data []byte) error {
+func (r V2ListOrdersResponseData) RawJSON() string { return r.JSON.raw }
+func (r *V2ListOrdersResponseData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Pagination metadata
-type V2ListOrdersResponsePaginatedEntityOrderResponsePaginationMetadata struct {
+type V2ListOrdersResponsePaginationMetadata struct {
 	// Cursor for next page
 	Next string `json:"next"`
 	// Cursor for previous page
@@ -341,12 +206,17 @@ type V2ListOrdersResponsePaginatedEntityOrderResponsePaginationMetadata struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2ListOrdersResponsePaginatedEntityOrderResponsePaginationMetadata) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2ListOrdersResponsePaginatedEntityOrderResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+func (r V2ListOrdersResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
+func (r *V2ListOrdersResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Version
+type V2ListOrdersResponse_Sv string
+
+const (
+	V2ListOrdersResponse_SvPaginatedEntityOrderResponseV1 V2ListOrdersResponse_Sv = "PaginatedEntityOrderResponse:v1"
+)
 
 type V2ListOrdersParams struct {
 	// CAIP-2 formatted chain ID of the blockchain the `Order` was made on.
@@ -362,9 +232,7 @@ type V2ListOrdersParams struct {
 	// Cursor for previous page
 	Previous param.Opt[string] `query:"previous,omitzero" json:"-"`
 	// Number of results to return
-	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
-	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Sort order
 	//
 	// Any of "asc", "desc".

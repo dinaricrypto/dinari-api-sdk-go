@@ -4,7 +4,6 @@ package dinariapisdkgo
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -70,7 +69,7 @@ func (r *V2AccountWithdrawalService) Get(ctx context.Context, withdrawalID strin
 }
 
 // Get a list of all `Withdrawals` under the `Account`, sorted by most recent.
-func (r *V2AccountWithdrawalService) List(ctx context.Context, accountID string, query V2AccountWithdrawalListParams, opts ...option.RequestOption) (res *V2AccountWithdrawalListResponseUnion, err error) {
+func (r *V2AccountWithdrawalService) List(ctx context.Context, accountID string, query V2AccountWithdrawalListParams, opts ...option.RequestOption) (res *V2AccountWithdrawalListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -209,62 +208,15 @@ func (r *V2AccountWithdrawalGetResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// V2AccountWithdrawalListResponseUnion contains all possible properties and values
-// from [[]Withdrawal],
-// [V2AccountWithdrawalListResponsePaginatedWithdrawalResponse].
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-//
-// If the underlying value is not a json object, one of the following properties
-// will be valid: OfWithdrawalArray]
-type V2AccountWithdrawalListResponseUnion struct {
-	// This field will be present if the value is a [[]Withdrawal] instead of an
-	// object.
-	OfWithdrawalArray []Withdrawal `json:",inline"`
-	// This field is from variant
-	// [V2AccountWithdrawalListResponsePaginatedWithdrawalResponse].
-	Data []Withdrawal `json:"data"`
-	// This field is from variant
-	// [V2AccountWithdrawalListResponsePaginatedWithdrawalResponse].
-	PaginationMetadata V2AccountWithdrawalListResponsePaginatedWithdrawalResponsePaginationMetadata `json:"pagination_metadata"`
-	// This field is from variant
-	// [V2AccountWithdrawalListResponsePaginatedWithdrawalResponse].
-	Sv   string `json:"_sv"`
-	JSON struct {
-		OfWithdrawalArray  respjson.Field
-		Data               respjson.Field
-		PaginationMetadata respjson.Field
-		Sv                 respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-func (u V2AccountWithdrawalListResponseUnion) AsWithdrawalArray() (v []Withdrawal) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u V2AccountWithdrawalListResponseUnion) AsV2AccountWithdrawalListResponsePaginatedWithdrawalResponse() (v V2AccountWithdrawalListResponsePaginatedWithdrawalResponse) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-// Returns the unmodified JSON received from the API
-func (u V2AccountWithdrawalListResponseUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *V2AccountWithdrawalListResponseUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2AccountWithdrawalListResponsePaginatedWithdrawalResponse struct {
+type V2AccountWithdrawalListResponse struct {
 	// List of Withdrawal
 	Data []Withdrawal `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2AccountWithdrawalListResponsePaginatedWithdrawalResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata V2AccountWithdrawalListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedWithdrawalResponse:v1".
-	Sv string `json:"_sv"`
+	Sv V2AccountWithdrawalListResponse_Sv `json:"_sv"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Data               respjson.Field
@@ -276,15 +228,13 @@ type V2AccountWithdrawalListResponsePaginatedWithdrawalResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountWithdrawalListResponsePaginatedWithdrawalResponse) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountWithdrawalListResponsePaginatedWithdrawalResponse) UnmarshalJSON(data []byte) error {
+func (r V2AccountWithdrawalListResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountWithdrawalListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Pagination metadata
-type V2AccountWithdrawalListResponsePaginatedWithdrawalResponsePaginationMetadata struct {
+type V2AccountWithdrawalListResponsePaginationMetadata struct {
 	// Cursor for next page
 	Next string `json:"next"`
 	// Cursor for previous page
@@ -299,12 +249,17 @@ type V2AccountWithdrawalListResponsePaginatedWithdrawalResponsePaginationMetadat
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountWithdrawalListResponsePaginatedWithdrawalResponsePaginationMetadata) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountWithdrawalListResponsePaginatedWithdrawalResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+func (r V2AccountWithdrawalListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountWithdrawalListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Version
+type V2AccountWithdrawalListResponse_Sv string
+
+const (
+	V2AccountWithdrawalListResponse_SvPaginatedWithdrawalResponseV1 V2AccountWithdrawalListResponse_Sv = "PaginatedWithdrawalResponse:v1"
+)
 
 type V2AccountWithdrawalGetParams struct {
 	AccountID string `path:"account_id" api:"required" format:"uuid" json:"-"`
@@ -319,9 +274,7 @@ type V2AccountWithdrawalListParams struct {
 	// ID of the `WithdrawalRequest` to find `Withdrawals` for.
 	WithdrawalRequestID param.Opt[string] `query:"withdrawal_request_id,omitzero" format:"uuid" json:"-"`
 	// Number of results to return
-	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
-	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Sort order
 	//
 	// Any of "asc", "desc".
