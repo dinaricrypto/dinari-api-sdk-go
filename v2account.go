@@ -4,7 +4,6 @@ package dinariapisdkgo
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -158,7 +157,7 @@ func (r *V2AccountService) GetCashBalances(ctx context.Context, accountID string
 
 // Get dividend payments made to the `Account` from dividend-bearing stock
 // holdings.
-func (r *V2AccountService) GetDividendPayments(ctx context.Context, accountID string, query V2AccountGetDividendPaymentsParams, opts ...option.RequestOption) (res *V2AccountGetDividendPaymentsResponseUnion, err error) {
+func (r *V2AccountService) GetDividendPayments(ctx context.Context, accountID string, query V2AccountGetDividendPaymentsParams, opts ...option.RequestOption) (res *V2AccountGetDividendPaymentsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -173,7 +172,7 @@ func (r *V2AccountService) GetDividendPayments(ctx context.Context, accountID st
 //
 // Currently, the only yield-bearing stablecoin accepted by Dinari is
 // [USD+](https://usd.dinari.com/).
-func (r *V2AccountService) GetInterestPayments(ctx context.Context, accountID string, query V2AccountGetInterestPaymentsParams, opts ...option.RequestOption) (res *V2AccountGetInterestPaymentsResponseUnion, err error) {
+func (r *V2AccountService) GetInterestPayments(ctx context.Context, accountID string, query V2AccountGetInterestPaymentsParams, opts ...option.RequestOption) (res *V2AccountGetInterestPaymentsResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -340,89 +339,15 @@ func (r *V2AccountGetCashBalancesResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// V2AccountGetDividendPaymentsResponseUnion contains all possible properties and
-// values from [[]V2AccountGetDividendPaymentsResponseArrayItem],
-// [V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponse].
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-//
-// If the underlying value is not a json object, one of the following properties
-// will be valid: OfV2AccountGetDividendPaymentsResponseArray]
-type V2AccountGetDividendPaymentsResponseUnion struct {
-	// This field will be present if the value is a
-	// [[]V2AccountGetDividendPaymentsResponseArrayItem] instead of an object.
-	OfV2AccountGetDividendPaymentsResponseArray []V2AccountGetDividendPaymentsResponseArrayItem `json:",inline"`
-	// This field is from variant
-	// [V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponse].
-	Data []V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponseData `json:"data"`
-	// This field is from variant
-	// [V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponse].
-	PaginationMetadata V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponsePaginationMetadata `json:"pagination_metadata"`
-	// This field is from variant
-	// [V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponse].
-	Sv   string `json:"_sv"`
-	JSON struct {
-		OfV2AccountGetDividendPaymentsResponseArray respjson.Field
-		Data                                        respjson.Field
-		PaginationMetadata                          respjson.Field
-		Sv                                          respjson.Field
-		raw                                         string
-	} `json:"-"`
-}
-
-func (u V2AccountGetDividendPaymentsResponseUnion) AsV2AccountGetDividendPaymentsResponseArray() (v []V2AccountGetDividendPaymentsResponseArrayItem) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u V2AccountGetDividendPaymentsResponseUnion) AsV2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponse() (v V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponse) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-// Returns the unmodified JSON received from the API
-func (u V2AccountGetDividendPaymentsResponseUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *V2AccountGetDividendPaymentsResponseUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Represents a dividend payment event for an `Account`.
-type V2AccountGetDividendPaymentsResponseArrayItem struct {
-	// Amount of the dividend paid.
-	Amount float64 `json:"amount" api:"required"`
-	// Currency in which the dividend was paid. (e.g. USD)
-	Currency string `json:"currency" api:"required"`
-	// Date the dividend was distributed to the account. ISO 8601 format, YYYY-MM-DD.
-	PaymentDate time.Time `json:"payment_date" api:"required" format:"date"`
-	// ID of the `Stock` for which the dividend was paid.
-	StockID string `json:"stock_id" api:"required" format:"uuid"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Amount      respjson.Field
-		Currency    respjson.Field
-		PaymentDate respjson.Field
-		StockID     respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountGetDividendPaymentsResponseArrayItem) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountGetDividendPaymentsResponseArrayItem) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponse struct {
+type V2AccountGetDividendPaymentsResponse struct {
 	// List of DividendPayment
-	Data []V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponseData `json:"data" api:"required"`
+	Data []V2AccountGetDividendPaymentsResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata V2AccountGetDividendPaymentsResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedDividendPaymentResponse:v1".
-	Sv string `json:"_sv"`
+	Sv V2AccountGetDividendPaymentsResponse_Sv `json:"_sv"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Data               respjson.Field
@@ -434,15 +359,13 @@ type V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponse struct
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponse) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponse) UnmarshalJSON(data []byte) error {
+func (r V2AccountGetDividendPaymentsResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountGetDividendPaymentsResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Represents a dividend payment event for an `Account`.
-type V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponseData struct {
+type V2AccountGetDividendPaymentsResponseData struct {
 	// Amount of the dividend paid.
 	Amount float64 `json:"amount" api:"required"`
 	// Currency in which the dividend was paid. (e.g. USD)
@@ -463,15 +386,13 @@ type V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponseData st
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponseData) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponseData) UnmarshalJSON(data []byte) error {
+func (r V2AccountGetDividendPaymentsResponseData) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountGetDividendPaymentsResponseData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Pagination metadata
-type V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponsePaginationMetadata struct {
+type V2AccountGetDividendPaymentsResponsePaginationMetadata struct {
 	// Cursor for next page
 	Next string `json:"next"`
 	// Cursor for previous page
@@ -486,93 +407,27 @@ type V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponsePaginat
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponsePaginationMetadata) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountGetDividendPaymentsResponsePaginatedDividendPaymentResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+func (r V2AccountGetDividendPaymentsResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountGetDividendPaymentsResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// V2AccountGetInterestPaymentsResponseUnion contains all possible properties and
-// values from [[]V2AccountGetInterestPaymentsResponseArrayItem],
-// [V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponse].
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-//
-// If the underlying value is not a json object, one of the following properties
-// will be valid: OfV2AccountGetInterestPaymentsResponseArray]
-type V2AccountGetInterestPaymentsResponseUnion struct {
-	// This field will be present if the value is a
-	// [[]V2AccountGetInterestPaymentsResponseArrayItem] instead of an object.
-	OfV2AccountGetInterestPaymentsResponseArray []V2AccountGetInterestPaymentsResponseArrayItem `json:",inline"`
-	// This field is from variant
-	// [V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponse].
-	Data []V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponseData `json:"data"`
-	// This field is from variant
-	// [V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponse].
-	PaginationMetadata V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponsePaginationMetadata `json:"pagination_metadata"`
-	// This field is from variant
-	// [V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponse].
-	Sv   string `json:"_sv"`
-	JSON struct {
-		OfV2AccountGetInterestPaymentsResponseArray respjson.Field
-		Data                                        respjson.Field
-		PaginationMetadata                          respjson.Field
-		Sv                                          respjson.Field
-		raw                                         string
-	} `json:"-"`
-}
+// Version
+type V2AccountGetDividendPaymentsResponse_Sv string
 
-func (u V2AccountGetInterestPaymentsResponseUnion) AsV2AccountGetInterestPaymentsResponseArray() (v []V2AccountGetInterestPaymentsResponseArrayItem) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
+const (
+	V2AccountGetDividendPaymentsResponse_SvPaginatedDividendPaymentResponseV1 V2AccountGetDividendPaymentsResponse_Sv = "PaginatedDividendPaymentResponse:v1"
+)
 
-func (u V2AccountGetInterestPaymentsResponseUnion) AsV2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponse() (v V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponse) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-// Returns the unmodified JSON received from the API
-func (u V2AccountGetInterestPaymentsResponseUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *V2AccountGetInterestPaymentsResponseUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// An object representing an interest payment from stablecoin holdings.
-type V2AccountGetInterestPaymentsResponseArrayItem struct {
-	// Amount of interest paid.
-	Amount float64 `json:"amount" api:"required"`
-	// Currency in which the interest was paid (e.g. USD).
-	Currency string `json:"currency" api:"required"`
-	// Date of interest payment in US Eastern time zone. ISO 8601 format, YYYY-MM-DD.
-	PaymentDate time.Time `json:"payment_date" api:"required" format:"date"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Amount      respjson.Field
-		Currency    respjson.Field
-		PaymentDate respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountGetInterestPaymentsResponseArrayItem) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountGetInterestPaymentsResponseArrayItem) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponse struct {
+type V2AccountGetInterestPaymentsResponse struct {
 	// List of InterestPayment
-	Data []V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponseData `json:"data" api:"required"`
+	Data []V2AccountGetInterestPaymentsResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata V2AccountGetInterestPaymentsResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedInterestPaymentResponse:v1".
-	Sv string `json:"_sv"`
+	Sv V2AccountGetInterestPaymentsResponse_Sv `json:"_sv"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Data               respjson.Field
@@ -584,15 +439,13 @@ type V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponse struct
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponse) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponse) UnmarshalJSON(data []byte) error {
+func (r V2AccountGetInterestPaymentsResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountGetInterestPaymentsResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // An object representing an interest payment from stablecoin holdings.
-type V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponseData struct {
+type V2AccountGetInterestPaymentsResponseData struct {
 	// Amount of interest paid.
 	Amount float64 `json:"amount" api:"required"`
 	// Currency in which the interest was paid (e.g. USD).
@@ -610,15 +463,13 @@ type V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponseData st
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponseData) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponseData) UnmarshalJSON(data []byte) error {
+func (r V2AccountGetInterestPaymentsResponseData) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountGetInterestPaymentsResponseData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Pagination metadata
-type V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponsePaginationMetadata struct {
+type V2AccountGetInterestPaymentsResponsePaginationMetadata struct {
 	// Cursor for next page
 	Next string `json:"next"`
 	// Cursor for previous page
@@ -633,12 +484,17 @@ type V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponsePaginat
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponsePaginationMetadata) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2AccountGetInterestPaymentsResponsePaginatedInterestPaymentResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+func (r V2AccountGetInterestPaymentsResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountGetInterestPaymentsResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Version
+type V2AccountGetInterestPaymentsResponse_Sv string
+
+const (
+	V2AccountGetInterestPaymentsResponse_SvPaginatedInterestPaymentResponseV1 V2AccountGetInterestPaymentsResponse_Sv = "PaginatedInterestPaymentResponse:v1"
+)
 
 // Balance information of `Stock` assets in your `Account`.
 type V2AccountGetPortfolioResponse struct {
@@ -706,9 +562,7 @@ type V2AccountGetDividendPaymentsParams struct {
 	// Optional ID of the `Stock` to filter by
 	StockID param.Opt[string] `query:"stock_id,omitzero" format:"uuid" json:"-"`
 	// Number of results to return
-	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
-	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Sort order
 	//
 	// Any of "asc", "desc".
@@ -743,9 +597,7 @@ type V2AccountGetInterestPaymentsParams struct {
 	// Cursor for previous page
 	Previous param.Opt[string] `query:"previous,omitzero" json:"-"`
 	// Number of results to return
-	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
-	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Sort order
 	//
 	// Any of "asc", "desc".

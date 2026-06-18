@@ -64,8 +64,6 @@ func TestV2AccountWithdrawalListWithOptionalParams(t *testing.T) {
 			Limit:               dinariapisdkgo.Int(20),
 			Next:                dinariapisdkgo.String("next"),
 			Order:               dinariapisdkgo.V2AccountWithdrawalListParamsOrderAsc,
-			Page:                dinariapisdkgo.Int(1),
-			PageSize:            dinariapisdkgo.Int(1),
 			Previous:            dinariapisdkgo.String("previous"),
 			WithdrawalRequestID: dinariapisdkgo.String("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"),
 		},

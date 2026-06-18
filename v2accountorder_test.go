@@ -67,8 +67,6 @@ func TestV2AccountOrderListWithOptionalParams(t *testing.T) {
 			Next:                 dinariapisdkgo.String("next"),
 			Order:                dinariapisdkgo.V2AccountOrderListParamsOrderAsc,
 			OrderTransactionHash: dinariapisdkgo.String("order_transaction_hash"),
-			Page:                 dinariapisdkgo.Int(1),
-			PageSize:             dinariapisdkgo.Int(1),
 			Previous:             dinariapisdkgo.String("previous"),
 		},
 	)
@@ -163,8 +161,6 @@ func TestV2AccountOrderGetFulfillmentsWithOptionalParams(t *testing.T) {
 			Limit:     dinariapisdkgo.Int(20),
 			Next:      dinariapisdkgo.String("next"),
 			Order:     dinariapisdkgo.V2AccountOrderGetFulfillmentsParamsOrderAsc,
-			Page:      dinariapisdkgo.Int(1),
-			PageSize:  dinariapisdkgo.Int(1),
 			Previous:  dinariapisdkgo.String("previous"),
 		},
 	)

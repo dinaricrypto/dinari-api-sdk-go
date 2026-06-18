@@ -31,8 +31,6 @@ func TestV2MarketDataStockSplitListWithOptionalParams(t *testing.T) {
 		Limit:    dinariapisdkgo.Int(20),
 		Next:     dinariapisdkgo.String("next"),
 		Order:    dinariapisdkgo.V2MarketDataStockSplitListParamsOrderAsc,
-		Page:     dinariapisdkgo.Int(1),
-		PageSize: dinariapisdkgo.Int(1),
 		Previous: dinariapisdkgo.String("previous"),
 	})
 	if err != nil {
@@ -65,8 +63,6 @@ func TestV2MarketDataStockSplitListForStockWithOptionalParams(t *testing.T) {
 			Limit:    dinariapisdkgo.Int(20),
 			Next:     dinariapisdkgo.String("next"),
 			Order:    dinariapisdkgo.V2MarketDataStockSplitListForStockParamsOrderAsc,
-			Page:     dinariapisdkgo.Int(1),
-			PageSize: dinariapisdkgo.Int(1),
 			Previous: dinariapisdkgo.String("previous"),
 		},
 	)

@@ -65,8 +65,6 @@ func TestV2AccountOrderFulfillmentQueryWithOptionalParams(t *testing.T) {
 			Next:     dinariapisdkgo.String("next"),
 			Order:    dinariapisdkgo.V2AccountOrderFulfillmentQueryParamsOrderAsc,
 			OrderIDs: []string{"182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e"},
-			Page:     dinariapisdkgo.Int(1),
-			PageSize: dinariapisdkgo.Int(1),
 			Previous: dinariapisdkgo.String("previous"),
 		},
 	)

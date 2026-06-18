@@ -4,7 +4,6 @@ package dinariapisdkgo
 
 import (
 	"context"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"net/http"
@@ -59,7 +58,7 @@ func (r *V2EntityAccountService) New(ctx context.Context, entityID string, body 
 // Get a list of all `Accounts` that belong to a specific `Entity`. This `Entity`
 // represents your organization itself, or an individual customer of your
 // organization.
-func (r *V2EntityAccountService) List(ctx context.Context, entityID string, query V2EntityAccountListParams, opts ...option.RequestOption) (res *V2EntityAccountListResponseUnion, err error) {
+func (r *V2EntityAccountService) List(ctx context.Context, entityID string, query V2EntityAccountListParams, opts ...option.RequestOption) (res *V2EntityAccountListResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
@@ -155,60 +154,15 @@ func (r *V2EntityAccountNewResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// V2EntityAccountListResponseUnion contains all possible properties and values
-// from [[]Account], [V2EntityAccountListResponsePaginatedAccountResponse].
-//
-// Use the methods beginning with 'As' to cast the union to one of its variants.
-//
-// If the underlying value is not a json object, one of the following properties
-// will be valid: OfAccountArray]
-type V2EntityAccountListResponseUnion struct {
-	// This field will be present if the value is a [[]Account] instead of an object.
-	OfAccountArray []Account `json:",inline"`
-	// This field is from variant
-	// [V2EntityAccountListResponsePaginatedAccountResponse].
-	Data []Account `json:"data"`
-	// This field is from variant
-	// [V2EntityAccountListResponsePaginatedAccountResponse].
-	PaginationMetadata V2EntityAccountListResponsePaginatedAccountResponsePaginationMetadata `json:"pagination_metadata"`
-	// This field is from variant
-	// [V2EntityAccountListResponsePaginatedAccountResponse].
-	Sv   string `json:"_sv"`
-	JSON struct {
-		OfAccountArray     respjson.Field
-		Data               respjson.Field
-		PaginationMetadata respjson.Field
-		Sv                 respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-func (u V2EntityAccountListResponseUnion) AsAccountArray() (v []Account) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-func (u V2EntityAccountListResponseUnion) AsV2EntityAccountListResponsePaginatedAccountResponse() (v V2EntityAccountListResponsePaginatedAccountResponse) {
-	apijson.UnmarshalRoot(json.RawMessage(u.JSON.raw), &v)
-	return
-}
-
-// Returns the unmodified JSON received from the API
-func (u V2EntityAccountListResponseUnion) RawJSON() string { return u.JSON.raw }
-
-func (r *V2EntityAccountListResponseUnion) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-type V2EntityAccountListResponsePaginatedAccountResponse struct {
+type V2EntityAccountListResponse struct {
 	// List of Account
 	Data []Account `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2EntityAccountListResponsePaginatedAccountResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata V2EntityAccountListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedAccountResponse:v1".
-	Sv string `json:"_sv"`
+	Sv V2EntityAccountListResponse_Sv `json:"_sv"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Data               respjson.Field
@@ -220,13 +174,13 @@ type V2EntityAccountListResponsePaginatedAccountResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2EntityAccountListResponsePaginatedAccountResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2EntityAccountListResponsePaginatedAccountResponse) UnmarshalJSON(data []byte) error {
+func (r V2EntityAccountListResponse) RawJSON() string { return r.JSON.raw }
+func (r *V2EntityAccountListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Pagination metadata
-type V2EntityAccountListResponsePaginatedAccountResponsePaginationMetadata struct {
+type V2EntityAccountListResponsePaginationMetadata struct {
 	// Cursor for next page
 	Next string `json:"next"`
 	// Cursor for previous page
@@ -241,12 +195,17 @@ type V2EntityAccountListResponsePaginatedAccountResponsePaginationMetadata struc
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2EntityAccountListResponsePaginatedAccountResponsePaginationMetadata) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2EntityAccountListResponsePaginatedAccountResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+func (r V2EntityAccountListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
+func (r *V2EntityAccountListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
+
+// Version
+type V2EntityAccountListResponse_Sv string
+
+const (
+	V2EntityAccountListResponse_SvPaginatedAccountResponseV1 V2EntityAccountListResponse_Sv = "PaginatedAccountResponse:v1"
+)
 
 type V2EntityAccountNewParams struct {
 	// Jurisdiction of the `Account`.
@@ -270,9 +229,7 @@ type V2EntityAccountListParams struct {
 	// Cursor for previous page
 	Previous param.Opt[string] `query:"previous,omitzero" json:"-"`
 	// Number of results to return
-	Limit    param.Opt[int64] `query:"limit,omitzero" json:"-"`
-	Page     param.Opt[int64] `query:"page,omitzero" json:"-"`
-	PageSize param.Opt[int64] `query:"page_size,omitzero" json:"-"`
+	Limit param.Opt[int64] `query:"limit,omitzero" json:"-"`
 	// Sort order
 	//
 	// Any of "asc", "desc".
