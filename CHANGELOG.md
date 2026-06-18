@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.14.0 (2026-06-18)
+
+Full Changelog: [v0.13.0...v0.14.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.13.0...v0.14.0)
+
+### Features
+
+* **api:** api update ([28a36a4](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/28a36a46314a6a056dbf51b5c0279ebeb943229d))
+* **api:** api update ([0c401c2](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/0c401c24a712a2ecfa91bcb965f4bea031b30f59))
+* **api:** api update ([d4e94e9](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/d4e94e9c43899bf51c7c1a5ecce43e5b4a728344))
+* **api:** api update ([a03a40a](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/a03a40a8d53ec73f14231a81564859083f4d81cd))
+* **api:** api update ([31e84e2](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/31e84e2c83586b1cc1a84f6de9df3064b2ca901c))
+* **api:** api update ([32e3c5c](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/32e3c5ccbae713f4f41684a613d4e7091dec76e7))
+* **api:** api update ([913fb58](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/913fb588f36ad5193322d798b2fd39d633e0a7fc))
+* **api:** api update ([f08ff6f](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/f08ff6f3f632fd2ca5230ff90628ee8d6894bfe5))
+* **api:** api update ([9709788](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/9709788e2f31bd97e42a2ef7da190fad6ea91946))
+* **api:** api update ([1244be6](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/1244be6e232638d9a3fbffa6b8bf1b290199b7de))
+* **api:** v20260617-0199ffd version sync ([490f8bd](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/490f8bd00a66df18d12babf61cb40358b5daf270))
+* **client:** optimize json encoder for internal types ([8c67f6c](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/8c67f6c17d66e77dd4a396b843f77221de489a7a))
+* **go:** add default http client with timeout ([9b7ff4c](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/9b7ff4c1e4516ce280b572fa1576e4d261af12d6))
+* **internal:** support comma format in multipart form encoding ([62b268a](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/62b268a2001ebe41c3f4c9de4866d29039c44193))
+* support setting headers via env ([5e79ae5](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/5e79ae5352e43c0e128109e45d319f1bbc2124fc))
+
+
+### Bug Fixes
+
+* fix issue with unmarshaling in some cases ([0bf77c1](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/0bf77c1c398e952801a6a3021e14ad81c9ae649a))
+* **go:** avoid panic when http.DefaultTransport is wrapped ([b41b85a](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/b41b85a217f1ea465282f861976bd322cd69c117))
+* prevent duplicate ? in query params ([018b6de](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/018b6de42e641a443ea2192699f4964fcaa2c15c))
+
+
+### Chores
+
+* avoid embedding reflect.Type for dead code elimination ([5116e21](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/5116e211debce2fddc95150b078013c5d3916437))
+* **ci:** support opting out of skipping builds on metadata-only commits ([2aa9af5](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/2aa9af504bade30e7709ae6ff99937eb1dfa7705))
+* **internal:** more robust bootstrap script ([452384c](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/452384c6bb7375b2578a0db4359cc24377e6e486))
+* redact api-key headers in debug logs ([0d31f4d](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/0d31f4dd67cfed5a97cdc854b0747ad4804d731a))
+* remove unnecessary error check for url parsing ([910511c](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/910511c7f5215dce95e0c7c1d207de027df5d076))
+* update docs for api:"required" ([25d6882](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/25d688260cf96f7b9cd13bf47f4bd65443ce7b93))
+
 ## 0.13.0 (2026-03-26)
 
 Full Changelog: [v0.12.0...v0.13.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.12.0...v0.13.0)
