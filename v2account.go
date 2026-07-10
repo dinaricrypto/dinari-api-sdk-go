@@ -119,7 +119,7 @@ func NewV2AccountService(opts ...option.RequestOption) (r V2AccountService) {
 }
 
 // Get a specific `Account` by its ID.
-func (r *V2AccountService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *V2AccountGetResponse, err error) {
+func (r *V2AccountService) Get(ctx context.Context, accountID string, opts ...option.RequestOption) (res *Account, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -131,7 +131,7 @@ func (r *V2AccountService) Get(ctx context.Context, accountID string, opts ...op
 }
 
 // Set the `Account` to be inactive. Inactive accounts cannot be used for trading.
-func (r *V2AccountService) Deactivate(ctx context.Context, accountID string, opts ...option.RequestOption) (res *V2AccountDeactivateResponse, err error) {
+func (r *V2AccountService) Deactivate(ctx context.Context, accountID string, opts ...option.RequestOption) (res *Account, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -236,76 +236,6 @@ const (
 	ChainEip155_7887      Chain = "eip155:7887"
 )
 
-// Information about an `Account` owned by an `Entity`.
-type V2AccountGetResponse struct {
-	// Unique ID for the `Account`.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Datetime when the `Account` was created. ISO 8601 timestamp.
-	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
-	// ID for the `Entity` that owns the `Account`.
-	EntityID string `json:"entity_id" api:"required" format:"uuid"`
-	// Indicates whether the `Account` is active.
-	IsActive bool `json:"is_active" api:"required"`
-	// Jurisdiction of the `Account`.
-	//
-	// Any of "BASELINE", "US".
-	Jurisdiction Jurisdiction `json:"jurisdiction" api:"required"`
-	// ID of the brokerage account associated with the `Account`.
-	BrokerageAccountID string `json:"brokerage_account_id" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID                 respjson.Field
-		CreatedDt          respjson.Field
-		EntityID           respjson.Field
-		IsActive           respjson.Field
-		Jurisdiction       respjson.Field
-		BrokerageAccountID respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountGetResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountGetResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Information about an `Account` owned by an `Entity`.
-type V2AccountDeactivateResponse struct {
-	// Unique ID for the `Account`.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Datetime when the `Account` was created. ISO 8601 timestamp.
-	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
-	// ID for the `Entity` that owns the `Account`.
-	EntityID string `json:"entity_id" api:"required" format:"uuid"`
-	// Indicates whether the `Account` is active.
-	IsActive bool `json:"is_active" api:"required"`
-	// Jurisdiction of the `Account`.
-	//
-	// Any of "BASELINE", "US".
-	Jurisdiction Jurisdiction `json:"jurisdiction" api:"required"`
-	// ID of the brokerage account associated with the `Account`.
-	BrokerageAccountID string `json:"brokerage_account_id" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID                 respjson.Field
-		CreatedDt          respjson.Field
-		EntityID           respjson.Field
-		IsActive           respjson.Field
-		Jurisdiction       respjson.Field
-		BrokerageAccountID respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountDeactivateResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountDeactivateResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Balance of a payment token in an `Account`.
 type V2AccountGetCashBalancesResponse struct {
 	// Total amount of the payment token in the `Account`.
@@ -343,7 +273,7 @@ type V2AccountGetDividendPaymentsResponse struct {
 	// List of DividendPayment
 	Data []V2AccountGetDividendPaymentsResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2AccountGetDividendPaymentsResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedDividendPaymentResponse:v1".
@@ -391,27 +321,6 @@ func (r *V2AccountGetDividendPaymentsResponseData) UnmarshalJSON(data []byte) er
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Pagination metadata
-type V2AccountGetDividendPaymentsResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountGetDividendPaymentsResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountGetDividendPaymentsResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 // Version
 type V2AccountGetDividendPaymentsResponse_Sv string
 
@@ -423,7 +332,7 @@ type V2AccountGetInterestPaymentsResponse struct {
 	// List of InterestPayment
 	Data []V2AccountGetInterestPaymentsResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2AccountGetInterestPaymentsResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedInterestPaymentResponse:v1".
@@ -465,27 +374,6 @@ type V2AccountGetInterestPaymentsResponseData struct {
 // Returns the unmodified JSON received from the API
 func (r V2AccountGetInterestPaymentsResponseData) RawJSON() string { return r.JSON.raw }
 func (r *V2AccountGetInterestPaymentsResponseData) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Pagination metadata
-type V2AccountGetInterestPaymentsResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountGetInterestPaymentsResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountGetInterestPaymentsResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

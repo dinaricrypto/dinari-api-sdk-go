@@ -187,7 +187,7 @@ type V2AccountTokenTransferListResponse struct {
 	// List of TokenTransfer
 	Data []TokenTransfer `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2AccountTokenTransferListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedTokenTransferResponse:v1".
@@ -205,27 +205,6 @@ type V2AccountTokenTransferListResponse struct {
 // Returns the unmodified JSON received from the API
 func (r V2AccountTokenTransferListResponse) RawJSON() string { return r.JSON.raw }
 func (r *V2AccountTokenTransferListResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Pagination metadata
-type V2AccountTokenTransferListResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountTokenTransferListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountTokenTransferListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

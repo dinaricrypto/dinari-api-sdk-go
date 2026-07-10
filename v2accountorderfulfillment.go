@@ -65,7 +65,7 @@ func (r *V2AccountOrderFulfillmentService) Get(ctx context.Context, orderFulfill
 }
 
 // Query `OrderFulfillments` under the `Account`.
-func (r *V2AccountOrderFulfillmentService) Query(ctx context.Context, accountID string, query V2AccountOrderFulfillmentQueryParams, opts ...option.RequestOption) (res *V2AccountOrderFulfillmentQueryResponse, err error) {
+func (r *V2AccountOrderFulfillmentService) Query(ctx context.Context, accountID string, query V2AccountOrderFulfillmentQueryParams, opts ...option.RequestOption) (res *PaginatedOrderFulfillment, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -134,15 +134,15 @@ func (r *Fulfillment) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-type V2AccountOrderFulfillmentQueryResponse struct {
+type PaginatedOrderFulfillment struct {
 	// List of AccountOrderFulfillment
-	Data []V2AccountOrderFulfillmentQueryResponseData `json:"data" api:"required"`
+	Data []PaginatedOrderFulfillmentData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2AccountOrderFulfillmentQueryResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedAccountOrderFulfillmentResponse:v1".
-	Sv V2AccountOrderFulfillmentQueryResponse_Sv `json:"_sv"`
+	Sv PaginatedOrderFulfillment_Sv `json:"_sv"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
 		Data               respjson.Field
@@ -154,14 +154,14 @@ type V2AccountOrderFulfillmentQueryResponse struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountOrderFulfillmentQueryResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountOrderFulfillmentQueryResponse) UnmarshalJSON(data []byte) error {
+func (r PaginatedOrderFulfillment) RawJSON() string { return r.JSON.raw }
+func (r *PaginatedOrderFulfillment) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Information about a fulfillment of an `Order`. An order may be fulfilled in
 // multiple transactions.
-type V2AccountOrderFulfillmentQueryResponseData struct {
+type PaginatedOrderFulfillmentData struct {
 	// ID of the `OrderFulfillment`.
 	ID string `json:"id" api:"required" format:"uuid"`
 	// Amount of dShare asset token filled for `BUY` orders.
@@ -206,37 +206,16 @@ type V2AccountOrderFulfillmentQueryResponseData struct {
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountOrderFulfillmentQueryResponseData) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountOrderFulfillmentQueryResponseData) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Pagination metadata
-type V2AccountOrderFulfillmentQueryResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountOrderFulfillmentQueryResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountOrderFulfillmentQueryResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+func (r PaginatedOrderFulfillmentData) RawJSON() string { return r.JSON.raw }
+func (r *PaginatedOrderFulfillmentData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
 // Version
-type V2AccountOrderFulfillmentQueryResponse_Sv string
+type PaginatedOrderFulfillment_Sv string
 
 const (
-	V2AccountOrderFulfillmentQueryResponse_SvPaginatedAccountOrderFulfillmentResponseV1 V2AccountOrderFulfillmentQueryResponse_Sv = "PaginatedAccountOrderFulfillmentResponse:v1"
+	PaginatedOrderFulfillment_SvPaginatedAccountOrderFulfillmentResponseV1 PaginatedOrderFulfillment_Sv = "PaginatedAccountOrderFulfillmentResponse:v1"
 )
 
 type V2AccountOrderFulfillmentGetParams struct {

@@ -77,12 +77,32 @@ func (r *V2MarketDataAlloyService) GetHistoricalPrices(ctx context.Context, allo
 	return res, err
 }
 
+type PaginationMetadata struct {
+	// Cursor for next page
+	Next string `json:"next"`
+	// Cursor for previous page
+	Previous string `json:"previous"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Next        respjson.Field
+		Previous    respjson.Field
+		ExtraFields map[string]respjson.Field
+		raw         string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r PaginationMetadata) RawJSON() string { return r.JSON.raw }
+func (r *PaginationMetadata) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
 // Paginated response containing a list of Alloys.
 type V2MarketDataAlloyListResponse struct {
 	// List of Alloys
 	Data []V2MarketDataAlloyListResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2MarketDataAlloyListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Schema version
 	//
 	// Any of "PaginatedAlloyResponse:v1".
@@ -132,27 +152,6 @@ type V2MarketDataAlloyListResponseData struct {
 // Returns the unmodified JSON received from the API
 func (r V2MarketDataAlloyListResponseData) RawJSON() string { return r.JSON.raw }
 func (r *V2MarketDataAlloyListResponseData) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Pagination metadata
-type V2MarketDataAlloyListResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2MarketDataAlloyListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2MarketDataAlloyListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

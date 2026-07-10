@@ -384,7 +384,7 @@ type V2AccountOrderRequestListResponse struct {
 	// List of AccountOrder
 	Data []V2AccountOrderRequestListResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2AccountOrderRequestListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedAccountOrderRequestResponse:v1".
@@ -423,15 +423,15 @@ type V2AccountOrderRequestListResponseData struct {
 	// Indicates whether `Order` is a buy or sell.
 	//
 	// Any of "BUY", "SELL".
-	OrderSide string `json:"order_side" api:"required"`
+	OrderSide OrderSide `json:"order_side" api:"required"`
 	// Indicates how long `Order` is valid for.
 	//
 	// Any of "DAY", "GTC", "IOC", "FOK".
-	OrderTif string `json:"order_tif" api:"required"`
+	OrderTif OrderTif `json:"order_tif" api:"required"`
 	// Type of `Order`.
 	//
 	// Any of "MARKET", "LIMIT".
-	OrderType string `json:"order_type" api:"required"`
+	OrderType OrderType `json:"order_type" api:"required"`
 	// Status of `OrderRequest`. Possible values:
 	//
 	// - `QUOTED`: Order request created with fee quote provided, ready for processing
@@ -480,27 +480,6 @@ type V2AccountOrderRequestListResponseData struct {
 // Returns the unmodified JSON received from the API
 func (r V2AccountOrderRequestListResponseData) RawJSON() string { return r.JSON.raw }
 func (r *V2AccountOrderRequestListResponseData) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Pagination metadata
-type V2AccountOrderRequestListResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountOrderRequestListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountOrderRequestListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

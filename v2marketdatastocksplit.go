@@ -52,7 +52,7 @@ func NewV2MarketDataStockSplitService(opts ...option.RequestOption) (r V2MarketD
 // disruptions. Each share of stock owned by a shareholder will then be converted
 // into 10 shares, and the split becomes `COMPLETE` as trading resumes on the
 // `ex_date` with new split-adjusted prices.
-func (r *V2MarketDataStockSplitService) List(ctx context.Context, query V2MarketDataStockSplitListParams, opts ...option.RequestOption) (res *V2MarketDataStockSplitListResponse, err error) {
+func (r *V2MarketDataStockSplitService) List(ctx context.Context, query V2MarketDataStockSplitListParams, opts ...option.RequestOption) (res *PaginatedStockSplit, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/market_data/stocks/splits"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
@@ -68,7 +68,7 @@ func (r *V2MarketDataStockSplitService) List(ctx context.Context, query V2Market
 // disruptions. Each share of stock owned by a shareholder will then be converted
 // into 10 shares, and the split becomes `COMPLETE` as trading resumes on the
 // `ex_date` with new split-adjusted prices.
-func (r *V2MarketDataStockSplitService) ListForStock(ctx context.Context, stockID string, query V2MarketDataStockSplitListForStockParams, opts ...option.RequestOption) (res *V2MarketDataStockSplitListForStockResponse, err error) {
+func (r *V2MarketDataStockSplitService) ListForStock(ctx context.Context, stockID string, query V2MarketDataStockSplitListForStockParams, opts ...option.RequestOption) (res *PaginatedStockSplit, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if stockID == "" {
 		err = errors.New("missing required stock_id parameter")
@@ -78,6 +78,38 @@ func (r *V2MarketDataStockSplitService) ListForStock(ctx context.Context, stockI
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, query, &res, opts...)
 	return res, err
 }
+
+type PaginatedStockSplit struct {
+	// List of StockSplit
+	Data []StockSplit `json:"data" api:"required"`
+	// Pagination metadata
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
+	// Version
+	//
+	// Any of "PaginatedStockSplitResponse:v1".
+	Sv PaginatedStockSplit_Sv `json:"_sv"`
+	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
+	JSON struct {
+		Data               respjson.Field
+		PaginationMetadata respjson.Field
+		Sv                 respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
+	} `json:"-"`
+}
+
+// Returns the unmodified JSON received from the API
+func (r PaginatedStockSplit) RawJSON() string { return r.JSON.raw }
+func (r *PaginatedStockSplit) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+// Version
+type PaginatedStockSplit_Sv string
+
+const (
+	PaginatedStockSplit_SvPaginatedStockSplitResponseV1 PaginatedStockSplit_Sv = "PaginatedStockSplitResponse:v1"
+)
 
 // Information about a stock split, including the `Stock` ID, the number of shares
 // before and after the split, the record date, payable date, ex-date, and the
@@ -139,114 +171,6 @@ const (
 	StockSplitStatusPending    StockSplitStatus = "PENDING"
 	StockSplitStatusInProgress StockSplitStatus = "IN_PROGRESS"
 	StockSplitStatusComplete   StockSplitStatus = "COMPLETE"
-)
-
-type V2MarketDataStockSplitListResponse struct {
-	// List of StockSplit
-	Data []StockSplit `json:"data" api:"required"`
-	// Pagination metadata
-	PaginationMetadata V2MarketDataStockSplitListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
-	// Version
-	//
-	// Any of "PaginatedStockSplitResponse:v1".
-	Sv V2MarketDataStockSplitListResponse_Sv `json:"_sv"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Data               respjson.Field
-		PaginationMetadata respjson.Field
-		Sv                 respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2MarketDataStockSplitListResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2MarketDataStockSplitListResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Pagination metadata
-type V2MarketDataStockSplitListResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2MarketDataStockSplitListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2MarketDataStockSplitListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Version
-type V2MarketDataStockSplitListResponse_Sv string
-
-const (
-	V2MarketDataStockSplitListResponse_SvPaginatedStockSplitResponseV1 V2MarketDataStockSplitListResponse_Sv = "PaginatedStockSplitResponse:v1"
-)
-
-type V2MarketDataStockSplitListForStockResponse struct {
-	// List of StockSplit
-	Data []StockSplit `json:"data" api:"required"`
-	// Pagination metadata
-	PaginationMetadata V2MarketDataStockSplitListForStockResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
-	// Version
-	//
-	// Any of "PaginatedStockSplitResponse:v1".
-	Sv V2MarketDataStockSplitListForStockResponse_Sv `json:"_sv"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Data               respjson.Field
-		PaginationMetadata respjson.Field
-		Sv                 respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2MarketDataStockSplitListForStockResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2MarketDataStockSplitListForStockResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Pagination metadata
-type V2MarketDataStockSplitListForStockResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2MarketDataStockSplitListForStockResponsePaginationMetadata) RawJSON() string {
-	return r.JSON.raw
-}
-func (r *V2MarketDataStockSplitListForStockResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Version
-type V2MarketDataStockSplitListForStockResponse_Sv string
-
-const (
-	V2MarketDataStockSplitListForStockResponse_SvPaginatedStockSplitResponseV1 V2MarketDataStockSplitListForStockResponse_Sv = "PaginatedStockSplitResponse:v1"
 )
 
 type V2MarketDataStockSplitListParams struct {
