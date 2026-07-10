@@ -57,7 +57,7 @@ func NewV2AccountWithdrawalRequestService(opts ...option.RequestOption) (r V2Acc
 //
 // The recipient `Account` must belong to the same `Entity` as the managed
 // `Account`.
-func (r *V2AccountWithdrawalRequestService) New(ctx context.Context, accountID string, body V2AccountWithdrawalRequestNewParams, opts ...option.RequestOption) (res *V2AccountWithdrawalRequestNewResponse, err error) {
+func (r *V2AccountWithdrawalRequestService) New(ctx context.Context, accountID string, body V2AccountWithdrawalRequestNewParams, opts ...option.RequestOption) (res *WithdrawalRequest, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if accountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -69,7 +69,7 @@ func (r *V2AccountWithdrawalRequestService) New(ctx context.Context, accountID s
 }
 
 // Get a specific `WithdrawalRequest` by its ID.
-func (r *V2AccountWithdrawalRequestService) Get(ctx context.Context, withdrawalRequestID string, query V2AccountWithdrawalRequestGetParams, opts ...option.RequestOption) (res *V2AccountWithdrawalRequestGetResponse, err error) {
+func (r *V2AccountWithdrawalRequestService) Get(ctx context.Context, withdrawalRequestID string, query V2AccountWithdrawalRequestGetParams, opts ...option.RequestOption) (res *WithdrawalRequest, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if query.AccountID == "" {
 		err = errors.New("missing required account_id parameter")
@@ -147,113 +147,11 @@ const (
 	WithdrawalRequestStatusCancelled WithdrawalRequestStatus = "CANCELLED"
 )
 
-// Information for a withdrawal request of payment tokens from an `Account` backed
-// by a Dinari-managed `Wallet`.
-type V2AccountWithdrawalRequestNewResponse struct {
-	// ID of the `WithdrawalRequest`.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// ID of the `Account` of the `WithdrawalRequest`.
-	AccountID string `json:"account_id" api:"required" format:"uuid"`
-	// Datetime at which the `WithdrawalRequest` was created. ISO 8601 timestamp.
-	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
-	// Amount of USD+ payment tokens submitted for withdrawal.
-	PaymentTokenAmount float64 `json:"payment_token_amount" api:"required"`
-	// ID of the `Account` that will receive USDC payment tokens from the `Withdrawal`.
-	// This `Account` must be connected to a non-managed `Wallet` and belong to the
-	// same `Entity`.
-	RecipientAccountID string `json:"recipient_account_id" api:"required" format:"uuid"`
-	// Status of the `WithdrawalRequest`
-	//
-	// Any of "PENDING", "SUBMITTED", "ERROR", "CANCELLED".
-	Status V2AccountWithdrawalRequestNewResponseStatus `json:"status" api:"required"`
-	// Datetime at which the `WithdrawalRequest` was updated. ISO 8601 timestamp.
-	UpdatedDt time.Time `json:"updated_dt" api:"required" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID                 respjson.Field
-		AccountID          respjson.Field
-		CreatedDt          respjson.Field
-		PaymentTokenAmount respjson.Field
-		RecipientAccountID respjson.Field
-		Status             respjson.Field
-		UpdatedDt          respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountWithdrawalRequestNewResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountWithdrawalRequestNewResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of the `WithdrawalRequest`
-type V2AccountWithdrawalRequestNewResponseStatus string
-
-const (
-	V2AccountWithdrawalRequestNewResponseStatusPending   V2AccountWithdrawalRequestNewResponseStatus = "PENDING"
-	V2AccountWithdrawalRequestNewResponseStatusSubmitted V2AccountWithdrawalRequestNewResponseStatus = "SUBMITTED"
-	V2AccountWithdrawalRequestNewResponseStatusError     V2AccountWithdrawalRequestNewResponseStatus = "ERROR"
-	V2AccountWithdrawalRequestNewResponseStatusCancelled V2AccountWithdrawalRequestNewResponseStatus = "CANCELLED"
-)
-
-// Information for a withdrawal request of payment tokens from an `Account` backed
-// by a Dinari-managed `Wallet`.
-type V2AccountWithdrawalRequestGetResponse struct {
-	// ID of the `WithdrawalRequest`.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// ID of the `Account` of the `WithdrawalRequest`.
-	AccountID string `json:"account_id" api:"required" format:"uuid"`
-	// Datetime at which the `WithdrawalRequest` was created. ISO 8601 timestamp.
-	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
-	// Amount of USD+ payment tokens submitted for withdrawal.
-	PaymentTokenAmount float64 `json:"payment_token_amount" api:"required"`
-	// ID of the `Account` that will receive USDC payment tokens from the `Withdrawal`.
-	// This `Account` must be connected to a non-managed `Wallet` and belong to the
-	// same `Entity`.
-	RecipientAccountID string `json:"recipient_account_id" api:"required" format:"uuid"`
-	// Status of the `WithdrawalRequest`
-	//
-	// Any of "PENDING", "SUBMITTED", "ERROR", "CANCELLED".
-	Status V2AccountWithdrawalRequestGetResponseStatus `json:"status" api:"required"`
-	// Datetime at which the `WithdrawalRequest` was updated. ISO 8601 timestamp.
-	UpdatedDt time.Time `json:"updated_dt" api:"required" format:"date-time"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID                 respjson.Field
-		AccountID          respjson.Field
-		CreatedDt          respjson.Field
-		PaymentTokenAmount respjson.Field
-		RecipientAccountID respjson.Field
-		Status             respjson.Field
-		UpdatedDt          respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountWithdrawalRequestGetResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountWithdrawalRequestGetResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Status of the `WithdrawalRequest`
-type V2AccountWithdrawalRequestGetResponseStatus string
-
-const (
-	V2AccountWithdrawalRequestGetResponseStatusPending   V2AccountWithdrawalRequestGetResponseStatus = "PENDING"
-	V2AccountWithdrawalRequestGetResponseStatusSubmitted V2AccountWithdrawalRequestGetResponseStatus = "SUBMITTED"
-	V2AccountWithdrawalRequestGetResponseStatusError     V2AccountWithdrawalRequestGetResponseStatus = "ERROR"
-	V2AccountWithdrawalRequestGetResponseStatusCancelled V2AccountWithdrawalRequestGetResponseStatus = "CANCELLED"
-)
-
 type V2AccountWithdrawalRequestListResponse struct {
 	// List of WithdrawalRequest
-	Data []WithdrawalRequest `json:"data" api:"required"`
+	Data []V2AccountWithdrawalRequestListResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2AccountWithdrawalRequestListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedWithdrawalRequestResponse:v1".
@@ -274,24 +172,44 @@ func (r *V2AccountWithdrawalRequestListResponse) UnmarshalJSON(data []byte) erro
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Pagination metadata
-type V2AccountWithdrawalRequestListResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
+// Information for a withdrawal request of payment tokens from an `Account` backed
+// by a Dinari-managed `Wallet`.
+type V2AccountWithdrawalRequestListResponseData struct {
+	// ID of the `WithdrawalRequest`.
+	ID string `json:"id" api:"required" format:"uuid"`
+	// ID of the `Account` of the `WithdrawalRequest`.
+	AccountID string `json:"account_id" api:"required" format:"uuid"`
+	// Datetime at which the `WithdrawalRequest` was created. ISO 8601 timestamp.
+	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
+	// Amount of USD+ payment tokens submitted for withdrawal.
+	PaymentTokenAmount float64 `json:"payment_token_amount" api:"required"`
+	// ID of the `Account` that will receive USDC payment tokens from the `Withdrawal`.
+	// This `Account` must be connected to a non-managed `Wallet` and belong to the
+	// same `Entity`.
+	RecipientAccountID string `json:"recipient_account_id" api:"required" format:"uuid"`
+	// Status of the `WithdrawalRequest`
+	//
+	// Any of "PENDING", "SUBMITTED", "ERROR", "CANCELLED".
+	Status string `json:"status" api:"required"`
+	// Datetime at which the `WithdrawalRequest` was updated. ISO 8601 timestamp.
+	UpdatedDt time.Time `json:"updated_dt" api:"required" format:"date-time"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		ID                 respjson.Field
+		AccountID          respjson.Field
+		CreatedDt          respjson.Field
+		PaymentTokenAmount respjson.Field
+		RecipientAccountID respjson.Field
+		Status             respjson.Field
+		UpdatedDt          respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
 	} `json:"-"`
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2AccountWithdrawalRequestListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountWithdrawalRequestListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+func (r V2AccountWithdrawalRequestListResponseData) RawJSON() string { return r.JSON.raw }
+func (r *V2AccountWithdrawalRequestListResponseData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

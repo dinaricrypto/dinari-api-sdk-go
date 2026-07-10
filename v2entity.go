@@ -64,7 +64,7 @@ func NewV2EntityService(opts ...option.RequestOption) (r V2EntityService) {
 
 // Create a new `Entity` to be managed by your organization. This `Entity`
 // represents an individual customer of your organization.
-func (r *V2EntityService) New(ctx context.Context, body V2EntityNewParams, opts ...option.RequestOption) (res *V2EntityNewResponse, err error) {
+func (r *V2EntityService) New(ctx context.Context, body V2EntityNewParams, opts ...option.RequestOption) (res *Entity, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/entities/"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
@@ -72,7 +72,7 @@ func (r *V2EntityService) New(ctx context.Context, body V2EntityNewParams, opts 
 }
 
 // Update a specific customer `Entity` of your organization.
-func (r *V2EntityService) Update(ctx context.Context, entityID string, body V2EntityUpdateParams, opts ...option.RequestOption) (res *V2EntityUpdateResponse, err error) {
+func (r *V2EntityService) Update(ctx context.Context, entityID string, body V2EntityUpdateParams, opts ...option.RequestOption) (res *Entity, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
@@ -93,7 +93,7 @@ func (r *V2EntityService) List(ctx context.Context, query V2EntityListParams, op
 }
 
 // Get a specific customer `Entity` of your organization by their ID.
-func (r *V2EntityService) GetByID(ctx context.Context, entityID string, opts ...option.RequestOption) (res *V2EntityGetByIDResponse, err error) {
+func (r *V2EntityService) GetByID(ctx context.Context, entityID string, opts ...option.RequestOption) (res *Entity, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
@@ -105,7 +105,7 @@ func (r *V2EntityService) GetByID(ctx context.Context, entityID string, opts ...
 }
 
 // Get the current authenticated `Entity`, which represents your organization.
-func (r *V2EntityService) GetCurrent(ctx context.Context, opts ...option.RequestOption) (res *V2EntityGetCurrentResponse, err error) {
+func (r *V2EntityService) GetCurrent(ctx context.Context, opts ...option.RequestOption) (res *Entity, err error) {
 	opts = slices.Concat(r.Options, opts)
 	path := "api/v2/entities/me"
 	err = requestconfig.ExecuteNewRequest(ctx, http.MethodGet, path, nil, &res, opts...)
@@ -159,105 +159,11 @@ const (
 	EntityEntityTypeOrganization EntityEntityType = "ORGANIZATION"
 )
 
-// Information about an `Entity`, which can be either an individual or an
-// organization.
-type V2EntityNewResponse struct {
-	// Unique ID of the `Entity`.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Type of `Entity`. `ORGANIZATION` for Dinari Partners and `INDIVIDUAL` for their
-	// individual customers.
-	//
-	// Any of "INDIVIDUAL", "ORGANIZATION".
-	EntityType V2EntityNewResponseEntityType `json:"entity_type" api:"required"`
-	// Indicates if `Entity` completed KYC.
-	IsKYCComplete bool `json:"is_kyc_complete" api:"required"`
-	// Name of `Entity`.
-	Name string `json:"name" api:"nullable"`
-	// Nationality or home country of the `Entity`.
-	Nationality string `json:"nationality" api:"nullable"`
-	// Case sensitive unique reference ID that you can set for the `Entity`. We
-	// recommend setting this to the unique ID of the `Entity` in your system.
-	ReferenceID string `json:"reference_id" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID            respjson.Field
-		EntityType    respjson.Field
-		IsKYCComplete respjson.Field
-		Name          respjson.Field
-		Nationality   respjson.Field
-		ReferenceID   respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2EntityNewResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2EntityNewResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Type of `Entity`. `ORGANIZATION` for Dinari Partners and `INDIVIDUAL` for their
-// individual customers.
-type V2EntityNewResponseEntityType string
-
-const (
-	V2EntityNewResponseEntityTypeIndividual   V2EntityNewResponseEntityType = "INDIVIDUAL"
-	V2EntityNewResponseEntityTypeOrganization V2EntityNewResponseEntityType = "ORGANIZATION"
-)
-
-// Information about an `Entity`, which can be either an individual or an
-// organization.
-type V2EntityUpdateResponse struct {
-	// Unique ID of the `Entity`.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Type of `Entity`. `ORGANIZATION` for Dinari Partners and `INDIVIDUAL` for their
-	// individual customers.
-	//
-	// Any of "INDIVIDUAL", "ORGANIZATION".
-	EntityType V2EntityUpdateResponseEntityType `json:"entity_type" api:"required"`
-	// Indicates if `Entity` completed KYC.
-	IsKYCComplete bool `json:"is_kyc_complete" api:"required"`
-	// Name of `Entity`.
-	Name string `json:"name" api:"nullable"`
-	// Nationality or home country of the `Entity`.
-	Nationality string `json:"nationality" api:"nullable"`
-	// Case sensitive unique reference ID that you can set for the `Entity`. We
-	// recommend setting this to the unique ID of the `Entity` in your system.
-	ReferenceID string `json:"reference_id" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID            respjson.Field
-		EntityType    respjson.Field
-		IsKYCComplete respjson.Field
-		Name          respjson.Field
-		Nationality   respjson.Field
-		ReferenceID   respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2EntityUpdateResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2EntityUpdateResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Type of `Entity`. `ORGANIZATION` for Dinari Partners and `INDIVIDUAL` for their
-// individual customers.
-type V2EntityUpdateResponseEntityType string
-
-const (
-	V2EntityUpdateResponseEntityTypeIndividual   V2EntityUpdateResponseEntityType = "INDIVIDUAL"
-	V2EntityUpdateResponseEntityTypeOrganization V2EntityUpdateResponseEntityType = "ORGANIZATION"
-)
-
 type V2EntityListResponse struct {
 	// List of Entity
-	Data []Entity `json:"data" api:"required"`
+	Data []V2EntityListResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2EntityListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedEntityResponse:v1".
@@ -278,24 +184,41 @@ func (r *V2EntityListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Pagination metadata
-type V2EntityListResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
+// Information about an `Entity`, which can be either an individual or an
+// organization.
+type V2EntityListResponseData struct {
+	// Unique ID of the `Entity`.
+	ID string `json:"id" api:"required" format:"uuid"`
+	// Type of `Entity`. `ORGANIZATION` for Dinari Partners and `INDIVIDUAL` for their
+	// individual customers.
+	//
+	// Any of "INDIVIDUAL", "ORGANIZATION".
+	EntityType string `json:"entity_type" api:"required"`
+	// Indicates if `Entity` completed KYC.
+	IsKYCComplete bool `json:"is_kyc_complete" api:"required"`
+	// Name of `Entity`.
+	Name string `json:"name" api:"nullable"`
+	// Nationality or home country of the `Entity`.
+	Nationality string `json:"nationality" api:"nullable"`
+	// Case sensitive unique reference ID that you can set for the `Entity`. We
+	// recommend setting this to the unique ID of the `Entity` in your system.
+	ReferenceID string `json:"reference_id" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		ID            respjson.Field
+		EntityType    respjson.Field
+		IsKYCComplete respjson.Field
+		Name          respjson.Field
+		Nationality   respjson.Field
+		ReferenceID   respjson.Field
+		ExtraFields   map[string]respjson.Field
+		raw           string
 	} `json:"-"`
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2EntityListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2EntityListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+func (r V2EntityListResponseData) RawJSON() string { return r.JSON.raw }
+func (r *V2EntityListResponseData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
@@ -304,100 +227,6 @@ type V2EntityListResponse_Sv string
 
 const (
 	V2EntityListResponse_SvPaginatedEntityResponseV1 V2EntityListResponse_Sv = "PaginatedEntityResponse:v1"
-)
-
-// Information about an `Entity`, which can be either an individual or an
-// organization.
-type V2EntityGetByIDResponse struct {
-	// Unique ID of the `Entity`.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Type of `Entity`. `ORGANIZATION` for Dinari Partners and `INDIVIDUAL` for their
-	// individual customers.
-	//
-	// Any of "INDIVIDUAL", "ORGANIZATION".
-	EntityType V2EntityGetByIDResponseEntityType `json:"entity_type" api:"required"`
-	// Indicates if `Entity` completed KYC.
-	IsKYCComplete bool `json:"is_kyc_complete" api:"required"`
-	// Name of `Entity`.
-	Name string `json:"name" api:"nullable"`
-	// Nationality or home country of the `Entity`.
-	Nationality string `json:"nationality" api:"nullable"`
-	// Case sensitive unique reference ID that you can set for the `Entity`. We
-	// recommend setting this to the unique ID of the `Entity` in your system.
-	ReferenceID string `json:"reference_id" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID            respjson.Field
-		EntityType    respjson.Field
-		IsKYCComplete respjson.Field
-		Name          respjson.Field
-		Nationality   respjson.Field
-		ReferenceID   respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2EntityGetByIDResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2EntityGetByIDResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Type of `Entity`. `ORGANIZATION` for Dinari Partners and `INDIVIDUAL` for their
-// individual customers.
-type V2EntityGetByIDResponseEntityType string
-
-const (
-	V2EntityGetByIDResponseEntityTypeIndividual   V2EntityGetByIDResponseEntityType = "INDIVIDUAL"
-	V2EntityGetByIDResponseEntityTypeOrganization V2EntityGetByIDResponseEntityType = "ORGANIZATION"
-)
-
-// Information about an `Entity`, which can be either an individual or an
-// organization.
-type V2EntityGetCurrentResponse struct {
-	// Unique ID of the `Entity`.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Type of `Entity`. `ORGANIZATION` for Dinari Partners and `INDIVIDUAL` for their
-	// individual customers.
-	//
-	// Any of "INDIVIDUAL", "ORGANIZATION".
-	EntityType V2EntityGetCurrentResponseEntityType `json:"entity_type" api:"required"`
-	// Indicates if `Entity` completed KYC.
-	IsKYCComplete bool `json:"is_kyc_complete" api:"required"`
-	// Name of `Entity`.
-	Name string `json:"name" api:"nullable"`
-	// Nationality or home country of the `Entity`.
-	Nationality string `json:"nationality" api:"nullable"`
-	// Case sensitive unique reference ID that you can set for the `Entity`. We
-	// recommend setting this to the unique ID of the `Entity` in your system.
-	ReferenceID string `json:"reference_id" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID            respjson.Field
-		EntityType    respjson.Field
-		IsKYCComplete respjson.Field
-		Name          respjson.Field
-		Nationality   respjson.Field
-		ReferenceID   respjson.Field
-		ExtraFields   map[string]respjson.Field
-		raw           string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2EntityGetCurrentResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2EntityGetCurrentResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Type of `Entity`. `ORGANIZATION` for Dinari Partners and `INDIVIDUAL` for their
-// individual customers.
-type V2EntityGetCurrentResponseEntityType string
-
-const (
-	V2EntityGetCurrentResponseEntityTypeIndividual   V2EntityGetCurrentResponseEntityType = "INDIVIDUAL"
-	V2EntityGetCurrentResponseEntityTypeOrganization V2EntityGetCurrentResponseEntityType = "ORGANIZATION"
 )
 
 type V2EntityNewParams struct {

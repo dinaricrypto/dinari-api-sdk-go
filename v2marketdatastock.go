@@ -120,7 +120,7 @@ type V2MarketDataStockListResponse struct {
 	// List of Stock
 	Data []V2MarketDataStockListResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2MarketDataStockListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedStockResponse:v1".
@@ -196,27 +196,6 @@ type V2MarketDataStockListResponseData struct {
 // Returns the unmodified JSON received from the API
 func (r V2MarketDataStockListResponseData) RawJSON() string { return r.JSON.raw }
 func (r *V2MarketDataStockListResponseData) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Pagination metadata
-type V2MarketDataStockListResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2MarketDataStockListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2MarketDataStockListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

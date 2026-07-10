@@ -75,11 +75,51 @@ func (r *V2Service) ListOrders(ctx context.Context, query V2ListOrdersParams, op
 	return res, err
 }
 
+type BrokerageOrderStatus string
+
+const (
+	BrokerageOrderStatusPendingSubmit    BrokerageOrderStatus = "PENDING_SUBMIT"
+	BrokerageOrderStatusPendingCancel    BrokerageOrderStatus = "PENDING_CANCEL"
+	BrokerageOrderStatusPendingEscrow    BrokerageOrderStatus = "PENDING_ESCROW"
+	BrokerageOrderStatusPendingFill      BrokerageOrderStatus = "PENDING_FILL"
+	BrokerageOrderStatusEscrowed         BrokerageOrderStatus = "ESCROWED"
+	BrokerageOrderStatusSubmitted        BrokerageOrderStatus = "SUBMITTED"
+	BrokerageOrderStatusCancelled        BrokerageOrderStatus = "CANCELLED"
+	BrokerageOrderStatusPartiallyFilled  BrokerageOrderStatus = "PARTIALLY_FILLED"
+	BrokerageOrderStatusFilled           BrokerageOrderStatus = "FILLED"
+	BrokerageOrderStatusRejected         BrokerageOrderStatus = "REJECTED"
+	BrokerageOrderStatusRequiringContact BrokerageOrderStatus = "REQUIRING_CONTACT"
+	BrokerageOrderStatusError            BrokerageOrderStatus = "ERROR"
+)
+
+type OrderSide string
+
+const (
+	OrderSideBuy  OrderSide = "BUY"
+	OrderSideSell OrderSide = "SELL"
+)
+
+type OrderTif string
+
+const (
+	OrderTifDay OrderTif = "DAY"
+	OrderTifGtc OrderTif = "GTC"
+	OrderTifIoc OrderTif = "IOC"
+	OrderTifFok OrderTif = "FOK"
+)
+
+type OrderType string
+
+const (
+	OrderTypeMarket OrderType = "MARKET"
+	OrderTypeLimit  OrderType = "LIMIT"
+)
+
 type V2ListOrdersResponse struct {
 	// List of EntityOrder
 	Data []V2ListOrdersResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2ListOrdersResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedEntityOrderResponse:v1".
@@ -113,17 +153,17 @@ type V2ListOrdersResponseData struct {
 	// Indicates whether `Order` is a buy or sell.
 	//
 	// Any of "BUY", "SELL".
-	OrderSide string `json:"order_side" api:"required"`
+	OrderSide OrderSide `json:"order_side" api:"required"`
 	// Time in force. Indicates how long `Order` is valid for.
 	//
 	// Any of "DAY", "GTC", "IOC", "FOK".
-	OrderTif string `json:"order_tif" api:"required"`
+	OrderTif OrderTif `json:"order_tif" api:"required"`
 	// Transaction hash for the `Order` creation.
 	OrderTransactionHash string `json:"order_transaction_hash" api:"required" format:"hex_string"`
 	// Type of `Order`.
 	//
 	// Any of "MARKET", "LIMIT".
-	OrderType string `json:"order_type" api:"required"`
+	OrderType OrderType `json:"order_type" api:"required"`
 	// The payment token (stablecoin) address.
 	PaymentToken string `json:"payment_token" api:"required" format:"eth_address"`
 	// Status of the `Order`.
@@ -131,7 +171,7 @@ type V2ListOrdersResponseData struct {
 	// Any of "PENDING_SUBMIT", "PENDING_CANCEL", "PENDING_ESCROW", "PENDING_FILL",
 	// "ESCROWED", "SUBMITTED", "CANCELLED", "PARTIALLY_FILLED", "FILLED", "REJECTED",
 	// "REQUIRING_CONTACT", "ERROR".
-	Status string `json:"status" api:"required"`
+	Status BrokerageOrderStatus `json:"status" api:"required"`
 	// The `Stock` ID associated with the `Order`
 	StockID string `json:"stock_id" api:"required" format:"uuid"`
 	// Account ID the order was made for.
@@ -187,27 +227,6 @@ type V2ListOrdersResponseData struct {
 // Returns the unmodified JSON received from the API
 func (r V2ListOrdersResponseData) RawJSON() string { return r.JSON.raw }
 func (r *V2ListOrdersResponseData) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Pagination metadata
-type V2ListOrdersResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2ListOrdersResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2ListOrdersResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
