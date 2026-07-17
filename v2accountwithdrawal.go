@@ -102,7 +102,7 @@ type Withdrawal struct {
 	// Any of "PENDING_SUBMIT", "PENDING_CANCEL", "PENDING_ESCROW", "PENDING_FILL",
 	// "ESCROWED", "SUBMITTED", "CANCELLED", "PARTIALLY_FILLED", "FILLED", "REJECTED",
 	// "REQUIRING_CONTACT", "ERROR".
-	Status WithdrawalStatus `json:"status" api:"required"`
+	Status BrokerageOrderStatus `json:"status" api:"required"`
 	// Datetime at which the `Withdrawal` was transacted. ISO 8601 timestamp.
 	TransactionDt time.Time `json:"transaction_dt" api:"required" format:"date-time"`
 	// Hash of the transaction for the `Withdrawal`.
@@ -131,24 +131,6 @@ func (r Withdrawal) RawJSON() string { return r.JSON.raw }
 func (r *Withdrawal) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
-
-// Status of the `Withdrawal`.
-type WithdrawalStatus string
-
-const (
-	WithdrawalStatusPendingSubmit    WithdrawalStatus = "PENDING_SUBMIT"
-	WithdrawalStatusPendingCancel    WithdrawalStatus = "PENDING_CANCEL"
-	WithdrawalStatusPendingEscrow    WithdrawalStatus = "PENDING_ESCROW"
-	WithdrawalStatusPendingFill      WithdrawalStatus = "PENDING_FILL"
-	WithdrawalStatusEscrowed         WithdrawalStatus = "ESCROWED"
-	WithdrawalStatusSubmitted        WithdrawalStatus = "SUBMITTED"
-	WithdrawalStatusCancelled        WithdrawalStatus = "CANCELLED"
-	WithdrawalStatusPartiallyFilled  WithdrawalStatus = "PARTIALLY_FILLED"
-	WithdrawalStatusFilled           WithdrawalStatus = "FILLED"
-	WithdrawalStatusRejected         WithdrawalStatus = "REJECTED"
-	WithdrawalStatusRequiringContact WithdrawalStatus = "REQUIRING_CONTACT"
-	WithdrawalStatusError            WithdrawalStatus = "ERROR"
-)
 
 // Information for a withdrawal of payment tokens from an `Account` backed by a
 // Dinari-managed `Wallet`.
@@ -212,7 +194,7 @@ type V2AccountWithdrawalListResponse struct {
 	// List of Withdrawal
 	Data []Withdrawal `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2AccountWithdrawalListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedWithdrawalResponse:v1".
@@ -230,27 +212,6 @@ type V2AccountWithdrawalListResponse struct {
 // Returns the unmodified JSON received from the API
 func (r V2AccountWithdrawalListResponse) RawJSON() string { return r.JSON.raw }
 func (r *V2AccountWithdrawalListResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
-// Pagination metadata
-type V2AccountWithdrawalListResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2AccountWithdrawalListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2AccountWithdrawalListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

@@ -84,14 +84,14 @@ func (r *V2EntityKYCService) Get(ctx context.Context, entityID string, opts ...o
 // The URL points to a web-based KYC interface that can be presented to the end
 // customer for KYC verification. Once the customer completes this KYC flow, the
 // KYC check will be created and available in the KYC API.
-func (r *V2EntityKYCService) NewManagedCheck(ctx context.Context, entityID string, opts ...option.RequestOption) (res *V2EntityKYCNewManagedCheckResponse, err error) {
+func (r *V2EntityKYCService) NewManagedCheck(ctx context.Context, entityID string, body V2EntityKYCNewManagedCheckParams, opts ...option.RequestOption) (res *V2EntityKYCNewManagedCheckResponse, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
 		return nil, err
 	}
 	path := fmt.Sprintf("api/v2/entities/%s/kyc/url", entityID)
-	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, nil, &res, opts...)
+	err = requestconfig.ExecuteNewRequest(ctx, http.MethodPost, path, body, &res, opts...)
 	return res, err
 }
 
@@ -1295,6 +1295,22 @@ type V2EntityKYCNewManagedCheckResponse struct {
 // Returns the unmodified JSON received from the API
 func (r V2EntityKYCNewManagedCheckResponse) RawJSON() string { return r.JSON.raw }
 func (r *V2EntityKYCNewManagedCheckResponse) UnmarshalJSON(data []byte) error {
+	return apijson.UnmarshalRoot(data, r)
+}
+
+type V2EntityKYCNewManagedCheckParams struct {
+	// Jurisdiction for the KYC check. Defaults to BASELINE.
+	//
+	// Any of "BASELINE", "US".
+	Jurisdiction Jurisdiction `json:"jurisdiction,omitzero"`
+	paramObj
+}
+
+func (r V2EntityKYCNewManagedCheckParams) MarshalJSON() (data []byte, err error) {
+	type shadow V2EntityKYCNewManagedCheckParams
+	return param.MarshalObject(r, (*shadow)(&r))
+}
+func (r *V2EntityKYCNewManagedCheckParams) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 

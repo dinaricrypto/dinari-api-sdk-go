@@ -44,7 +44,7 @@ func NewV2EntityAccountService(opts ...option.RequestOption) (r V2EntityAccountS
 
 // Create a new `Account` for a specific `Entity`. This `Entity` represents your
 // organization itself, or an individual customer of your organization.
-func (r *V2EntityAccountService) New(ctx context.Context, entityID string, body V2EntityAccountNewParams, opts ...option.RequestOption) (res *V2EntityAccountNewResponse, err error) {
+func (r *V2EntityAccountService) New(ctx context.Context, entityID string, body V2EntityAccountNewParams, opts ...option.RequestOption) (res *Account, err error) {
 	opts = slices.Concat(r.Options, opts)
 	if entityID == "" {
 		err = errors.New("missing required entity_id parameter")
@@ -82,7 +82,7 @@ type Account struct {
 	// Jurisdiction of the `Account`.
 	//
 	// Any of "BASELINE", "US".
-	Jurisdiction AccountJurisdiction `json:"jurisdiction" api:"required"`
+	Jurisdiction Jurisdiction `json:"jurisdiction" api:"required"`
 	// ID of the brokerage account associated with the `Account`.
 	BrokerageAccountID string `json:"brokerage_account_id" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
@@ -104,14 +104,6 @@ func (r *Account) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Jurisdiction of the `Account`.
-type AccountJurisdiction string
-
-const (
-	AccountJurisdictionBaseline AccountJurisdiction = "BASELINE"
-	AccountJurisdictionUs       AccountJurisdiction = "US"
-)
-
 type Jurisdiction string
 
 const (
@@ -119,46 +111,11 @@ const (
 	JurisdictionUs       Jurisdiction = "US"
 )
 
-// Information about an `Account` owned by an `Entity`.
-type V2EntityAccountNewResponse struct {
-	// Unique ID for the `Account`.
-	ID string `json:"id" api:"required" format:"uuid"`
-	// Datetime when the `Account` was created. ISO 8601 timestamp.
-	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
-	// ID for the `Entity` that owns the `Account`.
-	EntityID string `json:"entity_id" api:"required" format:"uuid"`
-	// Indicates whether the `Account` is active.
-	IsActive bool `json:"is_active" api:"required"`
-	// Jurisdiction of the `Account`.
-	//
-	// Any of "BASELINE", "US".
-	Jurisdiction Jurisdiction `json:"jurisdiction" api:"required"`
-	// ID of the brokerage account associated with the `Account`.
-	BrokerageAccountID string `json:"brokerage_account_id" api:"nullable"`
-	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
-	JSON struct {
-		ID                 respjson.Field
-		CreatedDt          respjson.Field
-		EntityID           respjson.Field
-		IsActive           respjson.Field
-		Jurisdiction       respjson.Field
-		BrokerageAccountID respjson.Field
-		ExtraFields        map[string]respjson.Field
-		raw                string
-	} `json:"-"`
-}
-
-// Returns the unmodified JSON received from the API
-func (r V2EntityAccountNewResponse) RawJSON() string { return r.JSON.raw }
-func (r *V2EntityAccountNewResponse) UnmarshalJSON(data []byte) error {
-	return apijson.UnmarshalRoot(data, r)
-}
-
 type V2EntityAccountListResponse struct {
 	// List of Account
-	Data []Account `json:"data" api:"required"`
+	Data []V2EntityAccountListResponseData `json:"data" api:"required"`
 	// Pagination metadata
-	PaginationMetadata V2EntityAccountListResponsePaginationMetadata `json:"pagination_metadata" api:"required"`
+	PaginationMetadata PaginationMetadata `json:"pagination_metadata" api:"required"`
 	// Version
 	//
 	// Any of "PaginatedAccountResponse:v1".
@@ -179,24 +136,38 @@ func (r *V2EntityAccountListResponse) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
-// Pagination metadata
-type V2EntityAccountListResponsePaginationMetadata struct {
-	// Cursor for next page
-	Next string `json:"next"`
-	// Cursor for previous page
-	Previous string `json:"previous"`
+// Information about an `Account` owned by an `Entity`.
+type V2EntityAccountListResponseData struct {
+	// Unique ID for the `Account`.
+	ID string `json:"id" api:"required" format:"uuid"`
+	// Datetime when the `Account` was created. ISO 8601 timestamp.
+	CreatedDt time.Time `json:"created_dt" api:"required" format:"date-time"`
+	// ID for the `Entity` that owns the `Account`.
+	EntityID string `json:"entity_id" api:"required" format:"uuid"`
+	// Indicates whether the `Account` is active.
+	IsActive bool `json:"is_active" api:"required"`
+	// Jurisdiction of the `Account`.
+	//
+	// Any of "BASELINE", "US".
+	Jurisdiction string `json:"jurisdiction" api:"required"`
+	// ID of the brokerage account associated with the `Account`.
+	BrokerageAccountID string `json:"brokerage_account_id" api:"nullable"`
 	// JSON contains metadata for fields, check presence with [respjson.Field.Valid].
 	JSON struct {
-		Next        respjson.Field
-		Previous    respjson.Field
-		ExtraFields map[string]respjson.Field
-		raw         string
+		ID                 respjson.Field
+		CreatedDt          respjson.Field
+		EntityID           respjson.Field
+		IsActive           respjson.Field
+		Jurisdiction       respjson.Field
+		BrokerageAccountID respjson.Field
+		ExtraFields        map[string]respjson.Field
+		raw                string
 	} `json:"-"`
 }
 
 // Returns the unmodified JSON received from the API
-func (r V2EntityAccountListResponsePaginationMetadata) RawJSON() string { return r.JSON.raw }
-func (r *V2EntityAccountListResponsePaginationMetadata) UnmarshalJSON(data []byte) error {
+func (r V2EntityAccountListResponseData) RawJSON() string { return r.JSON.raw }
+func (r *V2EntityAccountListResponseData) UnmarshalJSON(data []byte) error {
 	return apijson.UnmarshalRoot(data, r)
 }
 
