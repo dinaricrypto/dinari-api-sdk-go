@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.15.0 (2026-07-17)
+
+Full Changelog: [v0.14.0...v0.15.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.14.0...v0.15.0)
+
+### Features
+
+* **api:** manual updates ([7650aee](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/7650aeece7fd5df258d6dde3df06d81e9d7732b0))
+* **stlc:** configurable CI runner and private-production-repo support in workflow templates ([3820357](https://github.com/dinaricrypto/dinari-api-sdk-go/commit/3820357f14ec72bf441da6a12ba48249e8ae64a4))
+
 ## 0.14.0 (2026-06-18)
 
 Full Changelog: [v0.13.0...v0.14.0](https://github.com/dinaricrypto/dinari-api-sdk-go/compare/v0.13.0...v0.14.0)
