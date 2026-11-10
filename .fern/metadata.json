@@ -1,0 +1,20 @@
+{
+  "cliVersion": "5.168.1",
+  "generatorName": "fernapi/fern-go-sdk",
+  "generatorVersion": "1.60.2",
+  "generatorConfig": {
+    "packageName": "dinari_api_sdk",
+    "clientName": "DinariClient",
+    "clientConstructorName": "NewDinariClient",
+    "inlinePathParameters": true,
+    "module": {
+      "path": "github.com/dinaricrypto/dinari-api-sdk-go"
+    }
+  },
+  "originGitCommit": "c131f16ffbd8b36e898ecec662dddf38fe2d9161",
+  "originGitCommitIsDirty": true,
+  "invokedBy": "ci",
+  "requestedVersion": "1.0.0",
+  "ciProvider": "github",
+  "sdkVersion": "v1.0.0"
+}
