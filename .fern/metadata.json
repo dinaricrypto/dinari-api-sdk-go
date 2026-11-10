@@ -11,7 +11,7 @@
       "path": "github.com/dinaricrypto/dinari-api-sdk-go"
     }
   },
-  "originGitCommit": "c131f16ffbd8b36e898ecec662dddf38fe2d9161",
+  "originGitCommit": "d9ed655c771c36cc2c87e69eb87f15a98370da66",
   "originGitCommitIsDirty": true,
   "invokedBy": "ci",
   "requestedVersion": "1.0.0",
