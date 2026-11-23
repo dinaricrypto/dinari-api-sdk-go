@@ -2680,6 +2680,7 @@ const (
 	TokenTransferChainIDEip15556        TokenTransferChainID = "eip155:56"
 	TokenTransferChainIDEip1555042      TokenTransferChainID = "eip155:5042"
 	TokenTransferChainIDEip1551329      TokenTransferChainID = "eip155:1329"
+	TokenTransferChainIDEip1554217      TokenTransferChainID = "eip155:4217"
 	TokenTransferChainIDEip15511155111  TokenTransferChainID = "eip155:11155111"
 	TokenTransferChainIDEip155421614    TokenTransferChainID = "eip155:421614"
 	TokenTransferChainIDEip15584532     TokenTransferChainID = "eip155:84532"
@@ -2690,6 +2691,7 @@ const (
 	TokenTransferChainIDEip15597        TokenTransferChainID = "eip155:97"
 	TokenTransferChainIDEip1555042002   TokenTransferChainID = "eip155:5042002"
 	TokenTransferChainIDEip1551328      TokenTransferChainID = "eip155:1328"
+	TokenTransferChainIDEip15542431     TokenTransferChainID = "eip155:42431"
 	TokenTransferChainIDEip155202110    TokenTransferChainID = "eip155:202110"
 	TokenTransferChainIDEip155179205    TokenTransferChainID = "eip155:179205"
 	TokenTransferChainIDEip155179202    TokenTransferChainID = "eip155:179202"
@@ -2719,6 +2721,8 @@ func NewTokenTransferChainIDFromString(s string) (TokenTransferChainID, error) {
 		return TokenTransferChainIDEip1555042, nil
 	case "eip155:1329":
 		return TokenTransferChainIDEip1551329, nil
+	case "eip155:4217":
+		return TokenTransferChainIDEip1554217, nil
 	case "eip155:11155111":
 		return TokenTransferChainIDEip15511155111, nil
 	case "eip155:421614":
@@ -2739,6 +2743,8 @@ func NewTokenTransferChainIDFromString(s string) (TokenTransferChainID, error) {
 		return TokenTransferChainIDEip1555042002, nil
 	case "eip155:1328":
 		return TokenTransferChainIDEip1551328, nil
+	case "eip155:42431":
+		return TokenTransferChainIDEip15542431, nil
 	case "eip155:202110":
 		return TokenTransferChainIDEip155202110, nil
 	case "eip155:179205":

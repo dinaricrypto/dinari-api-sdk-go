@@ -507,6 +507,7 @@ const (
 	WalletChainIDEip15556        WalletChainID = "eip155:56"
 	WalletChainIDEip1555042      WalletChainID = "eip155:5042"
 	WalletChainIDEip1551329      WalletChainID = "eip155:1329"
+	WalletChainIDEip1554217      WalletChainID = "eip155:4217"
 	WalletChainIDEip15511155111  WalletChainID = "eip155:11155111"
 	WalletChainIDEip155421614    WalletChainID = "eip155:421614"
 	WalletChainIDEip15584532     WalletChainID = "eip155:84532"
@@ -517,6 +518,7 @@ const (
 	WalletChainIDEip15597        WalletChainID = "eip155:97"
 	WalletChainIDEip1555042002   WalletChainID = "eip155:5042002"
 	WalletChainIDEip1551328      WalletChainID = "eip155:1328"
+	WalletChainIDEip15542431     WalletChainID = "eip155:42431"
 	WalletChainIDEip155202110    WalletChainID = "eip155:202110"
 	WalletChainIDEip155179205    WalletChainID = "eip155:179205"
 	WalletChainIDEip155179202    WalletChainID = "eip155:179202"
@@ -548,6 +550,8 @@ func NewWalletChainIDFromString(s string) (WalletChainID, error) {
 		return WalletChainIDEip1555042, nil
 	case "eip155:1329":
 		return WalletChainIDEip1551329, nil
+	case "eip155:4217":
+		return WalletChainIDEip1554217, nil
 	case "eip155:11155111":
 		return WalletChainIDEip15511155111, nil
 	case "eip155:421614":
@@ -568,6 +572,8 @@ func NewWalletChainIDFromString(s string) (WalletChainID, error) {
 		return WalletChainIDEip1555042002, nil
 	case "eip155:1328":
 		return WalletChainIDEip1551328, nil
+	case "eip155:42431":
+		return WalletChainIDEip15542431, nil
 	case "eip155:202110":
 		return WalletChainIDEip155202110, nil
 	case "eip155:179205":

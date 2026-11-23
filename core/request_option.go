@@ -65,8 +65,8 @@ func (r *RequestOptions) cloneHeader() http.Header {
 	headers := r.HTTPHeader.Clone()
 	headers.Set("X-Fern-Language", "Go")
 	headers.Set("X-Fern-SDK-Name", "github.com/dinaricrypto/dinari-api-sdk-go")
-	headers.Set("X-Fern-SDK-Version", "v1.0.0")
-	headers.Set("User-Agent", "github.com/dinaricrypto/dinari-api-sdk-go/1.0.0")
+	headers.Set("X-Fern-SDK-Version", "v1.0.2")
+	headers.Set("User-Agent", "github.com/dinaricrypto/dinari-api-sdk-go/1.0.2")
 	return headers
 }
 
