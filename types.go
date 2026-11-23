@@ -2315,6 +2315,7 @@ const (
 	ChainIDEip15556        ChainID = "eip155:56"
 	ChainIDEip1555042      ChainID = "eip155:5042"
 	ChainIDEip1551329      ChainID = "eip155:1329"
+	ChainIDEip1554217      ChainID = "eip155:4217"
 	ChainIDEip15511155111  ChainID = "eip155:11155111"
 	ChainIDEip155421614    ChainID = "eip155:421614"
 	ChainIDEip15584532     ChainID = "eip155:84532"
@@ -2325,6 +2326,7 @@ const (
 	ChainIDEip15597        ChainID = "eip155:97"
 	ChainIDEip1555042002   ChainID = "eip155:5042002"
 	ChainIDEip1551328      ChainID = "eip155:1328"
+	ChainIDEip15542431     ChainID = "eip155:42431"
 	ChainIDEip155202110    ChainID = "eip155:202110"
 	ChainIDEip155179205    ChainID = "eip155:179205"
 	ChainIDEip155179202    ChainID = "eip155:179202"
@@ -2354,6 +2356,8 @@ func NewChainIDFromString(s string) (ChainID, error) {
 		return ChainIDEip1555042, nil
 	case "eip155:1329":
 		return ChainIDEip1551329, nil
+	case "eip155:4217":
+		return ChainIDEip1554217, nil
 	case "eip155:11155111":
 		return ChainIDEip15511155111, nil
 	case "eip155:421614":
@@ -2374,6 +2378,8 @@ func NewChainIDFromString(s string) (ChainID, error) {
 		return ChainIDEip1555042002, nil
 	case "eip155:1328":
 		return ChainIDEip1551328, nil
+	case "eip155:42431":
+		return ChainIDEip15542431, nil
 	case "eip155:202110":
 		return ChainIDEip155202110, nil
 	case "eip155:179205":

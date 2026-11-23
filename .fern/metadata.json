@@ -1,5 +1,5 @@
 {
-  "cliVersion": "5.168.1",
+  "cliVersion": "5.217.1",
   "generatorName": "fernapi/fern-go-sdk",
   "generatorVersion": "1.60.2",
   "generatorConfig": {
@@ -11,10 +11,10 @@
       "path": "github.com/dinaricrypto/dinari-api-sdk-go"
     }
   },
-  "originGitCommit": "d9ed655c771c36cc2c87e69eb87f15a98370da66",
+  "originGitCommit": "d11b672e48d35cb14571145e6b644607e9498b37",
   "originGitCommitIsDirty": true,
   "invokedBy": "ci",
-  "requestedVersion": "1.0.0",
+  "requestedVersion": "1.0.2",
   "ciProvider": "github",
-  "sdkVersion": "v1.0.0"
+  "sdkVersion": "v1.0.2"
 }

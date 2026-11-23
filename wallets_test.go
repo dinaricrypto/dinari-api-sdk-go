@@ -1106,6 +1106,13 @@ func TestEnumWalletChainID(t *testing.T) {
 		assert.Equal(t, WalletChainID("eip155:1329"), val, "enum value should match expected wire value")
 	})
 
+	t.Run("NewFromString_eip155_4217", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewWalletChainIDFromString("eip155:4217")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, WalletChainID("eip155:4217"), val, "enum value should match expected wire value")
+	})
+
 	t.Run("NewFromString_eip155_11155111", func(t *testing.T) {
 		t.Parallel()
 		val, err := NewWalletChainIDFromString("eip155:11155111")
@@ -1174,6 +1181,13 @@ func TestEnumWalletChainID(t *testing.T) {
 		val, err := NewWalletChainIDFromString("eip155:1328")
 		assert.NoError(t, err, "valid enum value should not return error")
 		assert.Equal(t, WalletChainID("eip155:1328"), val, "enum value should match expected wire value")
+	})
+
+	t.Run("NewFromString_eip155_42431", func(t *testing.T) {
+		t.Parallel()
+		val, err := NewWalletChainIDFromString("eip155:42431")
+		assert.NoError(t, err, "valid enum value should not return error")
+		assert.Equal(t, WalletChainID("eip155:42431"), val, "enum value should match expected wire value")
 	})
 
 	t.Run("NewFromString_eip155_202110", func(t *testing.T) {
